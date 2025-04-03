@@ -11,15 +11,13 @@ section 企画
 
 section 設計
   基本詳細設計書作成             : des2, after des1-1, 2d
-    経路登録画面                : des2-1, after des1-1, 1d
-    CSV作成画面                 : des2-2, after des2-1, 1d
     設計完了                    : milestone,
 
 section 開発準備
-  環境構築                      : des3, after des2-2, 1d 
-    Java(Version17)            : des3-1, after des2-2, 1d
-    Spring boot                : des3-2, after des2-2, 1d
-    DB(MySQL)                  : des3-3, after des2-2, 1d
+  環境構築                      : des3, after des2, 1d 
+    Java(Version17)            : des3-1, after des2, 1d
+    Spring boot                : des3-2, after des2, 1d
+    DB(MySQL)                  : des3-3, after des2, 1d
     環境構築完了                : milestone,
     
 section フロントエンド開発
