@@ -204,8 +204,75 @@ participant 5 as DB
 1-&gt;&gt;+2:交通費申請CSVを作りたい
 2-&gt;&gt;4: CSV管理表の内容を書き出す
 4-&gt;&gt;2: 交通費申請CSVを保存</div></pre>
+<h2 id="機能詳細">機能詳細</h2>
 <h2 id="データ設計">データ設計</h2>
+<pre style="all:unset;"><div class="mermaid">erDiagram
+    CsvFile ||--o{ KEIRODB : "保存"
+
+    CsvFile {
+        int id "ID"
+        int csv_file_id "CSVファイルID"
+        int detail_id "明細番号"
+        int related_id "関連明細番号"
+        date date "日付"
+        int employee_id "従業員番号"
+        string employee_name "従業員名"
+        string payee_content "支払先・内容"
+        string expense_category "経費科目"
+        float converted_amount "円換算金額"
+        float total_with_related "関連明細との合計"
+        float total_tax_with_related "関連明細との消費税額合計"
+        string memo "メモ"
+        int inhouse_attendees "自社出席者"
+        int inhouse_attendees_count "自社出席者人数"
+        int external_attendees "他社出席者"
+        int external_attendees_count "他社出席者人数"
+        int total_attendees "出席者数"
+        float amount_per_attendee "出席者あたりの円換算金額"
+        string department_code "費用負担部門コード"
+        string department_name "費用負担部門名"
+        string project_name "プロジェクト名"
+        string project_code "プロジェクトコード"
+        string tax_category "税区分"
+        string invoice_scheme "インボイス経過措置"
+        float amount_inclusive_tax "金額（税込）"
+        string currency "通貨"
+        float exchange_rate "為替レート"
+        float tax_amount "消費税額"
+        string debit_account "借方勘定科目"
+        string debit_sub_account "借方補助科目"
+        string credit_account "貸方勘定科目"
+        string credit_sub_account "貸方補助科目"
+        string source_of_entry "明細取得元"
+        bool journal_entry_created "仕訳作成済"
+        int pre_approval_number "事前申請番号"
+        string pre_approval_title "事前申請タイトル"
+        int expense_request_number "経費申請番号"
+        date request_date "申請日"
+        string request_status "申請ステータス"
+        string expense_request_title "経費申請タイトル"
+        int created_by_id "作成者番号"
+        string created_by_name "作成者名"
+        datetime created_at "作成日時"
+        int updated_by_id "更新者番号"
+        string updated_by_name "更新者名"
+        datetime updated_at "更新日時"
+        string aggregate_title "集計タイトル"
+    }
+
+    KEIRODB {
+        int id "ID"
+        int csv_file_id "CSVファイルID"
+        date date "日付"
+        string payee "支払先・内容"
+        string category "経費科目"
+        float amount "金額"
+        string memo "メモ"
+        string memo "費用負担部名"
+        string tax_category "費用負担部コード"
+    }</div></pre>
 <h2 id="画面設計">画面設計</h2>
+<p><img src="file:///c:\Users\y_hashimoto\Documents\Private\Yuhei\AttrMF\Picture\image.png" alt="CSV簡易作成画面"></p>
 <h2 id="システム構成">システム構成</h2>
 <h2 id="テスト計画">テスト計画</h2>
 
