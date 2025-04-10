@@ -179,18 +179,21 @@ h3 {
 </style>
 <h1 id="基本詳細設計書">基本詳細設計書</h1>
 <ol>
-<li>プロジェクト名：CSVファイル簡易生成ツール</li>
+<li>プロジェクト名：CSVファイル自動生成</li>
 <li>作成日：YYYY/MM/DD</li>
 <li>作成者：橋本悠平</li>
 </ol>
 <h2 id="システム概要">システム概要</h2>
 <h3 id="目的">目的</h3>
-<p>経費（交通費）のCSVファイルを月単位で自動生成する</p>
+<p>CSV編集用のモーダルを表示する</p>
 <h3 id="主な機能">主な機能</h3>
 <ol>
-<li>経路CSVファイルを経路DBに保存する</li>
-<li>選択された月のCSV管理表に経路DBの内容を一括表示する</li>
-<li>表示内容で問題なければ交通費申請CSVファイルを選択月で生成する</li>
+<li>
+<p>CSVファイル簡易作成ツール画面の編集ボタン押下時にCSV編集用モーダル画面を表示する。</p>
+</li>
+<li>
+<p>編集されたデータをワークテーブルに保存する。</p>
+</li>
 </ol>
 <h3 id="対象ユーザー">対象ユーザー</h3>
 <p>同一の経路で出勤することが多い従業員</p>
@@ -201,372 +204,82 @@ h3 {
 <li>DB：SQLite</li>
 </ol>
 <h2 id="画面設計">画面設計</h2>
-<h3 id="csvファイル簡易作成ツール画面">CSVファイル簡易作成ツール画面</h3>
-<p><img src="file:///c:\Users\y_hashimoto\Documents\Private\Yuhei\AttrMF\Picture\image.png" alt="CSV簡易作成ツール画面"></p>
 <h3 id="編集画面">編集画面</h3>
 <p><img src="file:///c:\Users\y_hashimoto\Documents\Private\Yuhei\AttrMF\Picture\image2.png" alt="編集画面"></p>
-<h3 id="一覧確認画面">一覧確認画面</h3>
-<p><img src="file:///c:\Users\y_hashimoto\Documents\Private\Yuhei\AttrMF\Picture\image3.png" alt="一覧画面"></p>
 <h2 id="機能仕様">機能仕様</h2>
-<h3 id="年月情報取得">年月情報取得</h3>
-<p>CSVファイル簡易作成ツール画面表示の際に現在時刻を取得する</p>
-<h3 id="ファイルの選択">ファイルの選択</h3>
-<p>ファイル選択ボタン押下時にファイル選択画面を表示し経路CSVファイルを選択する機能を追加する</p>
-<h3 id="反映ボタン押下">反映ボタン押下</h3>
-<p>反映ボタンを押下時に経路CSVファイル内すべての内容をMST_KEIROに登録する機能を追加</p>
-<h3 id="年月の選択">年月の選択</h3>
-<p>カレンダーウィジェットで選択した年月をCSV管理表に反映する</p>
-<h3 id="生成欄のチェックボックス押下">生成欄のチェックボックス押下</h3>
-<p>生成欄のチェックボックスにユーザーがチェックを入れると該当日のCSV管理表にWRK_KEIROの情報が反映する
-チェックを外すと該当日のCSV管理表が未反映になる</p>
-<h3 id="編集ボタン押下">編集ボタン押下</h3>
-<p>ユーザーが編集ボタン押下時に編集画面を表示する</p>
-<h3 id="出力ボタン押下">出力ボタン押下</h3>
-<p>ユーザーが出力ボタン押下時に一覧確認画面を表示する</p>
-<h3 id="csvファイル出力時">CSVファイル出力時</h3>
-<p>ローカルのダウンロードフォルダにCSVファイルを出力し画面内のラベルに「CSVファイルの出力が完了しました。」と表示する</p>
+<h3 id="データ表示">データ表示</h3>
+<p>当画面表示の際にWRK_KEIROから該当日のデータを取得し
+表示する</p>
+<h3 id="キャンセルボタン押下">キャンセルボタン押下</h3>
+<p>CSVファイル簡易作成ツール画面へ戻る</p>
+<h3 id="更新ボタン押下">更新ボタン押下</h3>
+<p>編集データをWRK_KEIROの該当箇所に保存する</p>
 <h2 id="機能詳細">機能詳細</h2>
-<h3 id="年月情報取得詳細">年月情報取得：詳細</h3>
-<p>WEBアプリ起動時および再読み込み時に、現在の年月を自動で取得する</p>
+<h3 id="データ表示詳細">データ表示：詳細</h3>
+<p>当画面表示の際にWRK_KEIROから該当日のデータを取得し
+表示する</p>
 <ul class="contains-task-list">
 <li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 入力なし：
-自動入力</p>
+<p><input class="task-list-item-checkbox"type="checkbox"> 入力なし：自動入力</p>
 </li>
 <li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 出力あり：
-当月の年月情報（例：2025/4など）</p>
+<p><input class="task-list-item-checkbox"type="checkbox"> 出力あり：該当日のWRK_KEIROデータ</p>
 </li>
 </ul>
-<h4 id="実装方法詳細">実装方法：詳細</h4>
+<h4 id="データ表示実装方法">データ表示：実装方法</h4>
 <ul>
 <li>コントローラークラス
 <ul>
-<li>日付取得処理を呼び出す</li>
-</ul>
-</li>
-<li>サービスクラス
-<ul>
-<li>現在の日付を取得する</li>
-<li>画面の作成年月に反映</li>
-</ul>
-</li>
-</ul>
-<h3 id="ファイルの選択詳細">ファイルの選択：詳細</h3>
-<p>ユーザーがファイル選択ボタン押下時にダイアログを表示しローカルからCSVファイルを選択する。選択したファイル名が画面に表示される。</p>
-<ul class="contains-task-list">
-<li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 入力あり：
-ローカルに保存されている経路CSVファイル（例：申請_2024年〇月経費申請.csv）</p>
-</li>
-<li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 出力あり：
-選択されたファイル名を画面に表示する</p>
-</li>
-</ul>
-<h4 id="実装方法">実装方法</h4>
-<ul>
-<li>コントローラークラス</li>
-<li>CSVファイル選択処理を呼び出す</li>
-<li>サービスクラス
-<ul>
-<li>JFileChooserを使ってCSVファイルを選択するダイアログを開く</li>
-<li>ファイルが選択されたらパスとファイル名を取得する。</li>
-</ul>
-</li>
-</ul>
-<h3 id="反映ボタン押下詳細">反映ボタン押下：詳細</h3>
-<p>ユーザーが選択した経路CSVファイルをMST_KEIROに保存する。</p>
-<ul class="contains-task-list">
-<li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 入力あり：
-選択された経路CSVファイルの内容</p>
-</li>
-<li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 出力あり：
-CSV管理表にWRK_KEIROの内容を表示</p>
-</li>
-</ul>
-<h4 id="反映ボタン押下実装方法">反映ボタン押下：実装方法</h4>
-<ul>
-<li>コントローラークラス：CSVをインポート</li>
-<li>サービスクラス
-<ul>
-<li>DBへのデータ保存（経路CSV内のすべて）</li>
-<li>DBへのデータ保存（交通費申請CSV作成用の項目）</li>
-</ul>
-</li>
-<li>モデルクラス
-<ul>
-<li>エンティティクラス
-<ul>
-<li>DBへのデータ保存（経路CSV内のすべて）を管理</li>
-<li>DBへのデータ保存（交通費申請CSV作成用の項目）を管理</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="年月の選択詳細">年月の選択：詳細</h3>
-<p>ドロップダウンを利用しCSV作成年月を選択する。</p>
-<ul class="contains-task-list">
-<li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 入力あり：
-選択された年月情報（例：2025年5月など）</p>
-</li>
-<li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 出力あり：
-選択された年月（例：2025年5月など）
-CSV管理表に年月情報を反映</p>
-</li>
-</ul>
-<h4 id="年月の選択実装方法">年月の選択：実装方法</h4>
-<ul>
-<li>コントローラークラス
-<ul>
-<li>選択された年月を取得する</li>
-</ul>
-</li>
-</ul>
-<h3 id="チェックボックス押下詳細">チェックボックス押下：詳細</h3>
-<p>チェックボックスの操作でCSV管理表の特定日のWRK_KEIROデータを反映か未反映にする</p>
-<ul class="contains-task-list">
-<li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 入力あり：
-チェックボックスの操作（チェックの有無）
-チェック有：該当日のデータを反映する
-チェック無：該当日のデータを未反映にする</p>
-</li>
-<li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 出力あり：
-チェック有：対象日のCSV管理表にWRK_KEIROの情報を反映
-チェック無：対象日のCSV管理表の内容が未反映として表示される</p>
-</li>
-</ul>
-<h4 id="チェックボックス押下実装方法">チェックボックス押下：実装方法</h4>
-<ul>
-<li>コントローラークラス
-<ul>
-<li>チェックされた日付の更新処理を呼び出す</li>
-<li>更新後のCSV管理表のデータ取得処理を呼び出す</li>
-</ul>
-</li>
-<li>サービスクラス
-<ul>
-<li>チェックされた日付の反映状態を更新処理
-<ul>
-<li>チェックがはずれた日付の反映状態を更新処理</li>
-<li>反映状態を更新したCSV管理表データの取得処理</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="編集ボタン押下詳細">編集ボタン押下：詳細</h3>
-<p>ユーザーが編集ボタンを押下することで該当データをモーダルで編集し保存できる</p>
-<ul class="contains-task-list">
-<li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 入力あり：
-編集ボタンがクリックされることで、該当する行のデータが選択され、その内容がモーダルに表示される。</p>
-</li>
-<li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 出力あり：</p>
-</li>
-</ul>
-<p>ユーザーが更新をクリックすると編集されたデータがCSV管理表に反映され、表示が更新される。</p>
-<h4 id="編集ボタン押下実装方法">編集ボタン押下：実装方法</h4>
-<ul>
-<li>コントローラークラス
-<ul>
-<li>WRK_KEIROデータを更新する</li>
-<li>更新後のWRK_KEIROデータを取得する</li>
-</ul>
-</li>
-<li>サービスクラス
-<ul>
-<li>WRK_KEIROデータを取得し更新処理</li>
-</ul>
-</li>
-</ul>
-<h3 id="出力ボタン押下詳細">出力ボタン押下：詳細</h3>
-<p>ユーザーが出力ボタン押下後にWRK_KEIROにCSV管理表のデータを保存する。一覧確認画面を表示し一覧表にWRK_KEIROのデータを表示、ラベル部分に「交通費申請用のCSVファイルを出力します。よろしいですか？」を表示する。</p>
-<ul class="contains-task-list">
-<li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 入力あり：
-ユーザーが出力ボタンを押下すると一覧確認画面を表示し出力内容確認メッセージを表示する（例：交通費申請CSVを出力します。よろしいですか？）</p>
-</li>
-<li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 出力あり：
-CSV管理表のデータをWRK_KEIROに保存し一覧確認画面に表示する</p>
-</li>
-</ul>
-<h3 id="出力ボタン押下実装方法">出力ボタン押下：実装方法</h3>
-<ul class="contains-task-list">
-<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> コントローラークラス
-<ul>
-<li>データ保存処理を呼び出す</li>
 <li>データ取得処理を呼び出す</li>
 </ul>
 </li>
-<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> サービスクラス
+<li>サービスクラス
 <ul>
-<li>WRK_KEIROへのデータ保存（CSV管理表のデータすべて）</li>
-<li>WRK_KEIROからデータ取得（WRK_KEIRO内のデータすべて）</li>
+<li>該当日のWRK_KEIROデータ取得処理を行う</li>
 </ul>
 </li>
 </ul>
-<h3 id="csvファイル出力時詳細">CSVファイル出力時：詳細</h3>
-<p>ローカルのダウンロードフォルダにCSVファイルを出力し画面内のラベルに「CSVファイルの出力が完了しました。」と表示する</p>
+<h3 id="キャンセルボタン押下詳細">キャンセルボタン押下：詳細</h3>
+<p>CSVファイル簡易作成ツール画面へ戻る</p>
 <ul class="contains-task-list">
 <li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 入力なし：</p>
+<p><input class="task-list-item-checkbox"type="checkbox"> 入力なし：CSVファイル簡易作成ツール画面に戻る</p>
 </li>
 <li class="task-list-item enabled">
-<p><input class="task-list-item-checkbox"type="checkbox"> 出力あり：
-ダウンロードフォルダへCSVファイル出力しラベル部分に「CSVファイルの出力が完了しました。」と表示する</p>
+<p><input class="task-list-item-checkbox"type="checkbox"> 出力なし：CSVファイル簡易作成ツール画面に戻る</p>
 </li>
 </ul>
-<h3 id="csvファイル出力時-実装方法">CSVファイル出力時： 実装方法</h3>
+<h4 id="キャンセルボタン押下実装方法">キャンセルボタン押下：実装方法</h4>
 <ul>
 <li>コントローラークラス
 <ul>
-<li>CSVファイルの出力処理を呼び出す</li>
-<li>CSVファイル出力完了メッセージを表示する</li>
+<li>CSVファイル簡易作成ツール画面へのリダイレクト処理</li>
+</ul>
+</li>
+</ul>
+<h3 id="更新ボタン押下詳細">更新ボタン押下：詳細</h3>
+<p>編集データをワークテーブルの該当箇所に保存する</p>
+<ul class="contains-task-list">
+<li class="task-list-item enabled">
+<p><input class="task-list-item-checkbox"type="checkbox"> 入力あり：ユーザーが入力した編集データ</p>
+</li>
+<li class="task-list-item enabled">
+<p><input class="task-list-item-checkbox"type="checkbox"> 出力あり：該当日の編集データをWRK_KEIROに保存</p>
+</li>
+</ul>
+<h4 id="更新ボタン押下実装方法">更新ボタン押下：実装方法</h4>
+<ul>
+<li>コントローラークラス
+<ul>
+<li>データ保存処理を呼び出す</li>
 </ul>
 </li>
 <li>サービスクラス
 <ul>
-<li>一覧確認画面で書き出されたCSVファイルの出力処理を行う</li>
+<li>WRK_KEIROへ該当日のデータ保存処理を行う</li>
 </ul>
 </li>
 </ul>
-<h2 id="現在年月取得時シーケンス図">現在年月取得時シーケンス図</h2>
-<pre style="all:unset;"><div class="mermaid">sequenceDiagram
-actor 1 as ユーザー
-participant 2 as CSVファイル簡易作成ツール画面
-
-1-&gt;&gt;+2: 画面を開く
-2-&gt;&gt;-2: 現在日時を表示</div></pre>
-<h2 id="csvファイル選択時シーケンス図">CSVファイル選択時シーケンス図</h2>
-<pre style="all:unset;"><div class="mermaid">sequenceDiagram
-actor 1 as ユーザー
-participant 2 as CSVファイル簡易作成ツール画面
-participant 5 as 経路CSV
-participant 6 as DB
-
-1-&gt;&gt;2: ファイルの選択ボタン押下
-2-&gt;&gt;5: CSVファイルの選択
-5-&gt;&gt;6: CSVファイルの全データをMST_KEIROに保存
-6-&gt;&gt;6: WRK_KEIROを生成
-6-&gt;&gt;2: MST_KEIROのデータを受け取る
-2-&gt;&gt;1: CSVファイル名を表示</div></pre>
-<h2 id="反映ボタン押下時シーケンス図">反映ボタン押下時シーケンス図</h2>
-<pre style="all:unset;"><div class="mermaid">sequenceDiagram
-actor 1 as ユーザー
-participant 2 as CSVファイル簡易作成ツール画面
-participant 6 as DB
-
-1-&gt;&gt;+2: 反映ボタン押下
-2-&gt;&gt;+6: WRK_KEIROのデータ検索
-6-&gt;&gt;-2: WRK_KEIROのデータを受け取る
-2-&gt;&gt;-1: CSV管理表に表示</div></pre>
-<h2 id="カレンダーウィジェット操作時シーケンス図">カレンダーウィジェット操作時シーケンス図</h2>
-<pre style="all:unset;"><div class="mermaid">sequenceDiagram
-actor 1 as ユーザー
-participant 2 as CSVファイル簡易作成ツール画面
-participant 6 as DB
-
-1-&gt;&gt;+2: カレンダーウィジェットの操作
-2-&gt;&gt;+6: WRK_KEIROのapplication_dateを変更
-6-&gt;&gt;-2: 変更後のWRK_KEIROをCSV管理表に表示</div></pre>
-<h2 id="出力ボタン押下時シーケンス図">出力ボタン押下時シーケンス図</h2>
-<pre style="all:unset;"><div class="mermaid">sequenceDiagram 
-actor 1 as ユーザー
-participant 2 as CSVファイル簡易作成ツール画面
-participant 3 as 一覧確認画面
-participant 6 as DB
-
-1-&gt;&gt;+2: 出力ボタン押下
-2-&gt;&gt;3: 一覧確認画面を開く
-3-&gt;&gt;+6: WRK_KEIROのデータを検索
-6-&gt;&gt;-3: WRK_KEIROのデータを受け取る
-3-&gt;&gt;1: 一覧確認画面を表示する</div></pre>
-<h2 id="okボタン押下時シーケンス図">OKボタン押下時シーケンス図</h2>
-<pre style="all:unset;"><div class="mermaid">sequenceDiagram
-actor 1 as ユーザー
-participant 3 as 一覧確認画面
-participant 7 as 交通費申請CSV
-
-1-&gt;&gt;+3: OKボタン押下
-3-&gt;&gt;+7: CSVファイルを書き出す
-7-&gt;&gt;-1: CSVファイルを出力</div></pre>
-<h2 id="データ設計">データ設計</h2>
-<pre style="all:unset;"><div class="mermaid">erDiagram
-
-    MST_KEIRO }o--|| WRK_KEIRO : "IDで関連付ける"
-
-    MST_KEIRO {
-        int id "ID"
-        int detail_id "明細番号"
-        int related_id "関連明細番号"
-        date application_date "申請日"
-        int employee_id "従業員番号"
-        string employee_name "従業員名"
-        string payee_content "支払先・内容"
-        string expense_category "経費科目"
-        float converted_amount "円換算金額"
-        float total_with_related "関連明細との合計"
-        float total_tax_with_related "関連明細との消費税額合計"
-        string memo "メモ"
-        int inhouse_attendees "自社出席者"
-        int inhouse_attendees_count "自社出席者人数"
-        int external_attendees "他社出席者"
-        int external_attendees_count "他社出席者人数"
-        int total_attendees "出席者数"
-        float amount_per_attendee "出席者あたりの円換算金額"
-        string department_code "費用負担部門コード"
-        string department_name "費用負担部門名"
-        string project_name "プロジェクト名"
-        string project_code "プロジェクトコード"
-        string tax_category "税区分"
-        string invoice_scheme "インボイス経過措置"
-        float amount_inclusive_tax "金額（税込）"
-        string currency "通貨"
-        float exchange_rate "為替レート"
-        float tax_amount "消費税額"
-        string debit_account "借方勘定科目"
-        string debit_sub_account "借方補助科目"
-        string credit_account "貸方勘定科目"
-        string credit_sub_account "貸方補助科目"
-        string source_of_entry "明細取得元"
-        bool journal_entry_created "仕訳作成済"
-        int pre_approval_number "事前申請番号"
-        string pre_approval_title "事前申請タイトル"
-        int expense_request_number "経費申請番号"
-        date request_date "申請日"
-        string request_status "申請ステータス"
-        string expense_request_title "経費申請タイトル"
-        int created_by_id "作成者番号"
-        string created_by_name "作成者名"
-        datetime created_at "作成日時"
-        int updated_by_id "更新者番号"
-        string updated_by_name "更新者名"
-        datetime updated_at "更新日時"
-        string aggregate_title "集計タイトル"
-    }
-
-    WRK_KEIRO {
-        int keiro_id "CSVファイルID"
-        date application_date "申請日"
-        string payee "支払先・内容"
-        string expense_category "経費科目"
-        float amount "金額"
-        string memo "メモ"
-        string department_name "費用負担部名"
-        string department_code "費用負担部コード"
-    }</div></pre>
-<h2 id="システム構成">システム構成</h2>
-<h2 id="テスト計画">テスト計画</h2>
 
             
             <script async type="text/javascript">
