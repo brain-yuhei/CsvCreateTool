@@ -82,7 +82,7 @@ h3 {
 
 ### 年月情報取得
 
-CSVファイル簡易作成ツール画面表示の際に現在時刻を取得する
+CSVファイル簡易作成ツール画面表示の際に現在時刻を取得し日付ラベルに反映する
 
 ### ファイルの選択
 
@@ -92,9 +92,9 @@ CSVファイル簡易作成ツール画面表示の際に現在時刻を取得�
 
 反映ボタンを押下時に経路CSVファイル内すべての内容をMST_KEIROに登録する機能を追加
 
-### 年月の選択
+### カレンダーの選択
 
-カレンダーウィジェットで選択した年月をCSV管理表に反映する
+ユーザーがカレンダーから対象年月を選択した場合に日付ラベルに選択月を反映する
 
 ### 生成欄のチェックボックス押下
 
@@ -172,16 +172,15 @@ CSV管理表にWRK_KEIROの内容を表示
     - DBへのデータ保存（経路CSV内のすべて）を管理
     - DBへのデータ保存（交通費申請CSV作成用の項目）を管理
 
-### 年月の選択：詳細
+### カレンダーの選択：詳細
 
-ドロップダウンを利用しCSV作成年月を選択する。
+ユーザーがカレンダーを選択した際にDate Pickerを使って選択年月を日付ラベルに反映する
 
 - [ ] 入力あり：
 選択された年月情報（例：2025年5月など）
 
 - [ ] 出力あり：
 選択された年月（例：2025年5月など）
-CSV管理表に年月情報を反映
 
 #### 年月の選択：実装方法
 
@@ -284,14 +283,14 @@ participant 2 as CSVファイル簡易作成ツール画面
 sequenceDiagram
 actor 1 as ユーザー
 participant 2 as CSVファイル簡易作成ツール画面
-participant 5 as 経路CSV
-participant 6 as DB
+participant 3 as 経路CSV
+participant 4 as DB
 
 1->>2: ファイルの選択ボタン押下
-2->>5: CSVファイルの選択
-5->>6: CSVファイルの全データをMST_KEIROに保存
-6->>6: WRK_KEIROを生成
-6->>2: MST_KEIROのデータを受け取る
+2->>3: CSVファイルの選択
+3->>4: CSVファイルの全データをMST_KEIROに保存
+4->>4: WRK_KEIROを生成
+4->>2: MST_KEIROのデータを受け取る
 2->>1: CSVファイル名を表示
 
 ```
@@ -302,26 +301,26 @@ participant 6 as DB
 sequenceDiagram
 actor 1 as ユーザー
 participant 2 as CSVファイル簡易作成ツール画面
-participant 6 as DB
+participant 3 as DB
 
 1->>+2: 反映ボタン押下
-2->>+6: WRK_KEIROのデータ検索
-6->>-2: WRK_KEIROのデータを受け取る
+2->>+2: 日付ラベルのデータを取得
+2->>+3: 日付ラベルのデータをWRK_KEIRO内の申請日に保存
+3->>-2: WRK_KEIROのデータを受け取る
 2->>-1: CSV管理表に表示
 
 ```
 
-## カレンダーウィジェット操作時シーケンス図
+## カレンダー選択時シーケンス図
 
 ```mermaid
 sequenceDiagram
 actor 1 as ユーザー
 participant 2 as CSVファイル簡易作成ツール画面
-participant 6 as DB
 
-1->>+2: カレンダーウィジェットの操作
-2->>+6: WRK_KEIROのapplication_dateを変更
-6->>-2: 変更後のWRK_KEIROをCSV管理表に表示
+
+1->>+2: カレンダーの操作
+2->>-2: 選択日時を表示
 
 ```
 
@@ -332,12 +331,12 @@ sequenceDiagram
 actor 1 as ユーザー
 participant 2 as CSVファイル簡易作成ツール画面
 participant 3 as 一覧確認画面
-participant 6 as DB
+participant 4 as DB
 
 1->>+2: 出力ボタン押下
 2->>3: 一覧確認画面を開く
-3->>+6: WRK_KEIROのデータを検索
-6->>-3: WRK_KEIROのデータを受け取る
+3->>+4: WRK_KEIROのデータを検索
+4->>-3: WRK_KEIROのデータを受け取る
 3->>1: 一覧確認画面を表示する
 
 ```
@@ -347,12 +346,12 @@ participant 6 as DB
 ```mermaid
 sequenceDiagram
 actor 1 as ユーザー
-participant 3 as 一覧確認画面
-participant 7 as 交通費申請CSV
+participant 2 as 一覧確認画面
+participant 3 as 交通費申請CSV
 
-1->>+3: OKボタン押下
-3->>+7: CSVファイルを書き出す
-7->>-1: CSVファイルを出力
+1->>+2: OKボタン押下
+2->>+3: CSVファイルを書き出す
+3->>-1: CSVファイルを出力
 
 ```
 
@@ -361,7 +360,9 @@ participant 7 as 交通費申請CSV
 ```mermaid
 erDiagram
 
-    MST_KEIRO }o--|| WRK_KEIRO : "IDで関連付ける"
+    MST_KEIRO ||--o{ WRK_KEIRO : "IDで関連付ける"
+    WRK_KEIRO ||--o{ out_result : produces
+    WRK_KEIRO }o--|| mst_holiday : refers 
 
     MST_KEIRO {
         int id "ID"
@@ -413,8 +414,21 @@ erDiagram
         string aggregate_title "集計タイトル"
     }
 
+    mst_holiday {
+        DATE holiday_date PK
+        VARCHAR name
+    }
+
+    out_result {
+        BIGINT id PK
+        BIGINT wrk_id FK
+        DATETIME exported_at
+        VARCHAR exported_by
+    }
+
     WRK_KEIRO {
-        int keiro_id "CSVファイルID"
+        int id pk "ワークID"
+        int mst_id FK "元データとの関連（MST_KEIRO.id）"
         date application_date "申請日"
         string payee "支払先・内容"
         string expense_category "経費科目"

@@ -209,13 +209,13 @@ h3 {
 <p><img src="file:///c:\Users\y_hashimoto\Documents\Private\Yuhei\AttrMF\Picture\image3.png" alt="一覧画面"></p>
 <h2 id="機能仕様">機能仕様</h2>
 <h3 id="年月情報取得">年月情報取得</h3>
-<p>CSVファイル簡易作成ツール画面表示の際に現在時刻を取得する</p>
+<p>CSVファイル簡易作成ツール画面表示の際に現在時刻を取得し日付ラベルに反映する</p>
 <h3 id="ファイルの選択">ファイルの選択</h3>
 <p>ファイル選択ボタン押下時にファイル選択画面を表示し経路CSVファイルを選択する機能を追加する</p>
 <h3 id="反映ボタン押下">反映ボタン押下</h3>
 <p>反映ボタンを押下時に経路CSVファイル内すべての内容をMST_KEIROに登録する機能を追加</p>
-<h3 id="年月の選択">年月の選択</h3>
-<p>カレンダーウィジェットで選択した年月をCSV管理表に反映する</p>
+<h3 id="カレンダーの選択">カレンダーの選択</h3>
+<p>ユーザーがカレンダーから対象年月を選択した場合に日付ラベルに選択月を反映する</p>
 <h3 id="生成欄のチェックボックス押下">生成欄のチェックボックス押下</h3>
 <p>生成欄のチェックボックスにユーザーがチェックを入れると該当日のCSV管理表にWRK_KEIROの情報が反映する
 チェックを外すと該当日のCSV管理表が未反映になる</p>
@@ -307,8 +307,8 @@ CSV管理表にWRK_KEIROの内容を表示</p>
 </ul>
 </li>
 </ul>
-<h3 id="年月の選択詳細">年月の選択：詳細</h3>
-<p>ドロップダウンを利用しCSV作成年月を選択する。</p>
+<h3 id="カレンダーの選択詳細">カレンダーの選択：詳細</h3>
+<p>ユーザーがカレンダーを選択した際にDate Pickerを使って選択年月を日付ラベルに反映する</p>
 <ul class="contains-task-list">
 <li class="task-list-item enabled">
 <p><input class="task-list-item-checkbox"type="checkbox"> 入力あり：
@@ -316,8 +316,7 @@ CSV管理表にWRK_KEIROの内容を表示</p>
 </li>
 <li class="task-list-item enabled">
 <p><input class="task-list-item-checkbox"type="checkbox"> 出力あり：
-選択された年月（例：2025年5月など）
-CSV管理表に年月情報を反映</p>
+選択された年月（例：2025年5月など）</p>
 </li>
 </ul>
 <h4 id="年月の選択実装方法">年月の選択：実装方法</h4>
@@ -451,59 +450,61 @@ participant 2 as CSVファイル簡易作成ツール画面
 <pre style="all:unset;"><div class="mermaid">sequenceDiagram
 actor 1 as ユーザー
 participant 2 as CSVファイル簡易作成ツール画面
-participant 5 as 経路CSV
-participant 6 as DB
+participant 3 as 経路CSV
+participant 4 as DB
 
 1-&gt;&gt;2: ファイルの選択ボタン押下
-2-&gt;&gt;5: CSVファイルの選択
-5-&gt;&gt;6: CSVファイルの全データをMST_KEIROに保存
-6-&gt;&gt;6: WRK_KEIROを生成
-6-&gt;&gt;2: MST_KEIROのデータを受け取る
+2-&gt;&gt;3: CSVファイルの選択
+3-&gt;&gt;4: CSVファイルの全データをMST_KEIROに保存
+4-&gt;&gt;4: WRK_KEIROを生成
+4-&gt;&gt;2: MST_KEIROのデータを受け取る
 2-&gt;&gt;1: CSVファイル名を表示</div></pre>
 <h2 id="反映ボタン押下時シーケンス図">反映ボタン押下時シーケンス図</h2>
 <pre style="all:unset;"><div class="mermaid">sequenceDiagram
 actor 1 as ユーザー
 participant 2 as CSVファイル簡易作成ツール画面
-participant 6 as DB
+participant 3 as DB
 
 1-&gt;&gt;+2: 反映ボタン押下
-2-&gt;&gt;+6: WRK_KEIROのデータ検索
-6-&gt;&gt;-2: WRK_KEIROのデータを受け取る
+2-&gt;&gt;+2: 日付ラベルのデータを取得
+2-&gt;&gt;+3: 日付ラベルのデータをWRK_KEIRO内の申請日に保存
+3-&gt;&gt;-2: WRK_KEIROのデータを受け取る
 2-&gt;&gt;-1: CSV管理表に表示</div></pre>
-<h2 id="カレンダーウィジェット操作時シーケンス図">カレンダーウィジェット操作時シーケンス図</h2>
+<h2 id="カレンダー選択時シーケンス図">カレンダー選択時シーケンス図</h2>
 <pre style="all:unset;"><div class="mermaid">sequenceDiagram
 actor 1 as ユーザー
 participant 2 as CSVファイル簡易作成ツール画面
-participant 6 as DB
 
-1-&gt;&gt;+2: カレンダーウィジェットの操作
-2-&gt;&gt;+6: WRK_KEIROのapplication_dateを変更
-6-&gt;&gt;-2: 変更後のWRK_KEIROをCSV管理表に表示</div></pre>
+
+1-&gt;&gt;+2: カレンダーの操作
+2-&gt;&gt;-2: 選択日時を表示</div></pre>
 <h2 id="出力ボタン押下時シーケンス図">出力ボタン押下時シーケンス図</h2>
 <pre style="all:unset;"><div class="mermaid">sequenceDiagram 
 actor 1 as ユーザー
 participant 2 as CSVファイル簡易作成ツール画面
 participant 3 as 一覧確認画面
-participant 6 as DB
+participant 4 as DB
 
 1-&gt;&gt;+2: 出力ボタン押下
 2-&gt;&gt;3: 一覧確認画面を開く
-3-&gt;&gt;+6: WRK_KEIROのデータを検索
-6-&gt;&gt;-3: WRK_KEIROのデータを受け取る
+3-&gt;&gt;+4: WRK_KEIROのデータを検索
+4-&gt;&gt;-3: WRK_KEIROのデータを受け取る
 3-&gt;&gt;1: 一覧確認画面を表示する</div></pre>
 <h2 id="okボタン押下時シーケンス図">OKボタン押下時シーケンス図</h2>
 <pre style="all:unset;"><div class="mermaid">sequenceDiagram
 actor 1 as ユーザー
-participant 3 as 一覧確認画面
-participant 7 as 交通費申請CSV
+participant 2 as 一覧確認画面
+participant 3 as 交通費申請CSV
 
-1-&gt;&gt;+3: OKボタン押下
-3-&gt;&gt;+7: CSVファイルを書き出す
-7-&gt;&gt;-1: CSVファイルを出力</div></pre>
+1-&gt;&gt;+2: OKボタン押下
+2-&gt;&gt;+3: CSVファイルを書き出す
+3-&gt;&gt;-1: CSVファイルを出力</div></pre>
 <h2 id="データ設計">データ設計</h2>
 <pre style="all:unset;"><div class="mermaid">erDiagram
 
-    MST_KEIRO }o--|| WRK_KEIRO : "IDで関連付ける"
+    MST_KEIRO ||--o{ WRK_KEIRO : "IDで関連付ける"
+    WRK_KEIRO ||--o{ out_result : produces
+    WRK_KEIRO }o--|| mst_holiday : refers 
 
     MST_KEIRO {
         int id "ID"
@@ -555,8 +556,21 @@ participant 7 as 交通費申請CSV
         string aggregate_title "集計タイトル"
     }
 
+    mst_holiday {
+        DATE holiday_date PK
+        VARCHAR name
+    }
+
+    out_result {
+        BIGINT id PK
+        BIGINT wrk_id FK
+        DATETIME exported_at
+        VARCHAR exported_by
+    }
+
     WRK_KEIRO {
-        int keiro_id "CSVファイルID"
+        int id pk "ワークID"
+        int mst_id FK "元データとの関連（MST_KEIRO.id）"
         date application_date "申請日"
         string payee "支払先・内容"
         string expense_category "経費科目"
