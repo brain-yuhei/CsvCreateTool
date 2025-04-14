@@ -8,6 +8,10 @@ public class KeirocreateApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(KeirocreateApplication.class, args);
+
+		//現在時刻のテスト
+		//final var now = LocalTime.now();
+        //System.out.println(now);
 	}
 
 }

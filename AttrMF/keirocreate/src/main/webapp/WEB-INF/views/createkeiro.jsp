@@ -13,15 +13,24 @@
     <!-- カレンダーを配置 -->
     <div class ="calendar">
         <label for="calendar_Text">年月選択</label>
-        <input type="month" id="calendar_Text" name="calendar_Text">
+        <input type="month" id="calendar_Text" name="calendar_Text" value="${currentTime}">
     </div>
 
-    <!-- ファイル選択を配置 -->
-    <div class ="Fileselect">
-        <label for="Fileselect_Text">CSVファイル</label>
-        <input type="file">
-    </div>
+    <!-- ファイル選択とアップロードボタンを配置 -->
+	<div class ="upload">
+		<form action="/upload" method="post" enctype="multipart/form-data">
+			<label for="file">ファイルを選択:</label>
+		    <input type="file" id="file" name="file" required>
+		    <button type="submit">アップロード</button>
+		</form>
+	</div>
 
+    <!--メッセージラベルを配置-->
+    <div class ="messagelabel">
+        <c:if test="${not empty message}">
+            <p>${message}</p>
+        </c:if>
+    </div>
 
     <!-- ボタンを配置 -->
     <div class="checkbutton"> 
