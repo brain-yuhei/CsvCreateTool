@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,8 @@ import java.time.LocalDateTime;
 @Entity // このクラスがDBのテーブルと対応することを示す
 @Getter // Lombokを使用して、すべてのフィールドのゲッターを自動生成
 @Setter // Lombokを使用して、すべてのフィールドのセッターを自動生成
-public class UserKeiroEntity {
+@Table(name = "MST_KEIRO") 
+public class MstKeiroEntity {
 
     @Id // idが主キーであることを示す
     @GeneratedValue(strategy = GenerationType.IDENTITY) // IDの自動生成
@@ -28,7 +30,7 @@ public class UserKeiroEntity {
     private LocalDate application_date; //申請日
     private String employee_id; //従業員番号
     private String employee_name; //従業員名
-    private String payee_content; //支払先・内容
+    private String payeeContent; //支払先・内容
     private String expense_category; //経費科目
     private BigDecimal converted_amount; //円換算金額
     private BigDecimal total_with_related; //関連明細との合計
@@ -46,7 +48,7 @@ public class UserKeiroEntity {
     private String project_code; //プロジェクトコード
     private String tax_category; //税区分
     private String invoice_scheme; //インボイス経過措置
-    private BigDecimal amount_inclusive_tax; //金額（税込）
+    private BigDecimal amountInclusiveTax; //金額（税込）
     private String currency; //通貨
     private BigDecimal exchange_rate; //為替レート
     private BigDecimal tax_amount; //消費税額
