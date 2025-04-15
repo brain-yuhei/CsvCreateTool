@@ -11,6 +11,10 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * ワークテーブルを作成
+ * 
+ */
 @Entity // このクラスがDBのテーブルと対応することを示す
 @Getter // Lombokを使用して、すべてのフィールドのゲッターを自動生成
 @Setter // Lombokを使用して、すべてのフィールドのセッターを自動生成

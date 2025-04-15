@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * 
+ * マスタテーブルを作成
  * 
  */
 @Entity // このクラスがDBのテーブルと対応することを示す
