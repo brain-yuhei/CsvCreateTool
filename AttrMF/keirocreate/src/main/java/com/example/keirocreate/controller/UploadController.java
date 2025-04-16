@@ -99,16 +99,6 @@ public class UploadController {
         model.addAttribute("wrkList", wrkList);
         return "createkeiro"; 
     }
-
-    @PostMapping("/SelectedKeiro")
-    public String handleFormSubmission(@RequestParam List<String> selectedDates) {
-    // 受け取ったselectedDatesを処理
-    for (String date : selectedDates) {
-        System.out.println(date);
-    }
-    return "redirect:/somePage";
-}
-
 }
 
 

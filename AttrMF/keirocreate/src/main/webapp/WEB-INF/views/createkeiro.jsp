@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>CSVファイル簡易作成ツール</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/modal.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Modal.css">
     <script src="${pageContext.request.contextPath}/js/modal.js"></script>
 </head>
 <body>
@@ -28,7 +28,6 @@
 
     <!-- メッセージを表示 -->
     <div class="messagelabel">
-        <!-- メッセージがある場合に表示する -->
         <c:if test="${not empty message}">
             <p>${message}</p>
         </c:if>
@@ -40,55 +39,48 @@
     </div>
 
     <!-- CSV管理表 -->
-<form action="/SelectedKeiro" method="post">
-    <table border="1">
-        <thead>
-            <tr>
-                <!-- 一括チェックボックス:selectAllCheckboxesメソッド呼び出し -->
-                <th><input type="checkbox" id="selectAll" onclick="selectAllCheckboxes(this)"></th> 
-                <th>日付</th>
-                <th>支払先・内容</th>
-                <th>経費科目</th>
-                <th>金額</th>
-                <th>メモ</th>
-                <th>費用負担部名</th>
-                <th>費用負担部コード</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- 選択した年月の各日付に対して1行ずつ出力 -->
-            <c:forEach var="date" items="${dateList}">
+    <form action="/SelectedKeiro" method="post">
+        <table border="1">
+            <thead>
                 <tr>
-                    <!-- 個別のチェックボックス -->
-                    <td>
-                        <input type="checkbox" name="selectedDates" value="${date}">
-                    </td>
-
-                    <!-- 各行に日付を表示 -->
-                    <td>${date}</td>
-
-                    <!-- ワークテーブルにデータがある場合の表示 -->
-                    <c:choose>
-                        <c:when test="${not empty wrkList}">
-                            <c:forEach var="item" items="${wrkList}">
-                                <td><input type="text" name="payee" value="${item.payee}"></td>
-                                <td><input type="text" name="expenseCategory" value="${item.expenseCategory}"></td>
-                                <td><input type="text" name="amount" value="${item.amount}"></td>
-                                <td><input type="text" name="memo" value="${item.memo}"></td>
-                                <td><input type="text" name="departmentName" value="${item.departmentName}"></td>
-                                <td><input type="text" name="departmentCode" value="${item.departmentCode}"></td>
-                            </c:forEach>
-                        </c:when>
-                        <c:otherwise>
-                           <td colspan="4">データなし</td>
-                        </c:otherwise>
-                    </c:choose>
+                    <th><input type="checkbox" id="selectAll" onclick="selectAllCheckboxes(this)"></th>
+                    <th>日付</th>
+                    <th>支払先・内容</th>
+                    <th>経費科目</th>
+                    <th>金額</th>
+                    <th>メモ</th>
+                    <th>費用負担部名</th>
+                    <th>費用負担部コード</th>
                 </tr>
-            </c:forEach>
-        </tbody>
-    </table>
-</form>
+            </thead>
+            <tbody>
+                <c:forEach var="date" items="${dateList}">
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="selectedDates" value="${date}">
+                        </td>
+                        <td>${date}</td>
 
+                        <c:choose>
+                            <c:when test="${not empty wrkList}">
+                                <c:forEach var="item" items="${wrkList}">
+                                    <td><input type="text" name="payee" value="${item.payee}"></td>
+                                    <td><input type="text" name="expenseCategory" value="${item.expenseCategory}"></td>
+                                    <td><input type="text" name="amount" value="${item.amount}"></td>
+                                    <td><input type="text" name="memo" value="${item.memo}"></td>
+                                    <td><input type="text" name="departmentName" value="${item.departmentName}"></td>
+                                    <td><input type="text" name="departmentCode" value="${item.departmentCode}"></td>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <td colspan="4">データなし</td>
+                            </c:otherwise>
+                        </c:choose>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </form>
 
     <!-- モーダル画面 -->
     <div id="outputModal">
@@ -110,10 +102,8 @@
             <tbody id="modalTableBody">
                 <!-- JavaScriptで挿入 -->
             </tbody>
-            
         </table>
 
-        <!-- モーダルの操作ボタン -->
         <br/>
         <button onclick="downloadCSV()">出力</button>
         <button onclick="closeModal()">閉じる</button>
@@ -124,5 +114,6 @@
 
 </body>
 </html>
+
 
 

@@ -4,11 +4,13 @@ import com.example.keirocreate.model.MstKeiroEntity;
 import com.example.keirocreate.model.WrkKeiroEntity;
 import com.example.keirocreate.repository.MstKeiroRepository;
 import com.example.keirocreate.repository.WrkKeiroRepository;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -17,67 +19,69 @@ import java.nio.charset.Charset;
 @Service
 public class CsvService {
 
+    // マスタテーブル用リポジトリ
     @Autowired
     private MstKeiroRepository mstkeiroRepository;
 
+    // ワークテーブル用リポジトリ
     @Autowired
     private WrkKeiroRepository wrkKeiroRepository;
 
     /**
-     * CSVファイルを読み込み、データベースに保存する
-     * 
-     * @param file CSVファイル
-     * @throws IOException
+     * CSVファイルを読み込み、内容をデータベースに保存する処理
+     *
+     * @param file アップロードされたCSVファイル
+     * @throws IOException 
+     * @throws CsvValidationException 
      */
-    public void saveCsvToDatabase(MultipartFile file) throws IOException {
-        // CSVファイルを読み込む
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), Charset.forName("MS932")))) {
-            String line;
-            boolean firstLine = true; // 1行目をTrue
+    public void saveCsvToDatabase(MultipartFile file) throws IOException, CsvValidationException {
+        // CSVを読み込む
+        try (CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream(), Charset.forName("MS932")))) {
+            String[] data;
+            boolean firstLine = true; // 最初の行をTrueにする
 
-            while ((line = reader.readLine()) != null) {
+            // 1行ずつ読み取り
+            while ((data = reader.readNext()) != null) {
+
+                // 最初の行はTrueなので必ずスキップ
                 if (firstLine) {
-                    firstLine = false; // 1行目がTrueなのでスキップ
+                    firstLine = false;
                     continue;
                 }
 
-                // CSVの1行をパース（先頭・末尾の " を除去 → "," で分割）
-                String[] data = line.replaceAll("^\"|\"$", "").split("\",\"");
-
-                // MstKeiroテーブルから該当データを取得
+                // 必要な情報をCSVの列から取り出す
                 String payeeContent = data[5]; // 支払先・内容
                 BigDecimal amountInclusiveTax = parseBigDecimal(data[23]); // 金額（税込）
 
-                MstKeiroEntity mstKeiro = mstkeiroRepository.findByPayeeContentAndAmountInclusiveTax(
-                    payeeContent, amountInclusiveTax
-                );
+                // マスタテーブルから支払先・金額が一致するデータを探す
+                MstKeiroEntity mstKeiro = mstkeiroRepository.findByPayeeContentAndAmountInclusiveTax(payeeContent, amountInclusiveTax);
 
-                // マスタに一致するデータがない場合はこの行をスキップ
+                // 一致するマスタデータがなければこの行はスキップ
                 if (mstKeiro == null) {
                     continue;
                 }
 
-                // 同じ支払先・金額のデータがすでにワークテーブルに存在する場合はスキップ
+                // ワークテーブルにすでに同じデータ（支払先＋金額）がある場合はスキップ
                 boolean exists = wrkKeiroRepository.existsByPayeeAndAmount(payeeContent, amountInclusiveTax);
                 if (exists) {
                     continue;
                 }
 
-                // WrkKeiroEntityの新しいインスタンスを作成し、必要項目を設定
+                // WrkKeiroEntityのインスタンスを生成し、必要な項目をセット
                 WrkKeiroEntity workKeiro = new WrkKeiroEntity();
-                workKeiro.setMstKeiro(mstKeiro);                      // MstKeiroとの関連
-                workKeiro.setPayee(data[5]);                          // 支払先・内容
-                workKeiro.setExpenseCategory(data[6]);                // 経費科目
-                workKeiro.setAmount(parseBigDecimal(data[23]));       // 金額（税込）
-                workKeiro.setMemo(data[10]);                          // メモ
-                workKeiro.setDepartmentName(data[18]);                // 費用負担部名
-                workKeiro.setDepartmentCode(data[17]);                // 費用負担部コード
+                workKeiro.setMstKeiro(mstKeiro); // MstKeiro（マスタ）との関連付け
+                workKeiro.setPayee(data[5]); // 支払先・内容
+                workKeiro.setExpenseCategory(data[6]); // 経費科目（7列目）
+                workKeiro.setAmount(parseBigDecimal(data[23])); // 金額（税込）
+                workKeiro.setMemo(data[10]); // メモ（11列目）
+                workKeiro.setDepartmentName(data[18]); // 費用負担部名（19列目）
+                workKeiro.setDepartmentCode(data[17]); // 費用負担部コード（18列目）
 
-                // ワークテーブルに保存
+                // ワークテーブルに保存（DBにINSERT）
                 try {
                     wrkKeiroRepository.save(workKeiro);
                 } catch (Exception e) {
-                    // 保存に失敗した場合はエラーログを出力
+                    // 保存に失敗した場合はエラーログを出力してスキップ
                     e.printStackTrace();
                 }
             }
@@ -85,19 +89,21 @@ public class CsvService {
     }
 
     /**
-     * 文字列をBigDecimal型に変換するメソッド
-     * 
+     * 文字列を BigDecimal に変換するメソッド
+     *
      * @param value 文字列
-     * @return BigDecimal型の数値 or null
+     * @return 変換後の BigDecimal または null
      */
     private BigDecimal parseBigDecimal(String value) {
         try {
             return (value == null || value.isBlank()) ? null : new BigDecimal(value.trim());
         } catch (NumberFormatException e) {
-            return null; 
+            return null;
         }
     }
 }
+
+
 
 
 
