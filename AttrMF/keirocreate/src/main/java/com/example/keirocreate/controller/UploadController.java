@@ -92,7 +92,7 @@ public class UploadController {
             LocalDate endDate = yearMonth.atEndOfMonth();
 
             List<LocalDate> datesInMonth = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
-
+            
             model.addAttribute("dateList", datesInMonth);
             model.addAttribute("wrkList", wrkKeiroRepository.findAll());
             model.addAttribute("currentTime", selectedMonth);

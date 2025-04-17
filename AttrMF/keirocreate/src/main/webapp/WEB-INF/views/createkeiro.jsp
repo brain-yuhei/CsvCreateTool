@@ -61,7 +61,7 @@
                 <c:forEach var="date" items="${dateList}">
                     <tr>
                         <td>
-                            <input type="checkbox" name="selectedDates" value="${date}">
+                            <input type="checkbox" name="selectedDates" value="${date}" checked>
                         </td>
                         <td>${date}</td>
 
