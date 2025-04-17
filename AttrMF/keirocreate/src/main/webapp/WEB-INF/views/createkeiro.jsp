@@ -13,19 +13,23 @@
 
     <h2>CSVファイル簡易作成ツール</h2>
 
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <!-- ユーザーが選択する年月 -->
-        <label for="calendar_Text">年月選択:</label>
-        <input type="month" id="calendar_Text" name="selectedMonth" value="${currentTime}" required>
+    <div class="form_group">
+        <!-- 年月選択 -->
+        <form id="monthForm" action="/changeMonth" method="post">
+            <label for="calendar_Text">年月選択:</label>
+            <input type="month" id="calendar_Text" name="selectedMonth" value="${currentTime}" required
+                   onchange="document.getElementById('monthForm').submit();">
+        </form>    
 
-        <!-- CSVファイルのアップロード -->
-        <label for="file">ファイルを選択:</label>
-        <input type="file" id="file" name="file" required>
-
-        <!-- フォーム送信ボタン -->
-        <button type="submit">反映</button>
-    </form>
-
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <!-- CSVファイルのアップロード -->
+            <label for="file">ファイルを選択:</label>
+            <input type="file" id="file" name="file" required>
+            <input type="hidden" name="selectedMonth" value="${currentTime}">
+            <!-- フォーム送信ボタン -->
+            <button type="submit">反映</button>
+        </form>
+    </div>
     <!-- メッセージを表示 -->
     <div class="messagelabel">
         <c:if test="${not empty message}">
@@ -73,7 +77,7 @@
                                 </c:forEach>
                             </c:when>
                             <c:otherwise>
-                                <td colspan="4">データなし</td>
+                                <td colspan="6">データなし</td>
                             </c:otherwise>
                         </c:choose>
                     </tr>

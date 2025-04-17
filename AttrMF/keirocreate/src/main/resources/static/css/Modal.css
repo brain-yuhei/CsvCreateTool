@@ -15,17 +15,21 @@ h2 {
     margin-bottom: 30px;
 }
 
-/*ユーザー入力部分*/
-form {
+.form_group {
+    display: flex;
+    justify-content: center; /* 中央揃え */
+    align-items: center;     /* 高さの位置合わせ */
+    gap: 20px;               /* フォーム同士の間隔 */
     margin-bottom: 30px;
-    text-align: center;
 }
 
-/*項目部分*/
-label {
-    margin: 0 10px;
-    font-weight: bold;
+.form_group form {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* ラベルとインプット間 */
+    margin: 0; /* formに元々の margin-bottom があれば除去 */
 }
+
 
 /*年月選択・ファイル選択・ボタンの枠や文字の大きさ*/
 input[type="month"],
