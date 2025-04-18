@@ -13,6 +13,14 @@
 
     <h2>CSVファイル簡易作成ツール</h2>
 
+    <!-- 出力内容確認モーダルを開くボタン -->
+    <div class="uplosd_button">
+        <a href="/">
+            <button type="button">CSVファイルの登録</button>
+        </a>
+    </div>
+       
+
     <div class="form_group">
         <!-- 年月選択 -->
         <form id="monthForm" action="/changeMonth" method="post">
@@ -21,14 +29,6 @@
                    onchange="document.getElementById('monthForm').submit();">
         </form>    
 
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <!-- CSVファイルのアップロード -->
-            <label for="file">ファイルを選択:</label>
-            <input type="file" id="file" name="file" required>
-            <input type="hidden" name="selectedMonth" value="${currentTime}">
-            <!-- フォーム送信ボタン -->
-            <button type="submit">反映</button>
-        </form>
     </div>
     <!-- メッセージを表示 -->
     <div class="messagelabel">

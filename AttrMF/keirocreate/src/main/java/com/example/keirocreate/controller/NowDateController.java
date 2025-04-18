@@ -29,6 +29,6 @@ public class NowDateController {
         //JSPファイルへの追加設定
         model.addAttribute("currentTime", formattedDate); 
         //CSVファイル簡易作成ツール画面を返す      
-        return "createkeiro";
+        return "csvupload";
     }
 }
