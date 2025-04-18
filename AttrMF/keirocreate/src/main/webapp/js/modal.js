@@ -8,7 +8,7 @@ function openModal() {
 
     const mainTableRows = document.querySelectorAll('table tbody tr');
     mainTableRows.forEach(row => {
-        const dateText = getCellText(row, 1); // 2列目（index 1）の日付を取得
+        const dateText = getCellText(row, 2); // 3列目の日付を取得
 
         // チェックされた日付と一致する行だけ処理
         if (selectedDates.includes(dateText)) {
@@ -47,7 +47,7 @@ function buildModalRow(originalRow) {
     const cells = originalRow.querySelectorAll('td');
 
     // 抽出する列の順番
-    const colOrder = [1, 2, 3, 4, null, null, null, null, 5, 6, 7];
+    const colOrder = [2, 3, 4, 5, null, null, null, null, 6, 7, 8];
 
     colOrder.forEach(index => {
         const newCell = document.createElement('td');
@@ -64,7 +64,6 @@ function buildModalRow(originalRow) {
     while (newRow.children.length < 18) {
         newRow.appendChild(document.createElement('td'));
     }
-
     return newRow;
 }
 

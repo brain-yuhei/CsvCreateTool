@@ -48,6 +48,7 @@
             <thead>
                 <tr>
                     <th><input type="checkbox" id="selectAll" onclick="selectAllCheckboxes(this)"></th>
+                    <th>曜日</th>
                     <th>日付</th>
                     <th>支払先・内容</th>
                     <th>経費科目</th>
@@ -58,11 +59,12 @@
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="date" items="${dateList}">
+                <c:forEach var="date" items="${dateList}" varStatus="status">
                     <tr>
                         <td>
                             <input type="checkbox" name="selectedDates" value="${date}" checked>
                         </td>
+                        <td>${dayOfWeekList[status.index]}</td>
                         <td>${date}</td>
 
                         <c:choose>

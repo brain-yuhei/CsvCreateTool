@@ -11,7 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Controller
@@ -63,8 +65,18 @@ public class UploadController {
 
             // 月初から月末までの日付リストを作成する
             List<LocalDate> datesInMonth = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
+
+            // 曜日を取得する
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E", Locale.JAPANESE);
+
+            // 曜日のリストを作成する
+            List<String> dayOfWeekList = datesInMonth.stream()
+            .map(date -> date.format(formatter))
+            .collect(Collectors.toList());
+            
             model.addAttribute("dateList", datesInMonth);
             model.addAttribute("wrkList", wrkKeiroRepository.findAll());
+            model.addAttribute("dayOfWeekList", dayOfWeekList);
             model.addAttribute("currentTime", selectedMonth);
             model.addAttribute("message", "反映が完了しました。");
 
