@@ -7,17 +7,17 @@
     <meta charset="UTF-8">
     <title>CSVファイルアップロード</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/csvUpload.css">
-    <script src="${pageContext.request.contextPath}/js/modal.js"></script>
+    <script src="${pageContext.request.contextPath}/js/modal.js"></script>    
 </head>
 
 <body>
 
     <h2>CSVファイルアップロード画面</h2>
 
-    <form>
-        <label>CSVファイルを選択</label>
-        <input>
-        <button>アップロード</button>
+    <form method="post" action="/csvUpload" enctype="multipart/form-data">
+        <label for="uploadfile">CSVファイルを選択</label>
+        <input type="file" id="uploadfile" name="uploadfile">
+        <button type="submit">アップロード</button>
     </form>
 
 </body>
