@@ -24,14 +24,27 @@ public class CsvdownloadController {
     @Autowired
     private WrkKeiroRepository wrkkeirorepository;
 
+    /**
+     * CSV編集画面を開いた際の処理（現在年月の自動反映用）
+     * 年月選択へリダイレクト
+     * 
+     */
     @GetMapping("/")
     public String home() {
         return "redirect:/currentMonth"; 
     }
 
+    /**
+     * CSV編集画面を開いた際の処理（選択経路の表示用）
+     * 支払先・内容をリスト化し取得する
+     * 
+     */
     @GetMapping("/csvDownload")
     public String downloadPage(Model model) {
+
+        // ワークテーブルから全データ取得
         List<WrkKeiroEntity> wrkList = wrkkeirorepository.findAll();
+        // 支払先・内容をリスト化して取得
         List<String> selectedPayees = wrkList.stream()
                 .map(WrkKeiroEntity::getPayee)
                 .distinct()
@@ -44,39 +57,74 @@ public class CsvdownloadController {
     }
 
     /**
-     * 年月の選択時に実行
+     * 年月を選択した時の処理（カレンダー選択用とカレンダー選択時の経路選択表示用）
      * 
      */
-    @PostMapping("/currentMonth")
-    public String downloadCsv(@RequestParam("selectedMonth") String selectedMonth,
-                              Model model) {
-    
-        // ワークテーブルから全データ取得
+    @GetMapping("/currentMonth")
+    public String showCurrentMonthPage(@RequestParam(value = "selectedMonth", required = false) String selectedMonth,
+                                       Model model) {
+
+        String currentMonth;                                
+        // nullと空欄の確認
+        if (selectedMonth != null && !selectedMonth.isEmpty()) {
+            // nullや空欄ではない場合。（選択年月を使用）
+            currentMonth = selectedMonth;
+        } else {
+            // nullや空欄の場合。（現在の年月を使用）
+            currentMonth = YearMonth.now().toString();
+        }
+
+        model.addAttribute("currentMonth", currentMonth);
+
+        // ワークテーブルから全件取得
         List<WrkKeiroEntity> wrkList = wrkkeirorepository.findAll();
+
+        // 支払先・内容をリスト化して取得
+        List<String> selectedPayees = wrkList.stream()
+            .map(WrkKeiroEntity::getPayee)
+            .filter(p -> p != null && !p.isEmpty())
+            .distinct()
+            .collect(Collectors.toList());
+
+        model.addAttribute("selectedPayees", selectedPayees);
+        model.addAttribute("message", "年月と経路を選択してください。");
+        return "csvDownload";
+    }
     
-        // ワークテーブルのデータがない場合
-        if (wrkList.isEmpty()) {
-            model.addAttribute("message", "データが存在しません。");
+    
+
+
+    /**
+     * 経路選択時の処理
+     * CSV管理表に表示するワークテーブルのデータをリスト化して取得
+     * 
+     */
+    @PostMapping("/selectPayee")
+    public String filterByPayeeAndMonth(@RequestParam("selectedPayee") String selectedPayee,
+                                        @RequestParam("selectedMonth") String selectedMonth,
+                                        Model model) {
+       // nullか空欄の場合                                     
+       if (selectedPayee == null || selectedPayee.isEmpty()) {
+           model.addAttribute("message", "経路を選択してください。");
             return "csvDownload";
         }
     
-        // 選択された年月の月初と月末
+        // 対象の年月の範囲を取得しリスト生成
         YearMonth yearMonth = YearMonth.parse(selectedMonth);
         LocalDate startDate = yearMonth.atDay(1);
         LocalDate endDate = yearMonth.atEndOfMonth();
-    
-        // 月初〜月末の日付リスト
         List<LocalDate> datesInMonth = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
     
-        // 曜日リスト
+        // 年月範囲リストを使って曜日リスト生成
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E", Locale.JAPANESE);
         List<String> dayOfWeekList = datesInMonth.stream()
                 .map(date -> date.format(formatter))
                 .collect(Collectors.toList());
     
-        // ワークテーブルの1行目をベースにコピーして月末まで埋める
-        // 後々、ワークテーブルのどのデータをコピーするか選択できるようにする
-        WrkKeiroEntity baseRow = wrkList.get(0);
+        // 選択された経路でワークテーブルからデータを取得
+        WrkKeiroEntity baseRow = wrkkeirorepository.findByPayee(selectedPayee).get(0);
+    
+        // 月の日付分コピー
         List<WrkKeiroEntity> repeatedWrkList = datesInMonth.stream()
             .map(date -> {
                 WrkKeiroEntity copy = new WrkKeiroEntity();
@@ -89,25 +137,26 @@ public class CsvdownloadController {
                 copy.setDate(date); 
                 return copy;
             })
-            .collect(Collectors.toList());        
-
+            .collect(Collectors.toList());
     
-        // 支払先（経路）のリスト
-        List<String> selectedPayees = repeatedWrkList.stream()
+        // プルダウンの選択肢は全Payeeを再取得
+        List<String> selectedPayees = wrkkeirorepository.findAll().stream()
             .map(WrkKeiroEntity::getPayee)
             .filter(p -> p != null && !p.isEmpty())
             .distinct()
             .collect(Collectors.toList());
     
         model.addAttribute("currentMonth", selectedMonth);
-        model.addAttribute("dateList", datesInMonth);
+        model.addAttribute("selectedPayee", selectedPayee);
         model.addAttribute("wrkList", repeatedWrkList);
+        model.addAttribute("dateList", datesInMonth);
         model.addAttribute("dayOfWeekList", dayOfWeekList);
         model.addAttribute("selectedPayees", selectedPayees);
-        model.addAttribute("message", "反映が完了しました。");
+        model.addAttribute("message", "指定された経路のデータを表示しました。");
     
         return "csvDownload";
     }
+    
     
 }
 

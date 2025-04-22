@@ -4,18 +4,30 @@
 function openModal() {
     toggleModal(true); // モーダルとオーバーレイを表示
 
-    const selectedDates = getSelectedDates(); // チェックされた日付を取得
-    const modalBody = document.getElementById('modalTableBody');
-    modalBody.innerHTML = ""; // モーダル内のテーブルを初期化
+    // チェックされた日付の値を格納
+    const selectedDates = getSelectedDates(); 
 
+    // JSPファイルのモーダルテーブル情報を格納
+    const modalBody = document.getElementById('modalTableBody');
+
+    // モーダルテーブルを初期化
+    modalBody.innerHTML = ""; 
+
+    // JSPファイルのテーブル要素・テーブル本体・行の情報を格納
     const mainTableRows = document.querySelectorAll('table tbody tr');
+
+    // すべての行をループ処理
     mainTableRows.forEach(row => {
-        const dateText = getCellText(row, 2); // 3列目の日付を取得
+
+        // 3列目の日付を格納（日付分処理を行うため）
+        const dateText = getCellText(row, 2); 
 
         // チェックされた日付と一致する行だけ処理
         if (selectedDates.includes(dateText)) {
-            const newRow = buildModalRow(row); // 必要な列だけ抽出して新しい行を作成
-            modalBody.appendChild(newRow);     // モーダルテーブルに追加
+            // 列の生成メソッドを呼び出す
+            const newRow = buildModalRow(row); 
+            // モーダルテーブルに列を追加
+            modalBody.appendChild(newRow); 
         }
     });
 }
@@ -31,7 +43,7 @@ function toggleModal(show) {
     document.getElementById('modalOverlay').style.display = show ? 'block' : 'none';
 }
 
-// チェックされた日付の値を配列として取得
+// チェックされている日付を取得
 function getSelectedDates() {
     return Array.from(document.querySelectorAll('input[name="selectedDates"]:checked'))
         .map(cb => cb.value);
@@ -43,9 +55,11 @@ function getCellText(row, index) {
     return cell ? cell.textContent.trim() : "";
 }
 
-// モーダル用に必要な列だけ抽出する
+// 必要な列だけ抽出する
 function buildModalRow(originalRow) {
+    // JSPファイルの行の情報を格納
     const newRow = document.createElement('tr');
+    // JSPファイルの列の情報を格納
     const cells = originalRow.querySelectorAll('td');
 
     // 抽出する列の順番

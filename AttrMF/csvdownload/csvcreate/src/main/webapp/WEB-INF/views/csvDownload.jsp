@@ -19,22 +19,26 @@
     </a>
 </div>
 
-<div class="select_Month">
-    <form id="monthForm" action="/currentMonth" method="post">
+<div class="form_group">
+    <form id="monthForm" action="/currentMonth" method="get">
         <label for="calendar_Text">年月選択:</label>
         <input type="month" id="calendar_Text" name="selectedMonth" value="${currentMonth}" required
                onchange="document.getElementById('monthForm').submit();">
     </form>
+
+    <form id="filterForm" action="/selectPayee" method="post">
+        <label for="selectedPayee">経路選択:</label>
+        <select name="selectedPayee" id="selectedPayee" onchange="document.getElementById('filterForm').submit();">
+            <option value="">-- 選択してください --</option>
+            <c:forEach var="payee" items="${selectedPayees}">
+                <option value="${payee}" ${payee == selectedPayee ? 'selected' : ''}>${payee}</option>
+            </c:forEach>
+        </select>
+        <input type="hidden" name="selectedMonth" value="${currentMonth}" required />
+    </form>
 </div>
 
-<div class="selectedPayees">
-    <label>選択中の経路:</label>
-    <ul>
-        <c:forEach var="payee" items="${selectedPayees}">
-            <li>${payee}</li>
-        </c:forEach>
-    </ul>
-</div>
+
 
 <c:if test="${not empty message}">
     <div class="error-message">${message}</div>

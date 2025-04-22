@@ -43,7 +43,7 @@ public class CsvuploadController {
             model.addAttribute("message", "アップロードに失敗しました: " + e.getMessage());
         }
 
-        return "csvDownload"; 
+        return "redirect:/currentMonth"; 
     }
 }
 

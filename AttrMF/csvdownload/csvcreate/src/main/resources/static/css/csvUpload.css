@@ -1,134 +1,68 @@
-
-/*全体*/
+/* 全体 */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9f9fb;
-    color: #333;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #f4f5f7;
+    color: #2c3e50;
     margin: 0;
-    padding: 20px;
+    padding: 40px;
 }
 
-/*見出し*/
+/* 見出し */
 h2 {
     color: #2c3e50;
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
+    font-weight: 600;
 }
 
-.form_group {
+/* フォーム */
+form {
     display: flex;
-    justify-content: center; /* 中央揃え */
-    align-items: center;     /* 高さの位置合わせ */
-    gap: 20px;               /* フォーム同士の間隔 */
-    margin-bottom: 30px;
-}
-
-.form_group form {
-    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 10px; /* ラベルとインプット間 */
-    margin: 0; /* formに元々の margin-bottom があれば除去 */
-}
-
-
-/*年月選択・ファイル選択・ボタンの枠や文字の大きさ*/
-input[type="month"],
-input[type="file"],
-button {
-    margin: 10px;
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-/*ボタン全般*/
-button {
-    background-color: #4b78a4;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-/*ボタンへカーソル合わせ時*/
-button:hover {
-    background-color: #462b51;
-}
-
-/*メッセージラベル*/
-.messagelabel p {
-    color: green;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 10px;
-}
-
-/*テーブル全体*/
-table {
-    width: 95%;
-    margin: 20px auto;
-    border-collapse: collapse;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-}
-
-/*見出しとセル*/
-th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
-}
-
-/*見出し*/
-th {
-    background-color: #462b51;
-    color: white;
-}
-
-/*セル*/
-td input[type="text"] {
-    width: 100%;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-/*モーダル*/
-#outputModal {
-    display: none;
-    position: fixed;
-    z-index: 1001;
-    left: 50%;
-    top: 50%;
-    width: 80%;
-    max-height: 80%;
-    overflow-y: auto;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    border-radius: 10px;
+    gap: 20px;
     padding: 20px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 0 auto;
 }
 
-/*モーダル背景*/
-#modalOverlay {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    left: 0;
+/* ラベル */
+label {
+    font-size: 16px;
+    color: #34495e;
+    font-weight: bold;
+}
+
+/* ファイル入力 */
+input[type="file"] {
+    padding: 10px 14px;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    font-size: 15px;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+    background-color: #f9f9f9;
 }
 
-/*モーダルのテーブル*/
-#outputModal table th {
-    background-color: #462b51;
-    color: white;
+/* ボタン */
+button {
+    background-color: #34495e;
+    color: #fff;
+    font-weight: bold;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    width: 100%;
 }
 
-/*チェックボックス*/
-.checkbutton {
-    text-align: center;
-    margin-top: 20px;
+button:hover {
+    background-color: #2c3e50;
+    transform: translateY(-1px);
 }
+
