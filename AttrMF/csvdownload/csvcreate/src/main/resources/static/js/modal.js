@@ -63,7 +63,7 @@ function buildModalRow(originalRow) {
     const cells = originalRow.querySelectorAll('td');
 
     // 抽出する列の順番
-    const colOrder = [2, 3, 4, 5, null, null, null, null, 6, 7, 8];
+    const colOrder = [2, 3, 4, 5, 6, 7, 8];
 
     colOrder.forEach(index => {
         const newCell = document.createElement('td');
@@ -76,10 +76,6 @@ function buildModalRow(originalRow) {
         newRow.appendChild(newCell);
     });
 
-    // 最終的に18列以下の場合はtdを追加
-    while (newRow.children.length < 18) {
-        newRow.appendChild(document.createElement('td'));
-    }
     return newRow;
 }
 
@@ -94,11 +90,7 @@ function selectAllCheckboxes() {
 // モーダル内のテーブルデータをCSV形式でダウンロードする
 function downloadCSV() {
     // ヘッダー行
-    const headers = [
-        "日付", "支払先・内容", "経費科目", "金額", "自社出席代表者名", "自社出席者人数", 
-        "他社出席代表者名", "他社出席者人数", "メモ", "費用負担部名", "費用負担部コード", 
-        "プロジェクト名", "税区分", "通貨", "為替レート", "貸方勘定科目", "貸方補助科目", "申請番号"
-    ];
+    const headers = ["日付", "支払先・内容", "経費科目", "金額", "メモ", "費用負担部門名", "費用負担部門コード", ];
 
     const selectedDates = getSelectedDates();
 

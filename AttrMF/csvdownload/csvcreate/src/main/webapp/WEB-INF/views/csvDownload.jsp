@@ -38,8 +38,6 @@
     </form>
 </div>
 
-
-
 <c:if test="${not empty message}">
     <div class="error-message">${message}</div>
 </c:if>
@@ -48,6 +46,7 @@
     <button type="button" onclick="openModal()">ダウンロード内容確認</button>
 </div>   
 
+<!-- CSV管理表 -->
 <form action="/SelectedKeiro" method="post">
     <table border="1">
         <thead>
@@ -59,19 +58,23 @@
             <th>経費科目</th>
             <th>金額</th>
             <th>メモ</th>
-            <th>費用負担部名</th>
-            <th>費用負担部コード</th>
+            <th>費用負担部門名</th>
+            <th>費用負担部門コード</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="date" items="${dateList}" varStatus="status">
+        <c:forEach var="info" items="${dateInfoList}" varStatus="status">
             <tr>
-                <td><input type="checkbox" name="selectedDates" value="${date}" checked></td>
-                <td>${dayOfWeekList[status.index]}</td>
-                <td>${date}</td>
+                <td>
+                    <input type="checkbox" name="selectedDates"value="${info.date}"
+                           <c:if test="${info.checked}">checked</c:if>
+                           data-day="${info.dayOfWeek}"
+                           data-date="${info.date}">
+                </td>
+                <td>${info.dayOfWeek}</td>
+                <td>${info.date}</td>
 
                 <c:set var="item" value="${wrkList[status.index]}" />
-
                 <td><input type="text" name="payeeList[${status.index}].payee" value="${item.payee}"></td>
                 <td><input type="text" name="payeeList[${status.index}].expenseCategory" value="${item.expenseCategory}"></td>
                 <td><input type="text" name="payeeList[${status.index}].amount" value="${item.amount}"></td>
@@ -84,34 +87,32 @@
     </table>
 </form>
 
-    <!-- ダウンロード内容確認画面 -->
-    <div id="outputModal">
-        <h3>出力内容確認</h3>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>日付</th>
-                    <th>支払先・内容</th>
-                    <th>経費科目</th>
-                    <th>金額</th>
-                    <th></th><th></th><th></th><th></th>
-                    <th>メモ</th>
-                    <th>費用負担部名</th>
-                    <th>費用負担部コード</th>
-                    <th></th><th></th><th></th><th></th><th></th><th></th><th></th>
-                </tr>
-            </thead>
-            <tbody id="modalTableBody">
-                <!-- JavaScriptで挿入 -->
-            </tbody>
-        </table>
+<!-- ダウンロード内容確認画面 -->
+<div id="outputModal">
+    <h3>出力内容確認</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>日付</th>
+                <th>支払先・内容</th>
+                <th>経費科目</th>
+                <th>金額</th>
+                <th>メモ</th>
+                <th>費用負担部門名</th>
+                <th>費用負担部門コード</th>
+            </tr>
+        </thead>
+        <tbody id="modalTableBody">
+            <!-- JavaScriptで挿入 -->
+        </tbody>
+    </table>
 
-        <br/>
-        <button onclick="downloadCSV()">出力</button>
-        <button onclick="closeModal()">閉じる</button>
-    </div>
+    <br/>
+    <button onclick="downloadCSV()">出力</button>
+    <button onclick="closeModal()">閉じる</button>
+</div>
 
-    <!-- モーダル画面のオーバーレイ -->
-    <div id="modalOverlay"></div>
+<!-- モーダル画面のオーバーレイ -->
+<div id="modalOverlay"></div>
 </body>
 </html>
