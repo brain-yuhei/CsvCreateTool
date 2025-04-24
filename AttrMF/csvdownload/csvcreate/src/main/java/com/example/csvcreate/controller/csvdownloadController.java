@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.csvcreate.model.WrkKeiroEntity;
 import com.example.csvcreate.repository.WrkKeiroRepository;
+import com.example.csvcreate.utils.businesscalendar.HolidayUtil;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -130,14 +131,18 @@ public class CsvdownloadController {
 
         // 日付ごとに処理するリストを生成
         List<Map<String, Object>> dateInfoList = datesInMonth.stream().map(date -> {
-            // mapに対してキーと値を追加できるインスタンス生成
             Map<String, Object> map = new HashMap<>();
             map.put("date", date);
             map.put("dayOfWeek", date.format(formatter));
             DayOfWeek dayOfWeek = date.getDayOfWeek();
-            map.put("checked", !(dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY));
+
+        // 土日 or 祝日ならチェックを外す
+            boolean isWeekday = !(dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY);
+            boolean isHoliday = HolidayUtil.isHoliday(date);
+            map.put("checked", isWeekday && !isHoliday);
+
             return map;
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toList()); 
 
         // 選択された経路とワークテーブル内の支払先・内容が同じデータを格納
         WrkKeiroEntity baseRow = wrkkeirorepository.findByPayee(selectedPayee).get(0);
