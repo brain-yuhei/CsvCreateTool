@@ -22,7 +22,7 @@
 <div class="form_group">
     <form id="monthForm" action="/currentMonth" method="get">
         <label for="calendar_Text">年月選択:</label>
-        <input type="month" id="calendar_Text" name="selectedMonth" value="${currentMonth}" required
+        <input type="month" id="calendar_Text" name="selectedMonth" value="${currentMonth}" min="${minMonth}" max="${maxMonth}" required
                onchange="document.getElementById('monthForm').submit();">
     </form>
 

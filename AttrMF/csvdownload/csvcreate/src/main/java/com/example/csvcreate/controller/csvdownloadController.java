@@ -6,15 +6,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.csvcreate.model.WrkKeiroEntity;
-import com.example.csvcreate.repository.WrkKeiroRepository;
-import com.example.csvcreate.utils.businesscalendar.HolidayUtil;
+import com.example.csvcreate.service.CsvDownloadService;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class CsvdownloadController {
 
     @Autowired
-    private WrkKeiroRepository wrkkeirorepository;
+    private CsvDownloadService csvDownloadService;
 
     /**
      * CSV編集画面の表示
@@ -37,31 +32,24 @@ public class CsvdownloadController {
 
     /**
      * csvDownloadがリダイレクトされた時の処理
-     * 全データリストと支払先・内容リストをモデルに格納
      * 
      */
     @GetMapping("/csvDownload")
     public String downloadPage(Model model) {
 
-        // ワークテーブルから全データのリストを生成
-        List<WrkKeiroEntity> wrkList = wrkkeirorepository.findAll();
-
-        // ワークテーブルの全データリストから支払先・内容のリストを生成
-        List<String> selectedPayees = wrkList.stream()
-                .map(WrkKeiroEntity::getPayee)
-                .distinct()
-                .collect(Collectors.toList());
-
-        // ワークテーブルの全データリストをモデルに追加       
+        // ワークテーブルの全データ取得
+        List<WrkKeiroEntity> wrkList = csvDownloadService.getWrkList();
         model.addAttribute("wrkList", wrkList);
-        // 支払先・内容のリストをモデルに追加
+
+        // ワークテーブルの支払先・内容データを取得
+        List<String> selectedPayees = csvDownloadService.getSelectedPayees();
         model.addAttribute("selectedPayees", selectedPayees);
+
         return "csvDownload";
     }
 
     /**
      * 年月が変更された際の処理
-     * 年月リストと支払先・内容リストとメッセージをモデルに格納
      * 
      */
     @GetMapping("/currentMonth")
@@ -82,18 +70,12 @@ public class CsvdownloadController {
         // 取得した年月をモデルに追加
         model.addAttribute("currentMonth", currentMonth);
 
-        // ワークテーブルから全データのリストを生成
-        List<WrkKeiroEntity> wrkList = wrkkeirorepository.findAll();
+        Map<String, String> monthRange = csvDownloadService.getMonthRange();
+        model.addAttribute("minMonth", monthRange.get("minMonth"));
+        model.addAttribute("maxMonth", monthRange.get("maxMonth"));
 
-        // ワークテーブルの全データリストから支払先・内容のリストを生成
-        List<String> selectedPayees = wrkList.stream()
-                .map(WrkKeiroEntity::getPayee)
-                .filter(p -> p != null && !p.isEmpty())
-                .distinct()
-                .collect(Collectors.toList());
-
-        // 支払先・内容をモデルに追加        
-        model.addAttribute("selectedPayees", selectedPayees);
+        // 支払先一覧を取得
+        model.addAttribute("selectedPayees", csvDownloadService.getSelectedPayees());
 
         // メッセージをモデルに追加
         model.addAttribute("message", "年月と経路を選択してください。");
@@ -106,8 +88,8 @@ public class CsvdownloadController {
      */
     @PostMapping("/selectPayee")
     public String filterByPayeeAndMonth(@RequestParam("selectedPayee") String selectedPayee,
-                                        @RequestParam("selectedMonth") String selectedMonth,
-                                        Model model) {
+                                    @RequestParam("selectedMonth") String selectedMonth,
+                                    Model model) {
 
         // 支払先・内容がnullか空欄の判定                                    
         if (selectedPayee == null || selectedPayee.isEmpty()) {
@@ -116,70 +98,20 @@ public class CsvdownloadController {
             return "csvDownload";
         }
 
-        // 選択された年月を年月型に変換
-        YearMonth yearMonth = YearMonth.parse(selectedMonth);
-        // 月初を設定
-        LocalDate startDate = yearMonth.atDay(1);
-        // 月末を設定
-        LocalDate endDate = yearMonth.atEndOfMonth();
+        Map<String, Object> filteredData = csvDownloadService.getPayeeAndMonth(selectedPayee, selectedMonth);
 
-        // 月初から月末のリストを生成
-        List<LocalDate> datesInMonth = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
-
-        // 曜日のリストを生成
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E", Locale.JAPANESE);
-
-        // 日付ごとに処理するリストを生成
-        List<Map<String, Object>> dateInfoList = datesInMonth.stream().map(date -> {
-            Map<String, Object> map = new HashMap<>();
-            map.put("date", date);
-            map.put("dayOfWeek", date.format(formatter));
-            DayOfWeek dayOfWeek = date.getDayOfWeek();
-
-        // 土日 or 祝日ならチェックを外す
-            boolean isWeekday = !(dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY);
-            boolean isHoliday = HolidayUtil.isHoliday(date);
-            map.put("checked", isWeekday && !isHoliday);
-
-            return map;
-        }).collect(Collectors.toList()); 
-
-        // 選択された経路とワークテーブル内の支払先・内容が同じデータを格納
-        WrkKeiroEntity baseRow = wrkkeirorepository.findByPayee(selectedPayee).get(0);
-
-        // 日付ごとにワークテーブルをリストを生成
-        List<WrkKeiroEntity> repeatedWrkList = datesInMonth.stream().map(date -> {
-            WrkKeiroEntity copy = new WrkKeiroEntity();
-            copy.setPayee(baseRow.getPayee());
-            copy.setExpenseCategory(baseRow.getExpenseCategory());
-            copy.setAmount(baseRow.getAmount());
-            copy.setMemo(baseRow.getMemo());
-            copy.setDepartmentName(baseRow.getDepartmentName());
-            copy.setDepartmentCode(baseRow.getDepartmentCode());
-            copy.setDate(date);
-            return copy;
-        }).collect(Collectors.toList());
-
-        // ワークテーブルの全データリストから支払先・内容のリストを生成
-        List<String> selectedPayees = wrkkeirorepository.findAll().stream()
-                .map(WrkKeiroEntity::getPayee)
-                .filter(p -> p != null && !p.isEmpty())
-                .distinct()
-                .collect(Collectors.toList());
-
-        // 選択年月をモデルに追加
+        model.addAttribute("wrkList", filteredData.get("wrkList"));
+        model.addAttribute("dateInfoList", filteredData.get("dateInfoList"));
+        model.addAttribute("selectedPayees", csvDownloadService.getSelectedPayees());
+    
+        Map<String, String> monthRange = csvDownloadService.getMonthRange();
+        model.addAttribute("minMonth", monthRange.get("minMonth"));
+        model.addAttribute("maxMonth", monthRange.get("maxMonth"));
+    
         model.addAttribute("currentMonth", selectedMonth);
-        // ユーザーが選択した経路をモデルに追加
         model.addAttribute("selectedPayee", selectedPayee);
-        // 日付ごとのワークテーブルデータリストをモデルに追加
-        model.addAttribute("wrkList", repeatedWrkList);
-        // 日付ごとに処理したデータリストをモデルに追加
-        model.addAttribute("dateInfoList", dateInfoList);
-        // ワークテーブルの支払先・内容リストをモデルに追加
-        model.addAttribute("selectedPayees", selectedPayees);
-        // メッセージをモデルに追加
         model.addAttribute("message", "指定された経路のデータを表示しました。");
-
+    
         return "csvDownload";
     }
 }
