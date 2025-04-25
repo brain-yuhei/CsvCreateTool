@@ -71,16 +71,17 @@
                            data-day="${info.dayOfWeek}"
                            data-date="${info.date}">
                 </td>
+                
                 <td>${info.dayOfWeek}</td>
-                <td>${info.date}</td>
+                <td data-type="date">${info.date}</td>
 
                 <c:set var="item" value="${wrkList[status.index]}" />
                 <td><input type="text" name="payeeList[${status.index}].payee" value="${item.payee}"></td>
                 <td><input type="text" name="payeeList[${status.index}].expenseCategory" value="${item.expenseCategory}"></td>
                 <td><input type="text" name="payeeList[${status.index}].amount" value="${item.amount}"></td>
                 <td><input type="text" name="payeeList[${status.index}].memo" value="${item.memo}"></td>
-                <td><input type="text" name="payeeList[${status.index}].departmentName" value="${item.departmentName}"></td>
-                <td><input type="text" name="payeeList[${status.index}].departmentCode" value="${item.departmentCode}"></td>
+                <td><input type="text" name="payeeList[${status.index}].departmentName" value="${item.departmentName}" readonly></td>
+                <td><input type="text" name="payeeList[${status.index}].departmentCode" value="${item.departmentCode}" readonly></td>
             </tr>
         </c:forEach>
         </tbody>

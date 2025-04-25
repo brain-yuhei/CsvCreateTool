@@ -1,5 +1,3 @@
-
-
 // モーダルを表示
 function openModal() {
     toggleModal(true); // モーダルとオーバーレイを表示
@@ -18,9 +16,10 @@ function openModal() {
 
     // すべての行をループ処理
     mainTableRows.forEach(row => {
+        console.log("処理中の行:", row);
 
-        // 3列目の日付を格納（日付分処理を行うため）
-        const dateText = getCellText(row, 2); 
+        // 日付を格納（日付分処理を行うため）
+        const dateText = getDateFromRow(row);
 
         // チェックされた日付と一致する行だけ処理
         if (selectedDates.includes(dateText)) {
@@ -49,11 +48,12 @@ function getSelectedDates() {
         .map(cb => cb.value);
 }
 
-// 指定された行のセルのテキストを取得
-function getCellText(row, index) {
-    const cell = row.querySelector(`td:nth-child(${index + 1})`);
-    return cell ? cell.textContent.trim() : "";
+// 日付セルのテキストを取得
+function getDateFromRow(row) {
+    const dateCell = row.querySelector('td[data-type="date"]');
+    return dateCell ? dateCell.textContent.trim() : "";
 }
+
 
 // 必要な列だけ抽出する
 function buildModalRow(originalRow) {
