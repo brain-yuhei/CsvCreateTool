@@ -1,18 +1,16 @@
-// package com.example.csvcreate.repository;
+package com.example.csvcreate.repository;
 
-// import java.math.BigDecimal;
-// import com.example.csvcreate.model.WrkKeiroEntity;
+import com.example.csvcreate.model.WrkKeiroEntity;
 
-// import org.springframework.data.jpa.repository.JpaRepository;
-// import java.util.List;
+import java.time.LocalDate;
 
-// public interface WrkKeiroRepository extends JpaRepository<WrkKeiroEntity, Long> {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-//     // 支払先・金額のデータがあるか確認
-//     boolean existsByPayeeAndAmount(String payee, BigDecimal amount);
+@Repository
+public interface WrkKeiroRepository extends JpaRepository<WrkKeiroEntity, Long> {
 
-//     // Payee（経路）に一致するデータをすべて取得
-//     List<WrkKeiroEntity> findByPayee(String payee);    
+    WrkKeiroEntity findByDateAndPayee(LocalDate date, String payee);
 
-// }
+}
 

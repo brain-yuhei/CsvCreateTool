@@ -46,8 +46,10 @@
     <button type="button" onclick="openModal()">ダウンロード内容確認</button>
 </div>   
 
-<!-- CSV管理表 -->
-<form action="/SelectedKeiro" method="post">
+<!-- CSV管理表 保存ボタン付きフォーム -->
+<form action="/saveWorkTable" method="post">
+    <input type="submit" value="一時保存" />
+
     <table border="1">
         <thead>
         <tr>
@@ -66,27 +68,29 @@
         <c:forEach var="info" items="${dateInfoList}" varStatus="status">
             <tr>
                 <td>
-                    <input type="checkbox" name="selectedDates"value="${info.date}"
-                           <c:if test="${info.checked}">checked</c:if>
-                           data-day="${info.dayOfWeek}"
-                           data-date="${info.date}">
+                    <input type="checkbox" name="selectedDates" value="${info.date}"
+                        <c:if test="${info.checked}">checked</c:if> >
                 </td>
-                
+
                 <td>${info.dayOfWeek}</td>
-                <td data-type="date">${info.date}</td>
+                <td>
+                    ${info.date}
+                    <input type="hidden" name="koutsuuhiList[${status.index}].date" value="${info.date}" />
+                </td>                
 
                 <c:set var="item" value="${wrkList[status.index]}" />
-                <td><input type="text" name="payeeList[${status.index}].payeeContent" value="${item.payeeContent}"></td>
-                <td><input type="text" name="payeeList[${status.index}].expense_category" value="${item.expense_category}"></td>
-                <td><input type="text" name="payeeList[${status.index}].amountInclusiveTax" value="${item.amountInclusiveTax}"></td>
-                <td><input type="text" name="payeeList[${status.index}].memo" value="${item.memo}"></td>
-                <td><input type="text" name="payeeList[${status.index}].department_name" value="${item.department_name}" readonly></td>
-                <td><input type="text" name="payeeList[${status.index}].department_code" value="${item.department_code}" readonly></td>
+                <td><input type="text" name="koutsuuhiList[${status.index}].payeeContent" value="${item.payeeContent}"></td>
+                <td><input type="text" name="koutsuuhiList[${status.index}].expense_category" value="${item.expense_category}"></td>
+                <td><input type="text" name="koutsuuhiList[${status.index}].amountInclusiveTax" value="${item.amountInclusiveTax}"></td>
+                <td><input type="text" name="koutsuuhiList[${status.index}].memo" value="${item.memo}"></td>
+                <td><input type="text" name="koutsuuhiList[${status.index}].department_name" value="${item.department_name}" readonly></td>
+                <td><input type="text" name="koutsuuhiList[${status.index}].department_code" value="${item.department_code}" readonly></td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
 </form>
+
 
 <!-- ダウンロード内容確認画面 -->
 <div id="outputModal">
