@@ -3,8 +3,8 @@ package com.example.csvcreate.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.csvcreate.model.WrkKeiroEntity;
-import com.example.csvcreate.repository.WrkKeiroRepository;
+import com.example.csvcreate.model.MstKeiroEntity;
+import com.example.csvcreate.repository.MstKeiroRepository;
 import com.example.csvcreate.utils.businesscalendar.HolidayUtil;
 
 import java.time.DayOfWeek;
@@ -18,15 +18,15 @@ import java.util.stream.Collectors;
 public class CsvDownloadService {
 
     @Autowired
-    private WrkKeiroRepository wrkKeiroRepository;
+    private MstKeiroRepository mstKeiroRepository;
 
     /**
      * ワークテーブルのデータ一覧を取得
      * 
      * @return ワークテーブル内の全データ
      */
-    public List<WrkKeiroEntity> getWrkList() {
-        return wrkKeiroRepository.findAll();
+    public List<MstKeiroEntity> getMstList() {
+        return mstKeiroRepository.findAll();
     }
 
     /**
@@ -35,8 +35,8 @@ public class CsvDownloadService {
      * @return 支払先・内容データ一覧
      */
     public List<String> getSelectedPayees() {
-        return wrkKeiroRepository.findAll().stream()
-                .map(WrkKeiroEntity::getPayee)
+        return mstKeiroRepository.findAll().stream()
+                .map(MstKeiroEntity::getPayeeContent)
                 .filter(payee -> payee != null && !payee.isEmpty())
                 .distinct()
                 .collect(Collectors.toList());
@@ -110,17 +110,17 @@ public class CsvDownloadService {
         }).collect(Collectors.toList());
 
         // 選択された支払先に該当する1件目のデータを取得
-        WrkKeiroEntity baseRow = wrkKeiroRepository.findByPayee(selectedPayee).get(0);
+        MstKeiroEntity baseRow = mstKeiroRepository.findByPayeeContent(selectedPayee).get(0);
 
         // 各日付に対して同様の内容を生成
-        List<WrkKeiroEntity> repeatedWrkList = datesInMonth.stream().map(date -> {
-            WrkKeiroEntity copy = new WrkKeiroEntity();
-            copy.setPayee(baseRow.getPayee());
-            copy.setExpenseCategory(baseRow.getExpenseCategory());
-            copy.setAmount(baseRow.getAmount());
+        List<MstKeiroEntity> repeatedWrkList = datesInMonth.stream().map(date -> {
+            MstKeiroEntity copy = new MstKeiroEntity();
+            copy.setPayeeContent(baseRow.getPayeeContent());
+            copy.setExpense_category(baseRow.getExpense_category());
+            copy.setAmountInclusiveTax(baseRow.getAmountInclusiveTax());
             copy.setMemo(baseRow.getMemo());
-            copy.setDepartmentName(baseRow.getDepartmentName());
-            copy.setDepartmentCode(baseRow.getDepartmentCode());
+            copy.setDepartment_name(baseRow.getDepartment_name());
+            copy.setDepartment_code(baseRow.getDepartment_code());
             copy.setDate(date); 
             return copy;
         }).collect(Collectors.toList());

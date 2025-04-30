@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.csvcreate.model.WrkKeiroEntity;
+import com.example.csvcreate.model.MstKeiroEntity;
 import com.example.csvcreate.service.CsvDownloadService;
 
 import java.time.YearMonth;
@@ -38,8 +38,8 @@ public class CsvDownloadController {
     public String downloadPage(Model model) {
 
         // ワークテーブルの全データ取得
-        List<WrkKeiroEntity> wrkList = csvDownloadService.getWrkList();
-        model.addAttribute("wrkList", wrkList);
+        List<MstKeiroEntity> mstList = csvDownloadService.getMstList();
+        model.addAttribute("wrkList", mstList);
 
         // ワークテーブルの支払先・内容データを取得
         List<String> selectedPayees = csvDownloadService.getSelectedPayees();

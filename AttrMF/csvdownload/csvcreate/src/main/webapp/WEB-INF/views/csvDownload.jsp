@@ -76,12 +76,12 @@
                 <td data-type="date">${info.date}</td>
 
                 <c:set var="item" value="${wrkList[status.index]}" />
-                <td><input type="text" name="payeeList[${status.index}].payee" value="${item.payee}"></td>
-                <td><input type="text" name="payeeList[${status.index}].expenseCategory" value="${item.expenseCategory}"></td>
-                <td><input type="text" name="payeeList[${status.index}].amount" value="${item.amount}"></td>
+                <td><input type="text" name="payeeList[${status.index}].payeeContent" value="${item.payeeContent}"></td>
+                <td><input type="text" name="payeeList[${status.index}].expense_category" value="${item.expense_category}"></td>
+                <td><input type="text" name="payeeList[${status.index}].amountInclusiveTax" value="${item.amountInclusiveTax}"></td>
                 <td><input type="text" name="payeeList[${status.index}].memo" value="${item.memo}"></td>
-                <td><input type="text" name="payeeList[${status.index}].departmentName" value="${item.departmentName}" readonly></td>
-                <td><input type="text" name="payeeList[${status.index}].departmentCode" value="${item.departmentCode}" readonly></td>
+                <td><input type="text" name="payeeList[${status.index}].department_name" value="${item.department_name}" readonly></td>
+                <td><input type="text" name="payeeList[${status.index}].department_code" value="${item.department_code}" readonly></td>
             </tr>
         </c:forEach>
         </tbody>

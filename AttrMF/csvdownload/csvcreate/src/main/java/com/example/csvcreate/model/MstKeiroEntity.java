@@ -67,5 +67,6 @@ public class MstKeiroEntity {
     private String updated_by_name; //更新者名
     private LocalDateTime updated_at; //更新日時
     private String aggregate_title; //集計タイトル
+    private LocalDate date;
     
 }
