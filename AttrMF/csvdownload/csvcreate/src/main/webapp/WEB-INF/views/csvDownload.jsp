@@ -19,77 +19,85 @@
     </a>
 </div>
 
-<div class="form_group">
-    <form id="monthForm" action="/currentMonth" method="get">
-        <label for="calendar_Text">年月選択:</label>
-        <input type="month" id="calendar_Text" name="selectedMonth" value="${currentMonth}" min="${minMonth}" max="${maxMonth}" required
-               onchange="document.getElementById('monthForm').submit();">
-    </form>
+<!-- 年月・経路選択 + 作成ボタンのフォーム -->
+<form action="/generateWorkTable" method="post">
+    <label for="selectedMonth">年月選択:</label>
+    <input type="month" id="selectedMonth" name="selectedMonth" value="${currentMonth}" required>
 
-    <form id="filterForm" action="/selectPayee" method="post">
-        <label for="selectedPayee">経路選択:</label>
-        <select name="selectedPayee" id="selectedPayee" onchange="document.getElementById('filterForm').submit();">
-            <option value="">-- 選択してください --</option>
-            <c:forEach var="payee" items="${selectedPayees}">
-                <option value="${payee}" ${payee == selectedPayee ? 'selected' : ''}>${payee}</option>
-            </c:forEach>
-        </select>
-        <input type="hidden" name="selectedMonth" value="${currentMonth}" required />
-    </form>
-</div>
+    <label for="selectedPayee">経路選択:</label>
+    <select id="selectedPayee" name="selectedPayee" required>
+        <option value="">-- 選択してください --</option>
+        <c:forEach var="payee" items="${selectedPayees}">
+            <option value="${payee}" ${payee == selectedPayee ? 'selected' : ''}>${payee}</option>
+        </c:forEach>
+    </select>
 
+    <button type="submit">作成</button>
+</form>
+
+<!--メッセージ-->
 <c:if test="${not empty message}">
     <div class="error-message">${message}</div>
 </c:if>
 
-<div class="check_button">
-    <button type="button" onclick="openModal()">ダウンロード内容確認</button>
-</div>   
 
-<!-- CSV管理表 保存ボタン付きフォーム -->
-<form action="/saveWorkTable" method="post">
-    <input type="submit" value="一時保存" />
+<!-- モーダル表示 -->
+<form action="/confirmSelection" method="post" id="confirmForm">
+    <c:forEach var="info" items="${dateInfoList}" varStatus="status">
+        <c:if test="${info.checked}">
+            <input type="hidden" name="selectedDates" value="${info.date}" />
+        </c:if>
+    </c:forEach>
+    <button type="submit">モーダル簡易確認</button>
+</form>
+ 
 
+
+<!-- CSV管理表 -->
+<form action="/saveWorkTable" method="get">
+    <input type="hidden" name="selectedPayee" value="${selectedPayee}" />
+    <input type="hidden" name="selectedMonth" value="${selectedMonth}" />
     <table border="1">
         <thead>
-        <tr>
-            <th><input type="checkbox" id="selectAll" onclick="selectAllCheckboxes(this)"></th>
-            <th>曜日</th>
-            <th>日付</th>
-            <th>支払先・内容</th>
-            <th>経費科目</th>
-            <th>金額</th>
-            <th>メモ</th>
-            <th>費用負担部門名</th>
-            <th>費用負担部門コード</th>
-        </tr>
+            <tr>
+                <th><input type="checkbox" id="selectAll" onclick="selectAllCheckboxes(this)"></th>
+                <th>曜日</th>
+                <th>日付</th>
+                <th>支払先・内容</th>
+                <th>経費科目</th>
+                <th>金額</th>
+                <th>メモ</th>
+                <th>費用負担部門名</th>
+                <th>費用負担部門コード</th>
+            </tr>
         </thead>
         <tbody>
-        <c:forEach var="info" items="${dateInfoList}" varStatus="status">
-            <tr>
-                <td>
-                    <input type="checkbox" name="selectedDates" value="${info.date}"
-                        <c:if test="${info.checked}">checked</c:if> >
-                </td>
+            <c:forEach var="info" items="${dateInfoList}" varStatus="status">
+                <tr>
+                    <td>
+                        <input type="checkbox" name="selectedDates" value="${info.date}"
+                            <c:if test="${info.checked}">checked</c:if> >
+                    </td>
+                    <td>${info.dayOfWeek}</td>
+                    <td>
+                        ${info.date}
+                        <input type="hidden" name="koutsuuhiList[${status.index}].date" value="${info.date}" />
+                    </td>
 
-                <td>${info.dayOfWeek}</td>
-                <td>
-                    ${info.date}
-                    <input type="hidden" name="koutsuuhiList[${status.index}].date" value="${info.date}" />
-                </td>                
-
-                <c:set var="item" value="${wrkList[status.index]}" />
-                <td><input type="text" name="koutsuuhiList[${status.index}].payeeContent" value="${item.payeeContent}"></td>
-                <td><input type="text" name="koutsuuhiList[${status.index}].expense_category" value="${item.expense_category}"></td>
-                <td><input type="text" name="koutsuuhiList[${status.index}].amountInclusiveTax" value="${item.amountInclusiveTax}"></td>
-                <td><input type="text" name="koutsuuhiList[${status.index}].memo" value="${item.memo}"></td>
-                <td><input type="text" name="koutsuuhiList[${status.index}].department_name" value="${item.department_name}" readonly></td>
-                <td><input type="text" name="koutsuuhiList[${status.index}].department_code" value="${item.department_code}" readonly></td>
-            </tr>
-        </c:forEach>
+                    <c:set var="item" value="${wrkList[status.index]}" />
+                    <td><input type="text" name="koutsuuhiList[${status.index}].payeeContent" value="${item.payee}" /></td>
+                    <td><input type="text" name="koutsuuhiList[${status.index}].expense_category" value="${item.expenseCategory}" /></td>
+                    <td><input type="text" name="koutsuuhiList[${status.index}].amountInclusiveTax" value="${item.amount}" /></td>
+                    <td><input type="text" name="koutsuuhiList[${status.index}].memo" value="${item.memo}" /></td>
+                    <td><input type="text" name="koutsuuhiList[${status.index}].department_name" value="${item.departmentName}" readonly /></td>
+                    <td><input type="text" name="koutsuuhiList[${status.index}].department_code" value="${item.departmentCode}" readonly /></td>
+                </tr>
+            </c:forEach>
         </tbody>
     </table>
 </form>
+
+
 
 
 <!-- ダウンロード内容確認画面 -->
@@ -108,7 +116,17 @@
             </tr>
         </thead>
         <tbody id="modalTableBody">
-            <!-- JavaScriptで挿入 -->
+            <c:forEach var="item" items="${modalDataList}">
+                <tr>
+                    <td>${item.date}</td>
+                    <td>${item.payeeContent}</td>
+                    <td>${item.expense_category}</td>
+                    <td>${item.amountInclusiveTax}</td>
+                    <td>${item.memo}</td>
+                    <td>${item.department_name}</td>
+                    <td>${item.department_code}</td>
+                </tr>
+            </c:forEach>
         </tbody>
     </table>
 
@@ -117,7 +135,9 @@
     <button onclick="closeModal()">閉じる</button>
 </div>
 
-<!-- モーダル画面のオーバーレイ -->
+<!-- モーダル画面のオーバーレイ--> 
 <div id="modalOverlay"></div>
+
 </body>
 </html>
+
