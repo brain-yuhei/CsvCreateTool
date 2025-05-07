@@ -1,7 +1,6 @@
 package com.example.csvcreate.model;
 
 import java.util.*;
-
 import lombok.Getter;
 import lombok.Setter;
 

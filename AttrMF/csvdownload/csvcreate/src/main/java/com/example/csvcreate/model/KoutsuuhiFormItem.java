@@ -1,12 +1,6 @@
 package com.example.csvcreate.model;
 
 import java.math.BigDecimal;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,14 +8,9 @@ import lombok.Setter;
  * CSV管理表の1行分を管理
  * 
  */
-@Entity
-@Getter
-@Setter
+@Getter // Lombokを使用して、すべてのフィールドのゲッターを自動生成
+@Setter // Lombokを使用して、すべてのフィールドのセッターを自動生成
 public class KoutsuuhiFormItem {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 主キーとして追加
 
     private String payeeContent;
     private String expense_category;
@@ -29,6 +18,5 @@ public class KoutsuuhiFormItem {
     private String memo;
     private String department_name;
     private String department_code;
-    private String date;
+    private String date;  
 }
-

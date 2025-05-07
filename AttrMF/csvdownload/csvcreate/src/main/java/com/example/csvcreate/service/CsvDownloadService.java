@@ -4,42 +4,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.csvcreate.model.MstKeiroEntity;
-import com.example.csvcreate.model.WrkKeiroEntity;
 import com.example.csvcreate.repository.MstKeiroRepository;
-import com.example.csvcreate.repository.WrkKeiroRepository;
+import com.example.csvcreate.utils.businesscalendar.HolidayUtil;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * CSVダウンロードに関するビジネスロジックを提供するサービスクラス
- */
 @Service
 public class CsvDownloadService {
 
     @Autowired
     private MstKeiroRepository mstKeiroRepository;
 
-    @Autowired
-    private WrkKeiroRepository wrkKeiroRepository;
-
     /**
-     * マスタテーブルの全データを取得する
-     *
-     * @return マスタテーブルのリスト
+     * ワークテーブルのデータ一覧を取得
+     * 
+     * @return ワークテーブル内の全データ
      */
     public List<MstKeiroEntity> getMstList() {
         return mstKeiroRepository.findAll();
     }
 
     /**
-     * マスタテーブルから「支払先・内容（payeeContent）」の一覧を取得する
-     * nullや空文字を除外し、重複を排除する
-     *
-     * @return 支払先・内容のリスト
+     * 支払先・内容データの一覧を取得
+     * 
+     * @return 支払先・内容データ一覧
      */
     public List<String> getSelectedPayees() {
         return mstKeiroRepository.findAll().stream()
@@ -50,22 +43,25 @@ public class CsvDownloadService {
     }
 
     /**
-     * 現在の年月（yyyy-MM形式）を返す
-     *
-     * @return 現在の年月文字列
+     * 現在の年月を返す
+     * 
+     * @return 現在の年月（yyyy-MM形式）
      */
     public String getNowYearFormat() {
         return YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
     }
 
     /**
-     * 現在から2ヶ月先までの年月の範囲を返す
-     *
-     * @return 「minMonth」と「maxMonth」をキーとする年月範囲マップ
+     * 2ヶ月後の範囲を返す
+     * 
+     * @return 年月の範囲（minMonth, maxMonth）
      */
     public Map<String, String> getMonthRange() {
+        // 当年月のインスタンス生成
         YearMonth nowMonth = YearMonth.now();
+        // 2カ月後年月のインスタンス生成
         YearMonth twoMonthsLater = nowMonth.plusMonths(2);
+        // 年月のフォーマットを設定
         DateTimeFormatter ymFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
 
         Map<String, String> result = new HashMap<>();
@@ -75,90 +71,64 @@ public class CsvDownloadService {
     }
 
     /**
-     * 支払先と年月に対応するデータを取得する
-     * 必要であればワークテーブルにデータを生成してから取得する
+     * 日付ごとのデータリストと日付・曜日・チェック情報を返す
      *
-     * @param selectedPayee 選択された支払先
-     * @param selectedMonth 選択された年月（yyyy-MM形式）
-     * @return 表示用データ（ワークテーブルリストと日付リスト）を含むMap
+     * @param selectedPayee 選択された経路
+     * @param selectedMonth 選択された年月
+     * @return 日付ごとのデータリスト＆日付・曜日・チェック情報
      */
     public Map<String, Object> getPayeeAndMonth(String selectedPayee, String selectedMonth) {
-        // ログ出力: メソッド開始時
-        System.out.println("Getting data for Payee: " + selectedPayee + " and Month: " + selectedMonth);
-    
-        // ① ワークテーブルにデータがなければ作成
-        createWrkDataIfNotExists(selectedPayee, selectedMonth);
-    
-        // ② 表示用データを取得
-        List<WrkKeiroEntity> wrkList = wrkKeiroRepository.findByPayeeAndMonth(selectedPayee, selectedMonth);
-        
-        // ログ出力: データ取得後
-        System.out.println("Work Table Data Retrieved: " + wrkList);
-    
-        List<LocalDate> dateInfoList = generateDateList(selectedMonth);
-        
-        // 結果を返す
+
         Map<String, Object> result = new HashMap<>();
-        result.put("wrkList", wrkList);
+
+        YearMonth yearMonth = YearMonth.parse(selectedMonth);
+
+        // 月初と月末の日付を取得
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+
+        // 月初から月末までの日付リストを作成
+        List<LocalDate> datesInMonth = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
+
+        // 曜日を日本語に変換
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E", Locale.JAPANESE);
+
+        // 日付ごとに曜日とチェック有無を生成
+        List<Map<String, Object>> dateInfoList = datesInMonth.stream().map(date -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("date", date); 
+            map.put("dayOfWeek", date.format(formatter)); 
+
+            DayOfWeek dayOfWeek = date.getDayOfWeek();
+
+            // 土日および祝日をチェック対象外にする
+            boolean isWeekday = !(dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY);
+            boolean isHoliday = HolidayUtil.isHoliday(date);
+            map.put("checked", isWeekday && !isHoliday);
+
+            return map;
+        }).collect(Collectors.toList());
+
+        // 選択された支払先に該当する1件目のデータを取得
+        MstKeiroEntity baseRow = mstKeiroRepository.findByPayeeContent(selectedPayee).get(0);
+
+        // 各日付に対して同様の内容を生成
+        List<MstKeiroEntity> repeatedWrkList = datesInMonth.stream().map(date -> {
+            MstKeiroEntity copy = new MstKeiroEntity();
+            copy.setPayeeContent(baseRow.getPayeeContent());
+            copy.setExpense_category(baseRow.getExpense_category());
+            copy.setAmountInclusiveTax(baseRow.getAmountInclusiveTax());
+            copy.setMemo(baseRow.getMemo());
+            copy.setDepartment_name(baseRow.getDepartment_name());
+            copy.setDepartment_code(baseRow.getDepartment_code());
+            copy.setDate(date); 
+            return copy;
+        }).collect(Collectors.toList());
+
+        // 結果マップにリストを格納して返却
+        result.put("wrkList", repeatedWrkList);
         result.put("dateInfoList", dateInfoList);
-        
         return result;
     }
-    
-
-    /**
-     * 指定された支払先と年月に対して、ワークテーブルにデータがなければ作成する
-     *
-     * @param payeeContent 支払先・内容
-     * @param yearMonthStr 年月（yyyy-MM形式）
-     */
-    private void createWrkDataIfNotExists(String payeeContent, String yearMonthStr) {
-        // 既存データの存在チェック
-        List<WrkKeiroEntity> existing = wrkKeiroRepository.findByPayeeAndMonth(payeeContent, yearMonthStr);
-        if (!existing.isEmpty()) {
-            return; // すでに存在していれば何もしない
-        }
-
-        // マスタデータ取得（支払先に一致する1件）
-        Optional<MstKeiroEntity> mstOpt = mstKeiroRepository.findByPayeeContent(payeeContent);
-        if (mstOpt.isEmpty()) {
-            return; // マスタに該当なし
-        }
-
-        MstKeiroEntity mst = mstOpt.get();
-
-        // 月の日付リストを作成（1日〜末日）
-        List<LocalDate> dateList = generateDateList(yearMonthStr);
-
-        for (LocalDate date : dateList) {
-            WrkKeiroEntity wrk = new WrkKeiroEntity();
-            wrk.setDate(date);
-            wrk.setPayee(payeeContent);
-            wrk.setExpenseCategory(mst.getExpense_category());
-            wrk.setAmount(mst.getAmountInclusiveTax());
-            wrk.setMemo(mst.getMemo()); 
-            wrk.setDepartmentName(mst.getDepartment_name());
-            wrk.setDepartmentCode(mst.getDepartment_code());
-
-            wrkKeiroRepository.save(wrk);
-        }
-    }
-
-    /**
-     * 指定された年月（yyyy-MM）の日付リストを生成する
-     *
-     * @param yearMonthStr 年月（yyyy-MM）
-     * @return LocalDate のリスト（1日〜末日）
-     */
-    private List<LocalDate> generateDateList(String yearMonthStr) {
-        YearMonth ym = YearMonth.parse(yearMonthStr);
-        List<LocalDate> dates = new ArrayList<>();
-        for (int day = 1; day <= ym.lengthOfMonth(); day++) {
-            dates.add(ym.atDay(day));
-        }
-        return dates;
-    }
-
 }
-
 

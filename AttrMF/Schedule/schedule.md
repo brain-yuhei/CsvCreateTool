@@ -1,3 +1,6 @@
+
+
+
 ```mermaid
 gantt
   title マネーフォワード経費の簡略化作業
@@ -11,7 +14,7 @@ gantt
     仕様決定              : done, des1-1, after des1, 1d
 
   section 設計
-    基本詳細設計書作成     : active, des2, after des1-1, 3d
+    基本詳細設計書作成     : active, des2, after des1-1, 3d 
     設計完了              : milestone, 2025-04-08,
 
   section 開発準備
