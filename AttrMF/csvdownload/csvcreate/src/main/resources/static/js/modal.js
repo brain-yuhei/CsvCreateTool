@@ -60,27 +60,38 @@ function getDateFromRow(row) {
 
 // 必要な列だけ抽出する
 function buildModalRow(originalRow) {
-    // JSPファイルの行の情報を格納
     const newRow = document.createElement('tr');
-    // JSPファイルの列の情報を格納
     const cells = originalRow.querySelectorAll('td');
 
-    // 抽出する列の順番
     const colOrder = [2, 3, 4, 5, 6, 7, 8];
 
     colOrder.forEach(index => {
         const newCell = document.createElement('td');
-        if (index !== null) {
-            const cell = cells[index];
-            const input = cell.querySelector('input');
-            // セル内に input があればその値を、なければテキストを取得
-            newCell.textContent = input ? input.value.trim() : cell.textContent.trim();
+        const cell = cells[index];
+
+        // input or select 要素を取得
+        const input = cell.querySelector('input');
+        const select = cell.querySelector('select');
+
+        let value = "";
+        if (select) {
+            // 選択中のオプションの表示テキストのみ取得
+            value = select.options[select.selectedIndex].text.trim();
+        } else if (input) {
+            value = input.value.trim();
+        } else {
+            value = cell.textContent.trim();
         }
+
+        // select や input を含まず、プレーンなテキストだけをセット
+        newCell.textContent = value;
         newRow.appendChild(newCell);
     });
 
     return newRow;
 }
+
+
 
 // 全選択のチェックボックスに応じて、すべてのチェックボックスをON/OFF
 function selectAllCheckboxes() {
@@ -99,12 +110,11 @@ function downloadCSV() {
 
     // モーダル内の行を取得し、日付が選択されたものだけ処理
     const rows = Array.from(document.querySelectorAll("#outputModal tbody tr"))
-        .filter(tr => selectedDates.includes(tr.querySelector("td").textContent.trim()))
-        .map(tr => 
-            Array.from(tr.querySelectorAll("td"))
-                .map(td => `"${td.textContent.trim().replace(/"/g, '""')}"`) // ダブルクォートをエスケープ
-                .join(",")
-        );
+    .map(tr => 
+        Array.from(tr.querySelectorAll("td"))
+            .map(td => `"${td.textContent.trim().replace(/"/g, '""')}"`)
+            .join(",")
+    );
 
     // CSV文字列を生成
     const csvContent = [headers.join(","), ...rows].join("\n");
@@ -118,3 +128,19 @@ function downloadCSV() {
     link.click();
     document.body.removeChild(link);
 }
+
+// モーダルの背景をクリックした時にモーダルを閉じる処理
+document.getElementById('modalOverlay').addEventListener('click', function(event) {
+    if (event.target.id === 'modalOverlay') {
+        closeModal();
+    }
+});
+
+
+
+// モーダル内部のクリックでは閉じないようにする
+document.getElementById('outputModal').addEventListener('click', function(event) {
+    event.stopPropagation(); 
+});
+
+  

@@ -51,7 +51,6 @@
 <!-- CSV管理表 保存ボタン付きフォーム -->
 <form id="csvForm" action="/saveWorkTable" method="post">
     <!--<input type="submit" value="一時保存" />-->
-
     <table border="1">
         <thead>
         <tr>
@@ -81,7 +80,13 @@
                 </td>                
 
                 <c:set var="item" value="${wrkList[status.index]}" />
-                <td><input type="text" name="koutsuuhiList[${status.index}].payeeContent" value="${item.payeeContent}"></td>
+                <td>
+                    <select name="koutsuuhiList[${status.index}].payeeContent">
+                        <c:forEach var="payee" items="${selectedPayees}">
+                            <option value="${payee}" <c:if test="${payee == item.payeeContent}">selected</c:if>>${payee}</option>
+                        </c:forEach>
+                    </select>
+                </td>                                
                 <td><input type="text" name="koutsuuhiList[${status.index}].expense_category" value="${item.expense_category}"></td>
                 <td><input type="text" name="koutsuuhiList[${status.index}].amountInclusiveTax" value="${item.amountInclusiveTax}"></td>
                 <td><input type="text" name="koutsuuhiList[${status.index}].memo" value="${item.memo}"></td>
@@ -95,31 +100,32 @@
 
 
 <!-- ダウンロード内容確認画面 -->
-<div id="outputModal">
-    <h3>出力内容確認</h3>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>日付</th>
-                <th>支払先・内容</th>
-                <th>経費科目</th>
-                <th>金額</th>
-                <th>メモ</th>
-                <th>費用負担部門名</th>
-                <th>費用負担部門コード</th>
-            </tr>
-        </thead>
-        <tbody id="modalTableBody">
-            <!-- JavaScriptで挿入 -->
-        </tbody>
-    </table>
+<div id="modalOverlay">
+    <div id="outputModal">
+        <h3>出力内容確認</h3>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>日付</th>
+                    <th>支払先・内容</th>
+                    <th>経費科目</th>
+                    <th>金額</th>
+                    <th>メモ</th>
+                    <th>費用負担部門名</th>
+                    <th>費用負担部門コード</th>
+                </tr>
+            </thead>
+            <tbody id="modalTableBody">
+                <!-- JavaScriptで挿入 -->
+            </tbody>
+        </table>
 
-    <br/>
-    <button onclick="downloadCSV()">出力</button>
-    <button onclick="closeModal()">閉じる</button>
+        <br/>
+        <button onclick="downloadCSV()">出力</button>
+        <button onclick="closeModal()">閉じる</button>
+    </div>
 </div>
 
-<!-- モーダル画面のオーバーレイ -->
-<div id="modalOverlay"></div>
+
 </body>
 </html>

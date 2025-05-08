@@ -82,37 +82,36 @@ public class CsvDownloadService {
      * @param selectedMonth
      */
     public void createWorkTableData(String selectedPayee, String selectedMonth) {
-    // マスタから対象の経路データを取得
-    List<MstKeiroEntity> mstData = mstKeiroRepository.findByPayeeContent(selectedPayee);
-
-    // 対象月の日付分、ワークテーブル用データを生成
-    List<WrkKeiroEntity> wrkDataList = new ArrayList<>();
-    YearMonth ym = YearMonth.parse(selectedMonth);
-    for (int day = 1; day <= ym.lengthOfMonth(); day++) {
-        LocalDate date = ym.atDay(day);
-
-        for (MstKeiroEntity mst : mstData) {
-            WrkKeiroEntity wrk = new WrkKeiroEntity();
-            wrk.setDate(date);
-            wrk.setPayee(mst.getPayeeContent());
-            wrk.setExpenseCategory(mst.getExpense_category());
-            wrk.setAmount(mst.getAmountInclusiveTax());
-            wrk.setMemo(mst.getMemo());
-            wrk.setDepartmentName(mst.getDepartment_name());
-            wrk.setDepartmentCode(mst.getDepartment_code());
-            wrk.setPayee(selectedPayee);
-            // 他にも必要な情報をセット
-
-            wrkDataList.add(wrk);
+        List<MstKeiroEntity> mstData = mstKeiroRepository.findByPayeeContent(selectedPayee);
+        
+        YearMonth ym = YearMonth.parse(selectedMonth);
+    
+        List<WrkKeiroEntity> wrkToSave = new ArrayList<>();
+    
+        for (int day = 1; day <= ym.lengthOfMonth(); day++) {
+            LocalDate date = ym.atDay(day);
+            for (MstKeiroEntity mst : mstData) {
+    
+                // 既存レコードの検索
+                Optional<WrkKeiroEntity> existing = wrkKeiroRepository.findByPayeeAndDate(selectedPayee, date);
+    
+                WrkKeiroEntity wrk = existing.orElse(new WrkKeiroEntity());
+                wrk.setDate(date);
+                wrk.setPayee(mst.getPayeeContent());
+                wrk.setExpenseCategory(mst.getExpense_category());
+                wrk.setAmount(mst.getAmountInclusiveTax());
+                wrk.setMemo(mst.getMemo());
+                wrk.setDepartmentName(mst.getDepartment_name());
+                wrk.setDepartmentCode(mst.getDepartment_code());
+    
+                wrkToSave.add(wrk);
+            }
         }
+    
+        wrkKeiroRepository.saveAll(wrkToSave);
     }
-
-    // 上書き処理追加予定☆
-
-
-    // 全データ保存
-    wrkKeiroRepository.saveAll(wrkDataList);
-}
+    
+    
 
     /**
      * CSV管理表へのデータ表示設定
