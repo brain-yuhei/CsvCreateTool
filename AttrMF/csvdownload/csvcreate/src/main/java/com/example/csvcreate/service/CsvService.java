@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class CsvService {
      */
     public void saveDatabase(MultipartFile uploadfile) throws IOException, CsvValidationException {
 
-        try (CSVReader reader = new CSVReader(new InputStreamReader(uploadfile.getInputStream(), Charset.forName("MS932")))) {
+        try (CSVReader reader = new CSVReader(new InputStreamReader(uploadfile.getInputStream(), StandardCharsets.UTF_8))) {
             String[] data;
             boolean firstLine = true;
 
@@ -54,7 +55,7 @@ public class CsvService {
                 }
 
                 if (mstKeiro == null) {
-                    // 新規作成
+                    // マスタテーブルを作成
                     mstKeiro = new MstKeiroEntity();
                     mstKeiro.setPayeeContent(payee);
                     mstKeiro.setAmountInclusiveTax(amount);
@@ -63,6 +64,7 @@ public class CsvService {
                     mstKeiro.setDepartment_code(data.length > 17 ? data[17] : null);
                     mstKeiro.setDepartment_name(data.length > 18 ? data[18] : null);
 
+                    // マスタテーブルを保存
                     mstkeiroRepository.save(mstKeiro);
                 }
             }
