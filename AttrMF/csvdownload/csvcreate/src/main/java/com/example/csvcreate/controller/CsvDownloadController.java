@@ -83,7 +83,7 @@ public class CsvDownloadController {
     }
 
     /**
-     * 経路選択された際の処理
+     * CSV管理表生成ボタン押下時の処理
      * 
      */
     @PostMapping("/selectPayee")
@@ -98,10 +98,14 @@ public class CsvDownloadController {
             return "redirect:/currentMonth";
         }
 
-        Map<String, Object> filteredData = csvDownloadService.getPayeeAndMonth(selectedPayee, selectedMonth);
+        // ワークテーブルを生成
+        csvDownloadService.createWorkTableData(selectedPayee, selectedMonth);
 
-        model.addAttribute("wrkList", filteredData.get("wrkList"));
-        model.addAttribute("dateInfoList", filteredData.get("dateInfoList"));
+        // 生成したワークテーブルデータを成型して取得
+        Map<String, Object> koutsuuhiData = csvDownloadService.getPayeeAndMonth(selectedPayee, selectedMonth);
+
+        model.addAttribute("wrkList", koutsuuhiData.get("wrkList"));
+        model.addAttribute("dateInfoList", koutsuuhiData.get("dateInfoList"));
         model.addAttribute("selectedPayees", csvDownloadService.getSelectedPayees());
     
         Map<String, String> monthRange = csvDownloadService.getMonthRange();

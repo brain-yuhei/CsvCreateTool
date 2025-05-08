@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.csvcreate.model.MstKeiroEntity;
+import com.example.csvcreate.model.WrkKeiroEntity;
 import com.example.csvcreate.repository.MstKeiroRepository;
+import com.example.csvcreate.repository.WrkKeiroRepository;
 import com.example.csvcreate.utils.businesscalendar.HolidayUtil;
 
 import java.time.DayOfWeek;
@@ -20,10 +22,13 @@ public class CsvDownloadService {
     @Autowired
     private MstKeiroRepository mstKeiroRepository;
 
+    @Autowired
+    private WrkKeiroRepository wrkKeiroRepository;    
+
     /**
-     * ワークテーブルのデータ一覧を取得
+     * マスタテーブルのデータ一覧を取得
      * 
-     * @return ワークテーブル内の全データ
+     * @return マスタテーブル内の全データ
      */
     public List<MstKeiroEntity> getMstList() {
         return mstKeiroRepository.findAll();
@@ -71,7 +76,46 @@ public class CsvDownloadService {
     }
 
     /**
-     * 日付ごとのデータリストと日付・曜日・チェック情報を返す
+     * CSV管理表生成ボタン押下時の処理
+     * 
+     * @param selectedPayee
+     * @param selectedMonth
+     */
+    public void createWorkTableData(String selectedPayee, String selectedMonth) {
+    // マスタから対象の経路データを取得
+    List<MstKeiroEntity> mstData = mstKeiroRepository.findByPayeeContent(selectedPayee);
+
+    // 対象月の日付分、ワークテーブル用データを生成
+    List<WrkKeiroEntity> wrkDataList = new ArrayList<>();
+    YearMonth ym = YearMonth.parse(selectedMonth);
+    for (int day = 1; day <= ym.lengthOfMonth(); day++) {
+        LocalDate date = ym.atDay(day);
+
+        for (MstKeiroEntity mst : mstData) {
+            WrkKeiroEntity wrk = new WrkKeiroEntity();
+            wrk.setDate(date);
+            wrk.setPayee(mst.getPayeeContent());
+            wrk.setExpenseCategory(mst.getExpense_category());
+            wrk.setAmount(mst.getAmountInclusiveTax());
+            wrk.setMemo(mst.getMemo());
+            wrk.setDepartmentName(mst.getDepartment_name());
+            wrk.setDepartmentCode(mst.getDepartment_code());
+            wrk.setPayee(selectedPayee);
+            // 他にも必要な情報をセット
+
+            wrkDataList.add(wrk);
+        }
+    }
+
+    // 上書き処理追加予定☆
+
+
+    // 全データ保存
+    wrkKeiroRepository.saveAll(wrkDataList);
+}
+
+    /**
+     * CSV管理表へのデータ表示設定
      *
      * @param selectedPayee 選択された経路
      * @param selectedMonth 選択された年月

@@ -22,6 +22,15 @@ function openModal() {
     });
 }
 
+function submitPayeeForm() {
+    const payee = document.getElementById("selectedPayee").value;
+    if (payee === "") {
+        alert("経路を選択してください。");
+        return;
+    }
+    document.getElementById("filterForm").submit();
+}
+
 
 // モーダルとオーバーレイを非表示にする
 function closeModal() {

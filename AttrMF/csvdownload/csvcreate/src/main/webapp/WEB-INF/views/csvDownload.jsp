@@ -28,14 +28,16 @@
 
     <form id="filterForm" action="/selectPayee" method="post">
         <label for="selectedPayee">経路選択:</label>
-        <select name="selectedPayee" id="selectedPayee" onchange="document.getElementById('filterForm').submit();">
+        <select name="selectedPayee" id="selectedPayee">
             <option value="">-- 選択してください --</option>
             <c:forEach var="payee" items="${selectedPayees}">
                 <option value="${payee}" ${payee == selectedPayee ? 'selected' : ''}>${payee}</option>
             </c:forEach>
         </select>
         <input type="hidden" name="selectedMonth" value="${currentMonth}" required />
+        <button type="button" onclick="submitPayeeForm()">CSV管理表生成</button>
     </form>
+    
 </div>
 
 <c:if test="${not empty message}">
@@ -48,7 +50,7 @@
 
 <!-- CSV管理表 保存ボタン付きフォーム -->
 <form id="csvForm" action="/saveWorkTable" method="post">
-    <input type="submit" value="一時保存" />
+    <!--<input type="submit" value="一時保存" />-->
 
     <table border="1">
         <thead>
