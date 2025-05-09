@@ -34,8 +34,10 @@ function submitPayeeForm() {
 
 // モーダルとオーバーレイを非表示にする
 function closeModal() {
-    toggleModal(false);
-}
+    document.getElementById('outputModal').style.display = 'none';
+    document.getElementById('modalOverlay').style.display = 'none';
+  }
+  
 
 // モーダルとオーバーレイの表示・非表示を切り替える
 function toggleModal(show) {
@@ -130,11 +132,22 @@ function downloadCSV() {
 }
 
 // モーダルの背景をクリックした時にモーダルを閉じる処理
-document.getElementById('modalOverlay').addEventListener('click', function(event) {
-    if (event.target.id === 'modalOverlay') {
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('outputModal');
+    const overlay = document.getElementById('modalOverlay');
+    const checkOutputBtn = document.getElementById('checkOutputBtn');
+
+    const isClickInsideModal = modal.contains(event.target);
+    const isClickOnButton = checkOutputBtn.contains(event.target);
+
+    if (overlay.style.display === 'block' && !isClickInsideModal && !isClickOnButton) {
         closeModal();
     }
 });
+
+
+
+
 
 
 

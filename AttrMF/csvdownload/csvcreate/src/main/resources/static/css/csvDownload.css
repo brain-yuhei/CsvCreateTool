@@ -11,7 +11,7 @@ body {
 h2 {
     color: #2c3e50;
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     font-weight: 600;
 }
 
@@ -21,7 +21,6 @@ h2 {
     margin-bottom: 10px;
     margin-right: 50px;
 }
-
 
 /* フォームグループ */
 .form_group {
@@ -41,7 +40,6 @@ h2 {
 #selectedPayee {
     padding: 10px 5px;
 }
-
 
 /* 入力欄とボタン */
 input[type="month"],
@@ -68,14 +66,6 @@ button:hover {
     transform: translateY(-1px);
 }
 
-/* メッセージ */
-.messagelabel p {
-    color: #27ae60;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 20px;
-}
-
 .error-message {
     display: flex;
     justify-content: center;
@@ -92,7 +82,7 @@ table {
     margin: 20px auto;
     border-collapse: separate;
     border-spacing: 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     background-color: white;
     border-radius: 10px;
     overflow: hidden;
@@ -134,21 +124,21 @@ td input[type="text"] {
     background-color: #ffffff;
     border-radius: 12px;
     padding: 25px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
 }
 
 /* モーダルの背景 */
 #modalOverlay {
+    padding: 30px;
     display: none;
     position: fixed;
-    z-index: 999;  /* ← 1000より小さく修正 */
+    z-index: 999;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
     background-color: rgba(30, 30, 30, 0.5);
 }
-
 
 /* モーダル内テーブル */
 #outputModal table th {
@@ -166,6 +156,49 @@ td input[type="text"] {
 input[type="checkbox"] {
     transform: scale(1.2);
     cursor: pointer;
+}
+
+/* スクロール可能なテーブルコンテナ */
+.scrollable-table-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* ヘッダー固定テーブル */
+.fixed-header-table {
+    border-collapse: separate;
+    width: 100%;
+}
+
+.fixed-header-table th,
+.fixed-header-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+.fixed-header-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #2d3e50;
+    color: white;
+    z-index: 10;
+}
+
+/* モーダル内テーブル */
+.modal-table {
+    max-height: 400px; /* 必要に応じて調整 */
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
+/* モーダル内ヘッダー固定テーブル */
+.modal-header-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #2c3e50;
+    color: white;
+    z-index: 5;
 }
 
 
