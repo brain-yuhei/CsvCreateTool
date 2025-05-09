@@ -145,15 +145,37 @@ window.addEventListener('click', function(event) {
     }
 });
 
-
-
-
-
-
-
 // モーダル内部のクリックでは閉じないようにする
 document.getElementById('outputModal').addEventListener('click', function(event) {
     event.stopPropagation(); 
 });
+
+
+
+function onPayeeChange(selectElement, rowIndex) {
+    const selectedPayee = selectElement.value;
+    const date = document.querySelector(`[name="koutsuuhiList[${rowIndex}].date"]`).value;
+
+    fetch('/api/updateRowByPayee', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ payee: selectedPayee, date: date })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // 対象の行を更新
+        document.querySelector(`[name="koutsuuhiList[${rowIndex}].expense_category"]`).value = data.expense_category;
+        document.querySelector(`[name="koutsuuhiList[${rowIndex}].amountInclusiveTax"]`).value = data.amountInclusiveTax;
+        document.querySelector(`[name="koutsuuhiList[${rowIndex}].memo"]`).value = data.memo;
+        document.querySelector(`[name="koutsuuhiList[${rowIndex}].department_name"]`).value = data.department_name;
+        document.querySelector(`[name="koutsuuhiList[${rowIndex}].department_code"]`).value = data.department_code;        
+    })
+    .catch(error => {
+        console.error('エラーが発生しました:', error);
+    });
+}
+
 
   

@@ -82,7 +82,7 @@
 
                         <c:set var="item" value="${wrkList[status.index]}" />
                         <td>
-                            <select name="koutsuuhiList[${status.index}].payeeContent">
+                            <select name="koutsuuhiList[${status.index}].payeeContent" onchange="onPayeeChange(this, '${status.index}')">
                                 <c:forEach var="payee" items="${selectedPayees}">
                                     <option value="${payee}" <c:if test="${payee == item.payeeContent}">selected</c:if>>${payee}</option>
                                 </c:forEach>

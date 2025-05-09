@@ -3,11 +3,16 @@ package com.example.csvcreate.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.csvcreate.model.MstKeiroEntity;
+import com.example.csvcreate.model.WrkKeiroEntity;
 import com.example.csvcreate.service.CsvDownloadService;
+import com.example.csvcreate.service.WrkKeiroService;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.*;
 
@@ -19,6 +24,9 @@ public class CsvDownloadController {
   
     @Autowired
     private CsvDownloadService csvDownloadService;
+
+    @Autowired
+    private WrkKeiroService wrkKeiroService;
 
     /**
      * CSV編集画面の表示
@@ -117,5 +125,27 @@ public class CsvDownloadController {
         model.addAttribute("message", "指定された経路のデータを表示しました。");
     
         return "csvDownload";
+    }
+
+    @PostMapping("/api/updateRowByPayee")
+    @ResponseBody
+    public Map<String, Object> updateRowByPayee(@RequestBody Map<String, String> request) {
+        String payee = request.get("payee");
+        LocalDate date = LocalDate.parse(request.get("date"));
+
+        WrkKeiroEntity wrk = wrkKeiroService.updateRowByPayee(payee, date);
+        if (wrk == null) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("payeeContent", wrk.getPayee());
+        response.put("expense_category", wrk.getExpenseCategory());
+        response.put("amountInclusiveTax", wrk.getAmount());
+        response.put("memo", wrk.getMemo());
+        response.put("department_name", wrk.getDepartmentName());
+        response.put("department_code", wrk.getDepartmentCode());
+
+        return response;
     }
 }
