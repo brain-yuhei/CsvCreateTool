@@ -12,7 +12,7 @@ public interface MstKeiroRepository extends JpaRepository<MstKeiroEntity, Long> 
     MstKeiroEntity findByPayeeContentAndAmountInclusiveTax(String payeeContent, BigDecimal amountInclusiveTax);
     // 支払先・金額のデータがあるか確認
     boolean existsByPayeeContentAndAmountInclusiveTax(String payeeContent, BigDecimal amountInclusiveTax);
-    // Payee（経路）に一致するデータをすべて取得
+    // 経路の一致するデータをすべて取得
     List<MstKeiroEntity> findByPayeeContent(String payeeContent); 
 
 }

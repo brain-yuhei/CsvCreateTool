@@ -29,6 +29,7 @@ public class CsvService {
      */
     public void saveDatabase(MultipartFile uploadfile) throws IOException, CsvValidationException {
 
+        // CSVファイルを読み込む
         try (CSVReader reader = new CSVReader(new InputStreamReader(uploadfile.getInputStream(), StandardCharsets.UTF_8))) {
             String[] data;
             boolean firstLine = true;

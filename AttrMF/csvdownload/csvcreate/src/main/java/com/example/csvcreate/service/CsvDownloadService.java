@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.csvcreate.model.MstKeiroEntity;
 import com.example.csvcreate.model.WrkKeiroEntity;
+import com.example.csvcreate.repository.MstHolidayRepository;
 import com.example.csvcreate.repository.MstKeiroRepository;
 import com.example.csvcreate.repository.WrkKeiroRepository;
-import com.example.csvcreate.utils.businesscalendar.HolidayUtil;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -23,7 +23,10 @@ public class CsvDownloadService {
     private MstKeiroRepository mstKeiroRepository;
 
     @Autowired
-    private WrkKeiroRepository wrkKeiroRepository;    
+    private WrkKeiroRepository wrkKeiroRepository;
+    
+    @Autowired
+    private MstHolidayRepository mstHolidayRepository;
 
     /**
      * マスタテーブルのデータ一覧を取得
@@ -69,6 +72,7 @@ public class CsvDownloadService {
         // 年月のフォーマットを設定
         DateTimeFormatter ymFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
 
+        // 空箱を生成
         Map<String, String> result = new HashMap<>();
         result.put("minMonth", nowMonth.format(ymFormatter));
         result.put("maxMonth", twoMonthsLater.format(ymFormatter));
@@ -82,19 +86,29 @@ public class CsvDownloadService {
      * @param selectedMonth
      */
     public void createWorkTableData(String selectedPayee, String selectedMonth) {
+
+        // 選択経路を使い、一致するマスタテーブルのデータ一覧を取得
         List<MstKeiroEntity> mstData = mstKeiroRepository.findByPayeeContent(selectedPayee);
-        
+
+        // 選択年月を変換（例：2025-05）
         YearMonth ym = YearMonth.parse(selectedMonth);
     
+        // 空のワークテーブル一覧を生成
         List<WrkKeiroEntity> wrkToSave = new ArrayList<>();
     
+        // 対象月を月末までループ
         for (int day = 1; day <= ym.lengthOfMonth(); day++) {
+
+            // 年月日を生成
             LocalDate date = ym.atDay(day);
+
+            // 選択経路と一致するマスタテーブルデータ分処理を行う
             for (MstKeiroEntity mst : mstData) {
     
-                // 既存レコードの検索
+                // 選択経路と年月日でワークテーブルにデータあるか確認
                 Optional<WrkKeiroEntity> existing = wrkKeiroRepository.findByPayeeAndDate(selectedPayee, date);
     
+                // すでにワークテーブルにデータがあればそれを利用し無ければ作成する
                 WrkKeiroEntity wrk = existing.orElse(new WrkKeiroEntity());
                 wrk.setDate(date);
                 wrk.setPayee(mst.getPayeeContent());
@@ -103,11 +117,11 @@ public class CsvDownloadService {
                 wrk.setMemo(mst.getMemo());
                 wrk.setDepartmentName(mst.getDepartment_name());
                 wrk.setDepartmentCode(mst.getDepartment_code());
-    
                 wrkToSave.add(wrk);
             }
         }
     
+        // ワークテーブルを保存
         wrkKeiroRepository.saveAll(wrkToSave);
     }
     
@@ -122,31 +136,38 @@ public class CsvDownloadService {
      */
     public Map<String, Object> getPayeeAndMonth(String selectedPayee, String selectedMonth) {
 
+        // 空箱を生成
         Map<String, Object> result = new HashMap<>();
 
+        // 選択年月を変換（例：2025-05）
         YearMonth yearMonth = YearMonth.parse(selectedMonth);
 
         // 月初と月末の日付を取得
         LocalDate startDate = yearMonth.atDay(1);
         LocalDate endDate = yearMonth.atEndOfMonth();
 
-        // 月初から月末までの日付リストを作成
+        // 月初から月末までの日付一覧を作成
         List<LocalDate> datesInMonth = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
 
         // 曜日を日本語に変換
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E", Locale.JAPANESE);
 
-        // 日付ごとに曜日とチェック有無を生成
+        // 日付ごとに曜日とチェック有無一覧を生成
         List<Map<String, Object>> dateInfoList = datesInMonth.stream().map(date -> {
+
+            // 空箱を生成し日付一覧を詰める
             Map<String, Object> map = new HashMap<>();
             map.put("date", date); 
             map.put("dayOfWeek", date.format(formatter)); 
 
+            // 曜日を取得
             DayOfWeek dayOfWeek = date.getDayOfWeek();
 
             // 土日および祝日をチェック対象外にする
             boolean isWeekday = !(dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY);
-            boolean isHoliday = HolidayUtil.isHoliday(date);
+            boolean isHoliday = mstHolidayRepository.existsByHolidayDate(date);
+
+            // 平日かつ祝日でなければチェック一覧を詰める
             map.put("checked", isWeekday && !isHoliday);
 
             return map;

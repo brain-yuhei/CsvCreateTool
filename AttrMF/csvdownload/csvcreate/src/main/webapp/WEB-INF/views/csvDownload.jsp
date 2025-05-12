@@ -50,7 +50,6 @@
 
 <!-- CSV管理表 保存ボタン付きフォーム -->
 <form id="csvForm" action="/saveWorkTable" method="post">
-    <!--<input type="submit" value="一時保存" />-->
     <div class="scrollable-table-container">
         <table class="fixed-header-table" border="1">
             <thead>
@@ -68,7 +67,7 @@
             </thead>
             <tbody>
                 <c:forEach var="info" items="${dateInfoList}" varStatus="status">
-                    <tr>
+                    <tr>   
                         <td>
                             <input type="checkbox" name="selectedDates" value="${info.date}"
                                 <c:if test="${info.checked}">checked</c:if> >
