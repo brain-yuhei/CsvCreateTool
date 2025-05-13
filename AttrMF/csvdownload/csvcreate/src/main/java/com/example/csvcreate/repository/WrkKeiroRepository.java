@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Repository
@@ -19,6 +20,13 @@ public interface WrkKeiroRepository extends JpaRepository<WrkKeiroEntity, Long> 
 
     // 支払先・内容と日付が一致するデータをすべて取得
     Optional<WrkKeiroEntity> findByPayeeAndDate(String payee, LocalDate date);
+
+    void deleteByDateIn(Set<LocalDate> dates);
+
+    void deleteByPayeeAndDate(String payee, LocalDate date);
+
+    WrkKeiroEntity findByDate(LocalDate date);
+
 
 }
 

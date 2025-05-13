@@ -166,11 +166,11 @@ function onPayeeChange(selectElement, rowIndex) {
     .then(response => response.json())
     .then(data => {
         // 対象の行を更新
-        document.querySelector(`[name="koutsuuhiList[${rowIndex}].expense_category"]`).value = data.expense_category;
-        document.querySelector(`[name="koutsuuhiList[${rowIndex}].amountInclusiveTax"]`).value = data.amountInclusiveTax;
+        document.querySelector(`[name="koutsuuhiList[${rowIndex}].expenseCategory"]`).value = data.expense_category;
+        document.querySelector(`[name="koutsuuhiList[${rowIndex}].amount"]`).value = data.amountInclusiveTax;
         document.querySelector(`[name="koutsuuhiList[${rowIndex}].memo"]`).value = data.memo;
-        document.querySelector(`[name="koutsuuhiList[${rowIndex}].department_name"]`).value = data.department_name;
-        document.querySelector(`[name="koutsuuhiList[${rowIndex}].department_code"]`).value = data.department_code;        
+        document.querySelector(`[name="koutsuuhiList[${rowIndex}].departmentName"]`).value = data.department_name;
+        document.querySelector(`[name="koutsuuhiList[${rowIndex}].departmentCode"]`).value = data.department_code;        
     })
     .catch(error => {
         console.error('エラーが発生しました:', error);

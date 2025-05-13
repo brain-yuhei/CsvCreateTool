@@ -2,18 +2,25 @@ package com.example.csvcreate.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+// import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+// import org.springframework.transaction.annotation.Transactional;
 
+import com.example.csvcreate.model.CsvFormWrapperDto;
+// import com.example.csvcreate.model.CsvFormWrapperDto;
 import com.example.csvcreate.model.WrkKeiroEntity;
+// import com.example.csvcreate.repository.WrkKeiroRepository;
 import com.example.csvcreate.service.CsvDownloadService;
 import com.example.csvcreate.service.WrkKeiroService;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.*;
+// import java.util.stream.Collectors;
 
 import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +33,9 @@ public class CsvDownloadController {
 
     @Autowired
     private WrkKeiroService wrkKeiroService;
+
+    // @Autowired
+    // private WrkKeiroRepository wrkKeiroRepository;
 
     /**
      * CSV編集画面の表示
@@ -159,4 +169,20 @@ public class CsvDownloadController {
 
         return response;
     }
+
+    @PostMapping("/saveWorkTable")
+    public String saveWorkTable(@ModelAttribute CsvFormWrapperDto csvFormWrapperDto, Model model) {
+        try {
+            // CSV管理表の編集データを上書き保存
+            wrkKeiroService.overwriteWrkKeiroData(csvFormWrapperDto.getKoutsuuhiList());
+        
+            model.addAttribute("message", "データを一時保存しました。");
+        } catch (Exception e) {
+            model.addAttribute("message", "保存中にエラーが発生しました: " + e.getMessage());
+        }
+    // 編集後、元のページへリダイレクト
+    return "redirect:/currentMonth";
+    }
+
+
 }

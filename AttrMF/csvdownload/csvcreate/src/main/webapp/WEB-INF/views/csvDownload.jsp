@@ -46,11 +46,12 @@
 
 <div class="check_button">
     <button id="checkOutputBtn" onclick="openModal()">出力内容確認</button>
-</div>   
-
+</div> 
+ 
 <!-- CSV管理表 保存ボタン付きフォーム -->
 <form id="csvForm" action="/saveWorkTable" method="post">
     <div class="scrollable-table-container">
+        <button type="submit">一時保存</button>
         <table class="fixed-header-table" border="1">
             <thead>
                 <tr>
@@ -81,17 +82,17 @@
 
                         <c:set var="item" value="${wrkList[status.index]}" />
                         <td>
-                            <select name="koutsuuhiList[${status.index}].payeeContent" onchange="onPayeeChange(this, '${status.index}')">
+                            <select name="koutsuuhiList[${status.index}].payee" onchange="onPayeeChange(this, '${status.index}')">
                                 <c:forEach var="payee" items="${selectedPayees}">
                                     <option value="${payee}" <c:if test="${payee == item.payeeContent}">selected</c:if>>${payee}</option>
                                 </c:forEach>
                             </select>
                         </td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].expense_category" value="${item.expense_category}"></td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].amountInclusiveTax" value="${item.amountInclusiveTax}"></td>
+                        <td><input type="text" name="koutsuuhiList[${status.index}].expenseCategory" value="${item.expense_category}"></td>
+                        <td><input type="text" name="koutsuuhiList[${status.index}].amount" value="${item.amountInclusiveTax}"></td>
                         <td><input type="text" name="koutsuuhiList[${status.index}].memo" value="${item.memo}"></td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].department_name" value="${item.department_name}" readonly></td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].department_code" value="${item.department_code}" readonly></td>
+                        <td><input type="text" name="koutsuuhiList[${status.index}].departmentName" value="${item.department_name}" readonly></td>
+                        <td><input type="text" name="koutsuuhiList[${status.index}].departmentCode" value="${item.department_code}" readonly></td>
                     </tr>
                 </c:forEach>
             </tbody>
@@ -103,7 +104,8 @@
 <div id="modalOverlay">
     <div id="outputModal">
       <h3>出力内容確認</h3>
-  
+      <button onclick="downloadCSV()">出力</button>
+      <button onclick="closeModal()">閉じる</button> 
       <div class="modal-table">
         <table class="modal-header-table" border="1">
           <thead>
@@ -122,10 +124,7 @@
           </tbody>
         </table>
       </div>
-  
       <br />
-      <button onclick="downloadCSV()">出力</button>
-      <button onclick="closeModal()">閉じる</button>
     </div>
   </div>
 
