@@ -203,7 +203,49 @@ public class CsvDownloadService {
         wrkKeiroRepository.deleteByMonthRange(startDate, endDate);
     }
     
+    // public Map<String, Object> getWrkTable(String selectedPayee, String selectedMonth) {
+    //     Map<String, Object> result = new HashMap<>();
     
+    //     // 選択年月を変換（例：2025-05）
+    //     YearMonth yearMonth = YearMonth.parse(selectedMonth);
+    
+    //     // 月初と月末の日付を取得
+    //     LocalDate startDate = yearMonth.atDay(1);
+    //     LocalDate endDate = yearMonth.atEndOfMonth();
+    
+    //     // 月初から月末までの日付一覧を作成
+    //     List<LocalDate> datesInMonth = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
+    
+    //     // 曜日を日本語に変換
+    //     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E", Locale.JAPANESE);
+    
+    //     // 日付ごとに曜日とチェック有無一覧を生成
+    //     List<Map<String, Object>> dateInfoList = datesInMonth.stream().map(date -> {
+    //         Map<String, Object> map = new HashMap<>();
+    //         map.put("date", date);
+    //         map.put("dayOfWeek", date.format(formatter));
+    
+    //         DayOfWeek dayOfWeek = date.getDayOfWeek();
+    //         boolean isWeekday = !(dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY);
+    //         boolean isHoliday = mstHolidayRepository.existsByHolidayDate(date);
+    
+    //         map.put("checked", isWeekday && !isHoliday);
+    
+    //         return map;
+    //     }).collect(Collectors.toList());
+    
+    //     // ワークテーブルから支払先と対象月に該当するデータを取得
+    //     List<WrkKeiroEntity> wrkList = wrkKeiroRepository.findByPayeeAndDateBetweenOrderByDate(
+    //         selectedPayee, startDate, endDate);
+    
+    //     // 結果を詰めて返却
+    //     result.put("wrkList", wrkList);
+    //     result.put("dateInfoList", dateInfoList);
+    
+    //     return result;
+    // }
+    
+        
     
 }
 

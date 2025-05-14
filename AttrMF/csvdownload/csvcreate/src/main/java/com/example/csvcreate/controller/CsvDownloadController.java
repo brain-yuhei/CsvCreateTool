@@ -195,6 +195,9 @@ public class CsvDownloadController {
     
         // 再表示用データを取得
         Map<String, Object> koutsuuhiData = csvDownloadService.getPayeeAndMonth(selectedPayee, selectedMonth);
+
+        // 新再表示用データを取得
+        // Map<String, Object> koutsuuhiData = csvDownloadService.getWrkTable(selectedPayee, selectedMonth);
   
         model.addAttribute("wrkList", koutsuuhiData.get("wrkList"));
         model.addAttribute("dateInfoList", koutsuuhiData.get("dateInfoList"));

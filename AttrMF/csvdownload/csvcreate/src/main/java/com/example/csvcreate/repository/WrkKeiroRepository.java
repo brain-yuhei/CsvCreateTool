@@ -36,7 +36,11 @@ public interface WrkKeiroRepository extends JpaRepository<WrkKeiroEntity, Long> 
     @Transactional
     @Query("DELETE FROM WrkKeiroEntity w WHERE w.date BETWEEN :startDate AND :endDate")
     void deleteByMonthRange(LocalDate startDate, LocalDate endDate);
-        
+    
+    // List<WrkKeiroEntity> findByPayeeAndDateBetweenOrderByDate(String payee, LocalDate startDate, LocalDate endDate);
+
+    // List<WrkKeiroEntity> findByPayeeAndDateBetweenOrderByDate(String payee, LocalDate start, LocalDate end);
+
 
 }
 
