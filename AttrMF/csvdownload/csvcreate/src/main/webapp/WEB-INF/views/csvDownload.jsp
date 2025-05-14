@@ -50,6 +50,8 @@
  
 <!-- CSV管理表 保存ボタン付きフォーム -->
 <form id="csvForm" action="/saveWorkTable" method="post">
+    <input type="hidden" name="selectedMonth" value="${currentMonth}">
+    <input type="hidden" name="selectedPayee" value="${selectedPayee}">
     <div class="scrollable-table-container">
         <button type="submit">一時保存</button>
         <table class="fixed-header-table" border="1">

@@ -56,35 +56,42 @@ public class CsvDownloadController {
      */
     @GetMapping("/currentMonth")
     public String showCurrentMonthPage(@RequestParam(value = "selectedMonth", required = false) String selectedMonth,
+                                       @RequestParam(value = "selectedPayee", required = false) String selectedPayee,
                                        Model model) {
-
+    
         String currentMonth;
-
+    
         // 年月がnullか空欄の判定
         if (selectedMonth != null && !selectedMonth.isEmpty()) {
-            // ユーザー選択の年月を取得
             currentMonth = selectedMonth;
         } else {
-            // 現在の年月を取得
             currentMonth = YearMonth.now().toString();
         }
-
-        // 取得した年月をモデルに追加
+    
+        // 支払先一覧を取得しモデルに追加
+        List<String> payees = csvDownloadService.getSelectedPayees();
+        model.addAttribute("selectedPayees", payees);
+    
+        if (selectedPayee == null || selectedPayee.isEmpty()) {
+            selectedPayee = payees.stream().findFirst().orElse("");
+        }
+    
+        // ワークテーブルのデータを取得しモデルに追加
+        List<WrkKeiroEntity> wrkDataList = wrkKeiroService.getWrkKeiroData(currentMonth, selectedPayee);
+        model.addAttribute("koutsuuhiList", wrkDataList);
+    
+        // 年月・Payeeも再表示用に追加
         model.addAttribute("currentMonth", currentMonth);
-
+        model.addAttribute("selectedPayee", selectedPayee);
+    
         //年月の範囲を設定し最小月と最大月をモデルに追加
         Map<String, String> monthRange = csvDownloadService.getMonthRange();
         model.addAttribute("minMonth", monthRange.get("minMonth"));
         model.addAttribute("maxMonth", monthRange.get("maxMonth"));
-
-        // 支払先一覧を取得しモデルに追加
-        model.addAttribute("selectedPayees", csvDownloadService.getSelectedPayees());
-
-        // メッセージをモデルに追加
-        // model.addAttribute("message", "年月と経路を選択してください。");
-
-        return "csvDownload";
+    
+        return "csvDownload"; // CSV管理表のJSP名
     }
+    
 
     /**
      * CSV管理表生成ボタンを押下時の処理
@@ -175,14 +182,32 @@ public class CsvDownloadController {
         try {
             // CSV管理表の編集データを上書き保存
             wrkKeiroService.overwriteWrkKeiroData(csvFormWrapperDto.getKoutsuuhiList());
-        
+    
             model.addAttribute("message", "データを一時保存しました。");
         } catch (Exception e) {
             model.addAttribute("message", "保存中にエラーが発生しました: " + e.getMessage());
         }
-    // 編集後、元のページへリダイレクト
-    return "redirect:/currentMonth";
+    
+        // フォームから選択された年月・経路を取得
+        String selectedMonth = csvFormWrapperDto.getSelectedMonth();
+        String selectedPayee = csvFormWrapperDto.getSelectedPayee();
+    
+        // 再表示用データを取得
+        Map<String, Object> koutsuuhiData = csvDownloadService.getPayeeAndMonth(selectedPayee, selectedMonth);
+  
+        model.addAttribute("wrkList", koutsuuhiData.get("wrkList"));
+        model.addAttribute("dateInfoList", koutsuuhiData.get("dateInfoList"));
+        model.addAttribute("selectedPayees", csvDownloadService.getSelectedPayees());
+        model.addAttribute("currentMonth", selectedMonth);
+        model.addAttribute("selectedPayee", selectedPayee);
+    
+        Map<String, String> monthRange = csvDownloadService.getMonthRange();
+        model.addAttribute("minMonth", monthRange.get("minMonth"));
+        model.addAttribute("maxMonth", monthRange.get("maxMonth"));
+    
+        return "csvDownload";
     }
+    
 
 
 }

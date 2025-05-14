@@ -5,8 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.time.LocalDate;
+import java.time.YearMonth;
+
 import com.example.csvcreate.model.MstKeiroEntity;
 import com.example.csvcreate.model.WrkKeiroEntity;
 import com.example.csvcreate.repository.MstKeiroRepository;
@@ -82,6 +83,15 @@ public class WrkKeiroService {
             }
         }
     }
+
+    public List<WrkKeiroEntity> getWrkKeiroData(String yearMonth, String payee) {
+    YearMonth ym = YearMonth.parse(yearMonth);
+    LocalDate startDate = ym.atDay(1);
+    LocalDate endDate = ym.atEndOfMonth();
+
+    return wrkKeiroRepository.findByDateBetweenAndPayee(startDate, endDate, payee);
+}
+
     
     
     
