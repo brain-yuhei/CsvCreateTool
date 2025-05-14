@@ -5,9 +5,11 @@ import com.example.csvcreate.model.WrkKeiroEntity;
 import java.time.LocalDate;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import java.util.Optional;
-import java.util.Set;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.*;
 
 
@@ -30,7 +32,11 @@ public interface WrkKeiroRepository extends JpaRepository<WrkKeiroEntity, Long> 
 
     List<WrkKeiroEntity> findByDateBetweenAndPayee(LocalDate startDate, LocalDate endDate, String payee);
 
-    
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM WrkKeiroEntity w WHERE w.date BETWEEN :startDate AND :endDate")
+    void deleteByMonthRange(LocalDate startDate, LocalDate endDate);
+        
 
 }
 

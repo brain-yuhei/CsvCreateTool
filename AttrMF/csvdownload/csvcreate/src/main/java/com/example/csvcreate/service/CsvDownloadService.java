@@ -194,5 +194,16 @@ public class CsvDownloadService {
         result.put("dateInfoList", dateInfoList);
         return result;
     } 
+
+    public void deleteWrkData(String selectedMonth) {
+        YearMonth ym = YearMonth.parse(selectedMonth);
+        LocalDate startDate = ym.atDay(1);
+        LocalDate endDate = ym.atEndOfMonth();
+    
+        wrkKeiroRepository.deleteByMonthRange(startDate, endDate);
+    }
+    
+    
+    
 }
 

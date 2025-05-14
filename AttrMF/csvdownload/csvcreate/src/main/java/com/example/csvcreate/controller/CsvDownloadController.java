@@ -179,18 +179,19 @@ public class CsvDownloadController {
 
     @PostMapping("/saveWorkTable")
     public String saveWorkTable(@ModelAttribute CsvFormWrapperDto csvFormWrapperDto, Model model) {
+        // フォームから選択された年月・経路を取得
+        String selectedMonth = csvFormWrapperDto.getSelectedMonth();
+        String selectedPayee = csvFormWrapperDto.getSelectedPayee();
         try {
-            // CSV管理表の編集データを上書き保存
-            wrkKeiroService.overwriteWrkKeiroData(csvFormWrapperDto.getKoutsuuhiList());
+            // ワークテーブルの削除
+            csvDownloadService.deleteWrkData(selectedMonth);
+            // CSV管理表の編集データを保存
+            wrkKeiroService.saveWrkKeiroData(csvFormWrapperDto.getKoutsuuhiList());
     
             model.addAttribute("message", "データを一時保存しました。");
         } catch (Exception e) {
             model.addAttribute("message", "保存中にエラーが発生しました: " + e.getMessage());
         }
-    
-        // フォームから選択された年月・経路を取得
-        String selectedMonth = csvFormWrapperDto.getSelectedMonth();
-        String selectedPayee = csvFormWrapperDto.getSelectedPayee();
     
         // 再表示用データを取得
         Map<String, Object> koutsuuhiData = csvDownloadService.getPayeeAndMonth(selectedPayee, selectedMonth);
