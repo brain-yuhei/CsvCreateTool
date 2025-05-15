@@ -103,43 +103,38 @@ public class CsvDownloadController {
      */
     @PostMapping("/selectPayee")
     public String filterByPayeeAndMonth(@RequestParam("selectedPayee") String selectedPayee,
-                                    @RequestParam("selectedMonth") String selectedMonth,
-                                    Model model) {
+                                        @RequestParam("selectedMonth") String selectedMonth,
+                                        Model model) {
 
-        // 支払先・内容がnullか空欄の判定                                    
-        if (selectedPayee == null || selectedPayee.isEmpty()) {
-            // メッセージをモデルに追加
-            model.addAttribute("message", "経路を選択してください。");
-            return "redirect:/currentMonth";
+        // 選択年月の月初と月末を設定
+        YearMonth yearMonth = YearMonth.parse(selectedMonth);
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+
+        // 対象月初と月末でワークテーブルのデータがあるか確認
+        if (!csvDownloadService.existsWrkDataByDateOnly(startDate, endDate)) {
+            // ワークテーブルにデータがなければマスタから生成＆保存
+            csvDownloadService.createWrkDataFromMaster(selectedPayee, selectedMonth);
+            model.addAttribute("message", "ワークテーブルを新規に作成しました。");
+        } else {
+            model.addAttribute("message", "既にデータが存在するため、ワークテーブルから取得しました。");
         }
-
-        // ワークテーブルの生成処理
-        csvDownloadService.createWorkTableData(selectedPayee, selectedMonth);
-
-        // 生成したワークテーブルデータを成型して取得
-        Map<String, Object> koutsuuhiData = csvDownloadService.getPayeeAndMonth(selectedPayee, selectedMonth);
-
-        // ワークテーブから各日付のデータリストとチェック有無のリストをモデルに追加
+    
+        // ワークテーブルから表示データ取得
+        Map<String, Object> koutsuuhiData = csvDownloadService.getWrkDataForDisplay(selectedPayee, selectedMonth);
         model.addAttribute("wrkList", koutsuuhiData.get("wrkList"));
         model.addAttribute("dateInfoList", koutsuuhiData.get("dateInfoList"));
-
-        // 支払先一覧を取得しモデルに追加
-        model.addAttribute("selectedPayees", csvDownloadService.getSelectedPayees());
     
-        //年月の範囲を設定し最小月と最大月をモデルに追加 
-        Map<String, String> monthRange = csvDownloadService.getMonthRange();
-        model.addAttribute("minMonth", monthRange.get("minMonth"));
-        model.addAttribute("maxMonth", monthRange.get("maxMonth"));
-
-        // 選択年月をモデルに追加
+        model.addAttribute("selectedPayees", csvDownloadService.getSelectedPayees());
+        model.addAttribute("minMonth", csvDownloadService.getMonthRange().get("minMonth"));
+        model.addAttribute("maxMonth", csvDownloadService.getMonthRange().get("maxMonth"));
         model.addAttribute("currentMonth", selectedMonth);
-
-        // 選択経路をモデルに追加
         model.addAttribute("selectedPayee", selectedPayee);
-        // model.addAttribute("message", "指定された経路のデータを表示しました。");
     
         return "csvDownload";
     }
+    
+    
 
     /**
      * 支払先・内容を変更時の処理
@@ -194,10 +189,10 @@ public class CsvDownloadController {
         }
     
         // 再表示用データを取得
-        Map<String, Object> koutsuuhiData = csvDownloadService.getPayeeAndMonth(selectedPayee, selectedMonth);
+        //Map<String, Object> koutsuuhiData = csvDownloadService.getPayeeAndMonth(selectedPayee, selectedMonth);
 
         // 新再表示用データを取得
-        // Map<String, Object> koutsuuhiData = csvDownloadService.getWrkTable(selectedPayee, selectedMonth);
+        Map<String, Object> koutsuuhiData = csvDownloadService.getWrkDataForDisplay(selectedPayee, selectedMonth);
   
         model.addAttribute("wrkList", koutsuuhiData.get("wrkList"));
         model.addAttribute("dateInfoList", koutsuuhiData.get("dateInfoList"));

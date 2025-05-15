@@ -86,15 +86,15 @@
                         <td>
                             <select name="koutsuuhiList[${status.index}].payee" onchange="onPayeeChange(this, '${status.index}')">
                                 <c:forEach var="payee" items="${selectedPayees}">
-                                    <option value="${payee}" <c:if test="${payee == item.payeeContent}">selected</c:if>>${payee}</option>
+                                    <option value="${payee}" <c:if test="${fn:trim(payee) == fn:trim(item.payee)}">selected</c:if>>${payee}</option>
                                 </c:forEach>
                             </select>
                         </td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].expenseCategory" value="${item.expense_category}"></td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].amount" value="${item.amountInclusiveTax}"></td>
+                        <td><input type="text" name="koutsuuhiList[${status.index}].expenseCategory" value="${item.expenseCategory}"></td>
+                        <td><input type="text" name="koutsuuhiList[${status.index}].amount" value="${item.amount}"></td>
                         <td><input type="text" name="koutsuuhiList[${status.index}].memo" value="${item.memo}"></td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].departmentName" value="${item.department_name}" readonly></td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].departmentCode" value="${item.department_code}" readonly></td>
+                        <td><input type="text" name="koutsuuhiList[${status.index}].departmentName" value="${item.departmentName}" readonly></td>
+                        <td><input type="text" name="koutsuuhiList[${status.index}].departmentCode" value="${item.departmentCode}" readonly></td>
                     </tr>
                 </c:forEach>
             </tbody>
