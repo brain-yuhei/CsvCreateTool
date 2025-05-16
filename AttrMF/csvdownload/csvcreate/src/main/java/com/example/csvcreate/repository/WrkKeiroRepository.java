@@ -36,13 +36,11 @@ public interface WrkKeiroRepository extends JpaRepository<WrkKeiroEntity, Long> 
     @Modifying
     @Transactional
     @Query("DELETE FROM WrkKeiroEntity w WHERE w.date BETWEEN :startDate AND :endDate")
-    void deleteByMonthRange(LocalDate startDate, LocalDate endDate);
-    
-    // List<WrkKeiroEntity> findByPayeeAndDateBetweenOrderByDate(String payee, LocalDate startDate, LocalDate endDate);
-
-    // List<WrkKeiroEntity> findByPayeeAndDateBetweenOrderByDate(String payee, LocalDate start, LocalDate end);
+    void deleteByMonthRange(LocalDate startDate, LocalDate endDate);   
 
     boolean existsByDateBetween(LocalDate startDate, LocalDate endDate);
+
+    boolean existsByDateAndPayee(LocalDate date, String payee);
 
     List<WrkKeiroEntity> findByDateBetween(LocalDate startDate, LocalDate endDate);
 
@@ -50,7 +48,6 @@ public interface WrkKeiroRepository extends JpaRepository<WrkKeiroEntity, Long> 
 List<WrkKeiroEntity> findByPayeeAndDateBetweenOrderByDate(@Param("payee") String payee,
                                                           @Param("startDate") LocalDate startDate,
                                                           @Param("endDate") LocalDate endDate);
-
 
 }
 

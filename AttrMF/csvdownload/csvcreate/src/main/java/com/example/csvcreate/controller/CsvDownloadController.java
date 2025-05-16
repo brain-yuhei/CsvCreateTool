@@ -76,10 +76,6 @@ public class CsvDownloadController {
             selectedPayee = payees.stream().findFirst().orElse("");
         }
     
-        // ワークテーブルのデータを取得しモデルに追加
-        List<WrkKeiroEntity> wrkDataList = wrkKeiroService.getWrkKeiroData(currentMonth, selectedPayee);
-        model.addAttribute("koutsuuhiList", wrkDataList);
-    
         // 年月・Payeeも再表示用に追加
         model.addAttribute("currentMonth", currentMonth);
         model.addAttribute("selectedPayee", selectedPayee);
@@ -112,12 +108,12 @@ public class CsvDownloadController {
         LocalDate endDate = yearMonth.atEndOfMonth();
 
         // 対象月初と月末でワークテーブルのデータがあるか確認
-        if (!csvDownloadService.existsWrkDataByDateOnly(startDate, endDate)) {
+        if (!wrkKeiroService.existsWrkDataByDateOnly(startDate, endDate)) {
             // ワークテーブルにデータがなければマスタから生成＆保存
             csvDownloadService.createWrkDataFromMaster(selectedPayee, selectedMonth);
             model.addAttribute("message", "ワークテーブルを新規に作成しました。");
         } else {
-            model.addAttribute("message", "既にデータが存在するため、ワークテーブルから取得しました。");
+            model.addAttribute("message", "対象月のデータがすでにあるため取得しました。");
         }
     
         // ワークテーブルから表示データ取得
@@ -172,14 +168,23 @@ public class CsvDownloadController {
         return response;
     }
 
+    /**
+     * 一時保存ボタン押下時の処理
+     * 
+     * @param csvFormWrapperDto
+     * @param model
+     * @return
+     */
     @PostMapping("/saveWorkTable")
     public String saveWorkTable(@ModelAttribute CsvFormWrapperDto csvFormWrapperDto, Model model) {
+
         // フォームから選択された年月・経路を取得
         String selectedMonth = csvFormWrapperDto.getSelectedMonth();
         String selectedPayee = csvFormWrapperDto.getSelectedPayee();
+
         try {
-            // ワークテーブルの削除
-            csvDownloadService.deleteWrkData(selectedMonth);
+            // 選択年月のワークテーブルデータを削除
+            wrkKeiroService.deleteWrkData(selectedMonth);
             // CSV管理表の編集データを保存
             wrkKeiroService.saveWrkKeiroData(csvFormWrapperDto.getKoutsuuhiList());
     
@@ -187,9 +192,6 @@ public class CsvDownloadController {
         } catch (Exception e) {
             model.addAttribute("message", "保存中にエラーが発生しました: " + e.getMessage());
         }
-    
-        // 再表示用データを取得
-        //Map<String, Object> koutsuuhiData = csvDownloadService.getPayeeAndMonth(selectedPayee, selectedMonth);
 
         // 新再表示用データを取得
         Map<String, Object> koutsuuhiData = csvDownloadService.getWrkDataForDisplay(selectedPayee, selectedMonth);

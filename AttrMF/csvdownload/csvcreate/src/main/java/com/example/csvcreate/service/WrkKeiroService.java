@@ -21,6 +21,7 @@ public class WrkKeiroService {
 
     @Autowired
     private WrkKeiroRepository wrkKeiroRepository;
+
     /**
      * 1行分のワークテーブルデータを作成
      * 
@@ -53,48 +54,68 @@ public class WrkKeiroService {
         return wrk;
     }
 
-/**
- * ワークテーブルにCSV管理表のデータを新規保存する
- *
- * @param newList 保存対象の交通費リスト
- */
-@Transactional
-public void saveWrkKeiroData(List<WrkKeiroEntity> newList) {
-    if (newList == null || newList.isEmpty()) return;
+    /**
+     * CSV管理表のデータを保存処理
+     *
+     * @param newList 保存対象の交通費リスト
+     */
+    @Transactional
+    public void saveWrkKeiroData(List<WrkKeiroEntity> newList) {
 
-    for (WrkKeiroEntity newEntry : newList) {
-        WrkKeiroEntity entityToSave = new WrkKeiroEntity();
+        // 交通費リストがNullか空欄の場合は返す
+        if (newList == null || newList.isEmpty()) return;
 
-        // 個別に各項目を設定
-        entityToSave.setDate(newEntry.getDate());
-        entityToSave.setPayee(newEntry.getPayee());
-        entityToSave.setExpenseCategory(newEntry.getExpenseCategory());
-        entityToSave.setAmount(newEntry.getAmount());
-        entityToSave.setMemo(newEntry.getMemo());
-        entityToSave.setDepartmentName(newEntry.getDepartmentName());
-        entityToSave.setDepartmentCode(newEntry.getDepartmentCode());
+        // 交通費リスト分ループ処理
+        for (WrkKeiroEntity newEntry : newList) {
 
-        wrkKeiroRepository.save(entityToSave);
+            // インスタンス生成
+            WrkKeiroEntity entityToSave = new WrkKeiroEntity();
 
-        System.out.println("🆕 データを新規保存しました: 日付 = " + entityToSave.getDate() + ", 支払先 = " + entityToSave.getPayee());
+            // 各項目をセット
+            entityToSave.setDate(newEntry.getDate());
+            entityToSave.setPayee(newEntry.getPayee());
+            entityToSave.setExpenseCategory(newEntry.getExpenseCategory());
+            entityToSave.setAmount(newEntry.getAmount());
+            entityToSave.setMemo(newEntry.getMemo());
+            entityToSave.setDepartmentName(newEntry.getDepartmentName());
+            entityToSave.setDepartmentCode(newEntry.getDepartmentCode());
+
+            // セットされたデータを保存
+            wrkKeiroRepository.save(entityToSave);
+        }
     }
-}
-
-
 
     /**
+     * 対象月のワークテーブルデータを取得処理
      * 
-     * @param yearMonth
-     * @param payee
+     * @param startDate 月初
+     * @param endDate 月末
      * @return
      */
-    public List<WrkKeiroEntity> getWrkKeiroData(String yearMonth, String payee) {
-        YearMonth ym = YearMonth.parse(yearMonth);
-        LocalDate startDate = ym.atDay(1);
-        LocalDate endDate = ym.atEndOfMonth();
-        return wrkKeiroRepository.findByDateBetweenAndPayee(startDate, endDate, payee);
+    public boolean existsWrkDataByDateOnly(LocalDate startDate, LocalDate endDate) {
+
+        // 月初から月末のデータを取得し返す
+        return wrkKeiroRepository.existsByDateBetween(startDate, endDate);
+
     }
 
+    /**
+     * 対象月のワークテーブルデータを削除処理
+     * 
+     * @param selectedMonth 選択月
+     */
+    public void deleteWrkData(String selectedMonth) {
+
+        // 対象月の月初から月末までを設定
+        YearMonth ym = YearMonth.parse(selectedMonth);
+        LocalDate startDate = ym.atDay(1);
+        LocalDate endDate = ym.atEndOfMonth();
+    
+        // 月初から月末のデータを削除
+        wrkKeiroRepository.deleteByMonthRange(startDate, endDate);
+    }
+
+    
   
 }
 

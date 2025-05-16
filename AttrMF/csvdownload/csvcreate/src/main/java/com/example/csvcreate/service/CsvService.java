@@ -21,7 +21,7 @@ public class CsvService {
     private MstKeiroRepository mstkeiroRepository;
 
     /**
-     * CSVファイルを読込み、DBに保存処理
+     * マスタテーブルの生成・保存処理
      * 
      * @param uploadfile CSVファイル
      * @throws IOException
