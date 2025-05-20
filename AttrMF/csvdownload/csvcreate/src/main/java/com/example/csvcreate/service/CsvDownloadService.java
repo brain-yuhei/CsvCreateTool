@@ -69,6 +69,8 @@ public class CsvDownloadService {
     public Map<String, String> getMonthRange() {
         // 当年月のインスタンス生成
         YearMonth nowMonth = YearMonth.now();
+        // 1カ月前の年月のインスタンス生成
+        // YearMonth oneMonthAgo = YearMonth.now().minusMonths(1);
         // 2カ月後年月のインスタンス生成
         YearMonth twoMonthsLater = nowMonth.plusMonths(2);
         // 年月のフォーマットを設定

@@ -3,7 +3,7 @@ package com.example.csvcreate.service;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
+// import java.nio.charset.StandardCharsets;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +13,7 @@ import com.example.csvcreate.model.MstKeiroEntity;
 import com.example.csvcreate.repository.MstKeiroRepository;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import java.nio.charset.Charset;
 
 @Service
 public class CsvService {
@@ -30,7 +31,8 @@ public class CsvService {
     public void saveDatabase(MultipartFile uploadfile) throws IOException, CsvValidationException {
 
         // CSVファイルを読み込む
-        try (CSVReader reader = new CSVReader(new InputStreamReader(uploadfile.getInputStream(), StandardCharsets.UTF_8))) {
+        try (CSVReader reader = new CSVReader(new InputStreamReader(uploadfile.getInputStream(), Charset.forName("Shift_JIS")))) {
+    
             String[] data;
             boolean firstLine = true;
 

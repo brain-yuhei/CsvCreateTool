@@ -127,7 +127,7 @@ public class CsvDownloadController {
         model.addAttribute("currentMonth", selectedMonth);
         model.addAttribute("selectedPayee", selectedPayee);
     
-        return "csvDownload";
+        return "csvTable";
     }
     
     
@@ -206,7 +206,7 @@ public class CsvDownloadController {
         model.addAttribute("minMonth", monthRange.get("minMonth"));
         model.addAttribute("maxMonth", monthRange.get("maxMonth"));
     
-        return "csvDownload";
+        return "csvTable";
     }
     
 

@@ -6,14 +6,12 @@ function openModal() {
     const modalBody = document.getElementById('modalTableBody');
     modalBody.innerHTML = "";
 
-    // 一時保存用フォーム内のテーブルを指定
-    const mainTable = document.querySelector('#csvForm table');
-    const mainTableRows = mainTable.querySelectorAll('tbody tr');
+    // データ行を含むテーブルを取得（スクロール可能な領域内）
+    const dataTable = document.querySelector('.scrollable-table-container table');
+    const dataRows = dataTable.querySelectorAll('tbody tr');
 
-    mainTableRows.forEach(row => {
+    dataRows.forEach(row => {
         const dateText = getDateFromRow(row);
-        console.log("選択された日付:", selectedDates);
-        console.log("この行の日付:", dateText);
 
         if (selectedDates.includes(dateText)) {
             const newRow = buildModalRow(row);
@@ -21,6 +19,7 @@ function openModal() {
         }
     });
 }
+
 
 function submitPayeeForm() {
     const payee = document.getElementById("selectedPayee").value;
