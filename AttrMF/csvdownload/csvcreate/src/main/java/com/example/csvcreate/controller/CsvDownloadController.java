@@ -3,24 +3,19 @@ package com.example.csvcreate.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-// import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-// import org.springframework.transaction.annotation.Transactional;
 
 import com.example.csvcreate.model.CsvFormWrapperDto;
-// import com.example.csvcreate.model.CsvFormWrapperDto;
 import com.example.csvcreate.model.WrkKeiroEntity;
-// import com.example.csvcreate.repository.WrkKeiroRepository;
 import com.example.csvcreate.service.CsvDownloadService;
 import com.example.csvcreate.service.WrkKeiroService;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.*;
-// import java.util.stream.Collectors;
 
 import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,40 +82,105 @@ public class CsvDownloadController {
     
         return "csvDownload"; // CSV管理表のJSP名
     }
+
+    /**
+     * 新規or履歴ボタン押下時の処理
+     * 
+     * @param selectedPayee
+     * @param selectedMonth
+     * @param actionType
+     * @param model
+     * @return
+     */
+    @PostMapping("/selectPayee")
+    public String handlePayeeAction(@RequestParam("selectedPayee") String selectedPayee,
+                                    @RequestParam("selectedMonth") String selectedMonth,
+                                    @RequestParam("actionType") String actionType,
+                                    Model model) {
+    
+        // 経路が未選択の場合
+        if (selectedPayee == null || selectedPayee.trim().isEmpty()) {
+            model.addAttribute("message", "経路を選択するか、経路を登録してください。");
+            model.addAttribute("currentMonth", selectedMonth);
+            return "csvDownload"; // 戻り先のJSPファイル名
+        }
+    
+        // 新規or履歴の判定
+        if ("create".equals(actionType)) {
+            // 新規ボタン押下時、ワークテーブルデータを新規作成し取得
+            return createNewWrkData(selectedPayee, selectedMonth, model);
+        } else if ("history".equals(actionType)) {
+            // 履歴ボタン押下時、ワークテーブルデータの履歴を取得
+            return showHistoryData(selectedPayee, selectedMonth, model);
+        } else {
+            model.addAttribute("message", "無効な操作です。");
+            return "csvTable";
+        }
+    }
     
 
     /**
-     * CSV管理表生成ボタンを押下時の処理
+     * ワークテーブルデータを新規作成処理
      * 
      * @param selectedPayee
      * @param selectedMonth
      * @param model
      * @return
      */
-    @PostMapping("/selectPayee")
-    public String filterByPayeeAndMonth(@RequestParam("selectedPayee") String selectedPayee,
-                                        @RequestParam("selectedMonth") String selectedMonth,
-                                        Model model) {
+    private String createNewWrkData(String selectedPayee, String selectedMonth, Model model) {
+ 
+        // ワークテーブル削除
+        csvDownloadService.deleteWrkDataByYearMonth(selectedMonth);
+        // ワークテーブル作成
+        csvDownloadService.createWrkDataFromMaster(selectedPayee, selectedMonth);
+        model.addAttribute("message", "ワークテーブルを新規に作成しました。");
 
-        // 選択年月の月初と月末を設定
+        // CSV管理表に表示
+        return displayWrkData(selectedPayee, selectedMonth, model);
+    }
+
+    /**
+     * ワークテーブルデータの履歴取得処理
+     * 
+     * @param selectedPayee
+     * @param selectedMonth
+     * @param model
+     * @return
+     */
+    private String showHistoryData(String selectedPayee, String selectedMonth, Model model) {
+
+        // 選択年月の月初と月末を取得
         YearMonth yearMonth = YearMonth.parse(selectedMonth);
         LocalDate startDate = yearMonth.atDay(1);
         LocalDate endDate = yearMonth.atEndOfMonth();
 
-        // 対象月初と月末でワークテーブルのデータがあるか確認
+        // ワークテーブルを月初～月末でソート
         if (!wrkKeiroService.existsWrkDataByDateOnly(startDate, endDate)) {
-            // ワークテーブルにデータがなければマスタから生成＆保存
-            csvDownloadService.createWrkDataFromMaster(selectedPayee, selectedMonth);
-            model.addAttribute("message", "ワークテーブルを新規に作成しました。");
-        } else {
-            model.addAttribute("message", "対象月のデータがすでにあるため取得しました。");
+            model.addAttribute("message", "履歴データが存在しません。");
+            model.addAttribute("wrkList", new ArrayList<>());
+            model.addAttribute("dateInfoList", new ArrayList<>());
+            return "csvTable";
         }
     
-        // ワークテーブルから表示データ取得
+        model.addAttribute("message", "履歴データを表示しました。");
+
+        // CSV管理表に表示
+        return displayWrkData(selectedPayee, selectedMonth, model);
+    }
+
+    /**
+     * CSV管理表に表示処理
+     * 
+     * @param selectedPayee
+     * @param selectedMonth
+     * @param model
+     * @return
+     */
+    private String displayWrkData(String selectedPayee, String selectedMonth, Model model) {
         Map<String, Object> koutsuuhiData = csvDownloadService.getWrkDataForDisplay(selectedPayee, selectedMonth);
+    
         model.addAttribute("wrkList", koutsuuhiData.get("wrkList"));
         model.addAttribute("dateInfoList", koutsuuhiData.get("dateInfoList"));
-    
         model.addAttribute("selectedPayees", csvDownloadService.getSelectedPayees());
         model.addAttribute("minMonth", csvDownloadService.getMonthRange().get("minMonth"));
         model.addAttribute("maxMonth", csvDownloadService.getMonthRange().get("maxMonth"));
@@ -129,6 +189,7 @@ public class CsvDownloadController {
     
         return "csvTable";
     }
+    
     
     
 

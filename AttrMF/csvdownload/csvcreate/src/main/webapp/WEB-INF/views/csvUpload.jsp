@@ -18,6 +18,7 @@
         <label for="uploadfile">CSVファイルを選択</label>
         <input type="file" id="uploadfile" name="uploadfile">
         <button type="submit">アップロード</button>
+        <button type="button" onclick="location.href='/'">戻る</button>
     </form>
 
 </body>

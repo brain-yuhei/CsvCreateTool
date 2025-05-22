@@ -28,6 +28,8 @@ public interface WrkKeiroRepository extends JpaRepository<WrkKeiroEntity, Long> 
     void deleteByDateIn(Set<LocalDate> dates);
 
     void deleteByPayeeAndDate(String payee, LocalDate date);
+    
+    void deleteByDateBetween(LocalDate startDate, LocalDate endDate);
 
     WrkKeiroEntity findByDate(LocalDate date);
 

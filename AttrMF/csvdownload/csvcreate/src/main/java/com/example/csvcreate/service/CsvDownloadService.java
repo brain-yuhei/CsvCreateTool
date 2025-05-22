@@ -70,7 +70,7 @@ public class CsvDownloadService {
         // 当年月のインスタンス生成
         YearMonth nowMonth = YearMonth.now();
         // 1カ月前の年月のインスタンス生成
-        // YearMonth oneMonthAgo = YearMonth.now().minusMonths(1);
+        YearMonth oneMonthAgo = YearMonth.now().minusMonths(1);
         // 2カ月後年月のインスタンス生成
         YearMonth twoMonthsLater = nowMonth.plusMonths(2);
         // 年月のフォーマットを設定
@@ -78,7 +78,8 @@ public class CsvDownloadService {
 
         // 空箱を生成
         Map<String, String> result = new HashMap<>();
-        result.put("minMonth", nowMonth.format(ymFormatter));
+        result.put("minMonth", oneMonthAgo.format(ymFormatter));
+        result.put("nowMonth", nowMonth.format(ymFormatter));
         result.put("maxMonth", twoMonthsLater.format(ymFormatter));
         return result;
     }
@@ -90,8 +91,8 @@ public class CsvDownloadService {
      * @param selectedMonth
      */
     @Transactional
-    public void createWrkDataFromMaster(String selectedPayee, String selectedMonth) {
-    
+    public void createWrkDataFromMaster(String selectedPayee, String selectedMonth) { 
+
         // 選択年月で月初と月末を設定
         YearMonth yearMonth = YearMonth.parse(selectedMonth);
         LocalDate startDate = yearMonth.atDay(1);
@@ -123,6 +124,15 @@ public class CsvDownloadService {
             // 1件ずつ保存
             wrkKeiroRepository.save(entity);
         }
+    }
+
+    @Transactional
+    public void deleteWrkDataByYearMonth(String selectedMonth) {
+        YearMonth yearMonth = YearMonth.parse(selectedMonth);
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+    
+        wrkKeiroRepository.deleteByDateBetween(startDate, endDate);
     }
     
 
@@ -170,7 +180,9 @@ public class CsvDownloadService {
         result.put("wrkList", wrkList);
         result.put("dateInfoList", dateInfoList);
         return result;
-    }       
+    }  
+    
+    
     
 }
 

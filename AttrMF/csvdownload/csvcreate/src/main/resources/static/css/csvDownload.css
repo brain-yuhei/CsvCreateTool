@@ -4,58 +4,88 @@ body {
     background-color: #f4f5f7;
     color: #2c3e50;
     margin: 0;
-    padding: 40px;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* 見出し */
-h2 {
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 20px;
-    font-weight: 600;
-}
-
-.upload_button {
-    text-align: right;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 50px;
-}
-
-/* フォームグループ */
-.form_group {
+.error-message {
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 30px;
-    margin: 20px 0;
+    color: #27ae60;
+    font-weight: bold;
+    margin-top: 30px;
+    font-size: 16px;
 }
 
-.form_group form {
+/* タイトル中央 */
+.page_header {
+    text-align: left;
+    padding: 20px 0;
+    background-color: #fff;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-weight: bold;
+}
+
+.page_header h2 {
+    margin: 0;
+    font-weight: bold;
+    font-size: 24px;
+    margin-left: 100px;
+}
+
+/* 右上固定メニュー */
+.top_right {
+    position: fixed;
+    top: 20px;
+    right: 40px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    z-index: 999;
+    font-weight: bold;
+}
+
+/* メイン中央フォーム */
+.center_form {
+    margin-top: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    font-weight: bold;
+}
+
+/* フォームの中身 */
+.center_form form {
     display: flex;
     align-items: center;
     gap: 10px;
+    font-weight: bold;
 }
 
-#selectedPayee {
-    padding: 10px 5px;
+/* アクションボタン */
+.action_buttons form {
+    display: flex;
+    gap: 10px;
 }
 
-/* 入力欄とボタン */
+/* 共通スタイル */
+select,
 input[type="month"],
-input[type="file"],
 button {
     padding: 10px 14px;
-    border: 1px solid #bbb;
     border-radius: 8px;
     font-size: 15px;
-    transition: all 0.2s ease-in-out;
+    border: 1px solid #bbb;
 }
 
-/* ボタン共通 */
 button {
     background-color: #34495e;
-    color: #fff;
+    color: white;
     font-weight: bold;
     border: none;
     cursor: pointer;
@@ -66,15 +96,7 @@ button:hover {
     transform: translateY(-1px);
 }
 
-.error-message {
-    display: flex;
-    justify-content: center;
-    color: #27ae60;
-    align-items: center;
-    font-weight: bold;
-    margin-top: 10px;
-    font-size: 16px;
-}
+
 
 
 
