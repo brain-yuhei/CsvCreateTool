@@ -166,8 +166,8 @@ function onPayeeChange(selectElement, rowIndex) {
     .then(data => {
         // 金額を数値に変換し、小数点2桁で表示
         const formattedAmount = data.amountInclusiveTax !== null
-            ? parseFloat(data.amountInclusiveTax).toFixed(2)
-            : '';
+        ? (Math.round(data.amountInclusiveTax * 100) / 100).toFixed(2)
+        : '';   
 
         document.querySelector(`[name="koutsuuhiList[${rowIndex}].expenseCategory"]`).value = data.expense_category || '';
         document.querySelector(`[name="koutsuuhiList[${rowIndex}].amount"]`).value = formattedAmount;
