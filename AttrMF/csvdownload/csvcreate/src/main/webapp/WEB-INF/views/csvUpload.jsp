@@ -14,6 +14,10 @@
 
     <h2>CSVファイルアップロード画面</h2>
 
+    <c:if test="${not empty message}">
+        <div class="error-message">${message}</div>
+    </c:if>
+
     <form method="post" action="/csvUpload" enctype="multipart/form-data">
         <label for="uploadfile">CSVファイルを選択</label>
         <input type="file" id="uploadfile" name="uploadfile">

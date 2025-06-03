@@ -35,15 +35,24 @@ public class CsvUploadController {
     @PostMapping("/csvUpload")
     public String uploadFile(@RequestParam("uploadfile") MultipartFile uploadfile, Model model) {
         try {
+            // ファイル名が空、または .csv でない場合はエラー
+            String filename = uploadfile.getOriginalFilename();
+            if (filename == null || !filename.toLowerCase().endsWith(".csv")) {
+                model.addAttribute("message", "CSVファイルを選択してください（拡張子が .csv である必要があります）");
+                return "csvUpload"; 
+            }
+    
             // CSVファイルを読み込み、DBに保存する
             csvService.saveDatabase(uploadfile);
             model.addAttribute("message", "アップロードに成功しました！");
+    
         } catch (Exception e) {
-            // エラー時はエラーメッセージを表示
             model.addAttribute("message", "アップロードに失敗しました: " + e.getMessage());
+            return "csvUpload"; 
         }
-
+    
         return "redirect:/currentMonth"; 
     }
+    
     
 }

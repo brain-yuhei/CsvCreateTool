@@ -66,3 +66,12 @@ button:hover {
     transform: translateY(-1px);
 }
 
+.error-message {
+    display: flex;
+    justify-content: center;
+    color: #27ae60;
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
