@@ -5,12 +5,54 @@
 
 | ソフトウェア | バージョン | 備考 |
 |-----|--------|-----|
-| Java | 17 | JAVA_HOMEの設定推奨 |
-| JDK | 21 | ー |
-| Maven | 3.9.9 | ターミナルにmvn -vを入力しバージョン確認可 |
+| Java | 17 | ー |
+| JDK | 21 | JAVA_HOMEの設定推奨 |
+| Maven | 3.9.9 | ー |
 | SpringBoot |ー|ー|
 
-## 起動手順
+## 起動までの手順
+
+### visual studio codeのインストール
+
+1. CSV簡易生成ツールを実行するために以下のサイトをチェックしながらVSCodeのインストールを行いましょう
+
+- [VSCodeインストール](https://qiita.com/furu38/items/6776acba6621012ee475)
+
+### Java（JDK）のインストール
+
+1. まずはJDKがインストールされているか以下のサイトからチェックしましょう
+
+- [JDKバージョン確認](https://qiita.com/musica_gatto/items/0f54d54cf27e33af010a)
+
+1. インストールされていなければ以下の公式サイトからJDKをダウンロードしてください。
+2. ダウンロード後にはファイルパスの設定も必要ですので実施しましょう。
+
+- [JDKインストール～ファイルパスの設定まで](https://simpleonedesign.com/blog/java/install_java/)
+
+### VSCode拡張機能追加
+
+- [ ] 「Maven for Java」を追加してください
+
+- [ ] 「Spring Boot Extension Pack」を追加してください
+
+### MySQLのインストール
+
+- [ ] 経路情報を管理するためにMySQLのインストールを以下のサイトをチェックしながら行いましょう
+
+- [MySQLのインストール](https://qiita.com/taiyang-ks/items/434495a42ae07f27022c)
+
+### application.propertiesの修正
+
+1. spring.datasource.url=jdbc:mysql://localhost:3306/testdb?useSSL=false&serverTimezone=UTC
+
+- [ ] ・localhost⇒必要に応じてホスト名やIPの変更が必要
+- [ ] ・3306⇒MySQLのポートが異なる場合は修正。
+- [ ] ・testdb⇒使用するデータベース名を自分の環境に合わせて修正。
+
+1. spring.datasource.username=root
+2. spring.datasource.password=yuhei0129H2349
+
+- [ ] ・root、yuhei0129H2349: ユーザー名・パスワードは自分のMySQLの設定に合わせて変更。
 
 ## 利用手順
 
