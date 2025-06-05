@@ -6,7 +6,7 @@
 | ソフトウェア | バージョン | 備考 |
 |-----|--------|-----|
 | Java | 17 | ー |
-| JDK | 21 | JAVA_HOMEの設定推奨 |
+| JDK | 21 | JAVA_HOMEの設定必須 |
 | Maven | 3.9.9 | ー |
 | SpringBoot |ー|ー|
 
@@ -22,7 +22,7 @@
 
 1. まずはJDKがインストールされているか以下のサイトからチェックしましょう
 
-- [JDKバージョン確認](https://qiita.com/musica_gatto/items/0f54d54cf27e33af010a)
+- [ ]  [JDKバージョン確認](https://qiita.com/musica_gatto/items/0f54d54cf27e33af010a)
 
 1. インストールされていなければ以下の公式サイトからJDKをダウンロードしてください。
 2. ダウンロード後にはファイルパスの設定も必要ですので実施しましょう。
