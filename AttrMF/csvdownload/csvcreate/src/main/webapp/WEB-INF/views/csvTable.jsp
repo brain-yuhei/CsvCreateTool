@@ -98,6 +98,9 @@
           </tbody>
         </table>
       </div>
+      <div id="emptyFieldWarning">
+            
+      </div>
       <br />
     </div>
   </div>

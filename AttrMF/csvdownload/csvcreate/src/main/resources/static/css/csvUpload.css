@@ -69,7 +69,7 @@ button:hover {
 .error-message {
     display: flex;
     justify-content: center;
-    color: #27ae60;
+    color: #fe1010;
     font-weight: bold;
     margin-top: 10px;
     font-size: 16px;
