@@ -29,9 +29,6 @@ public class CsvDownloadController {
     @Autowired
     private WrkKeiroService wrkKeiroService;
 
-    // @Autowired
-    // private WrkKeiroRepository wrkKeiroRepository;
-
     /**
      * CSV編集画面の表示
      * 年月選択にリダイレクト

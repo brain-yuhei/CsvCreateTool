@@ -115,11 +115,11 @@ public class CsvDownloadService {
             entity.setDepartmentCode(baseDate.getDepartment_code());
             entity.setDate(date);
 
-            System.out.println("=== 保存データ確認用 ===");
+            // System.out.println("=== 保存データ確認用 ===");
     
             // 確認用ログ出力
-            System.out.println("日付: " + entity.getDate() + ", 支払先: " + entity.getPayee()
-                    + ", 金額: " + entity.getAmount() + ", 部署コード: " + entity.getDepartmentCode());
+            // System.out.println("日付: " + entity.getDate() + ", 支払先: " + entity.getPayee()
+            //         + ", 金額: " + entity.getAmount() + ", 部署コード: " + entity.getDepartmentCode());
     
             // 1件ずつ保存
             wrkKeiroRepository.save(entity);
@@ -166,16 +166,16 @@ public class CsvDownloadService {
         // 月初～月末を使ってワークテーブルデータ一覧を生成
         List<WrkKeiroEntity> wrkList = wrkKeiroRepository.findByDateBetween(startDate, endDate);
       
-        System.out.println("=== wrkList データ内容 ===");
-        wrkList.forEach(e -> {
-            System.out.println("日付: " + e.getDate()
-            + ", 支払先: " + e.getPayee()
-            + ", 金額: " + e.getAmount()
-            + ", 経費科目: " + e.getExpenseCategory()
-            + ", メモ: " + e.getMemo()
-            + ", 部署コード: " + e.getDepartmentCode()
-            + ", 部署名: " + e.getDepartmentName());
-        });
+        // System.out.println("=== wrkList データ内容 ===");
+        // wrkList.forEach(e -> {
+        //     System.out.println("日付: " + e.getDate()
+        //     + ", 支払先: " + e.getPayee()
+        //     + ", 金額: " + e.getAmount()
+        //     + ", 経費科目: " + e.getExpenseCategory()
+        //     + ", メモ: " + e.getMemo()
+        //     + ", 部署コード: " + e.getDepartmentCode()
+        //     + ", 部署名: " + e.getDepartmentName());
+        // });
         Map<String, Object> result = new HashMap<>();
         result.put("wrkList", wrkList);
         result.put("dateInfoList", dateInfoList);
