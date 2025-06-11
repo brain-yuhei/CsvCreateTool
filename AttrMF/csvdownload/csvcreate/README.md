@@ -22,14 +22,6 @@
 
 - [VSCodeインストール](https://qiita.com/furu38/items/6776acba6621012ee475)
 
-### Java（JDK）のインストール
-
-1. コマンドプロンプトで「java -version」を入力し、インストールされていなければ以下の作業を行ってください
-2. 公式サイトからJDKをダウンロードする。
-3. ダウンロード後にはファイルパスの設定も必要ですので実施してください。
-
-- [JDKインストール～ファイルパスの設定まで](https://simpleonedesign.com/blog/java/install_java/)
-
 ### VSCode拡張機能追加
 
 - [ ] 「Maven for Java」を追加してください
@@ -42,11 +34,28 @@
 
 - [ ] 「Markdownlint」を追加してください
 
+### Java（JDK）のインストール
+
+1. コマンドプロンプトで「java -version」を入力し、インストールされていなければ以下の作業を行ってください
+2. 公式サイトからJDKをダウンロードする。
+3. ダウンロード後にファイルパスの設定をする。
+
+- [JDKインストール～ファイルパスの設定まで](https://simpleonedesign.com/blog/java/install_java/)
+
 ### MySQLのインストール
 
 - [ ] 経路情報を管理するためにMySQLのインストールを以下のサイトをチェックしながら行ってください。
 
 - [MySQLのインストール](https://qiita.com/taiyang-ks/items/434495a42ae07f27022c)
+
+- [ ] MySQL8.0 Command Line Clientを起動し自身で設定したPWでログイン
+![ログイン画面](./pic/image27.png)
+
+- [ ] 任意のDBを作成
+![DB作成画面](./pic/image28.png)
+
+- [ ] 作成されたDBを確認
+![DB確認画面](./pic/image29.png)
 
 ### application.propertiesの修正
 
@@ -65,7 +74,8 @@
 
 ### アプリ起動時の操作
 
-VSCodeのターミナルにて「mvn spring-boot:run」を入力し実行
+![ターミナル画面](./pic/image26.png)
+VSCodeのターミナルにて「./mvnw spring-boot:run」を入力し実行
 
 ### ツール利用前の操作（MF経費側）
 
