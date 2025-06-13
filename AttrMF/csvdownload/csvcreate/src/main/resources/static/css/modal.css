@@ -1,0 +1,18 @@
+
+.modal-header-table {
+  table-layout: fixed; /* 列幅を固定 */
+  width: 100%;
+}
+
+.modal-header-table th,
+.modal-header-table td {
+  word-wrap: break-word;   /* 単語を折り返す */
+  word-break: break-word;  /* 長い単語も折り返す */
+  white-space: normal;     /* 折り返しを有効に */
+  padding: 5px;
+}
+
+.modal-header-table td:nth-child(5) {
+  width: 150px;  /* メモ列だけ幅を狭める（適宜調整） */
+}
+

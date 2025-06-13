@@ -7,7 +7,9 @@
     <meta charset="UTF-8">
     <title>CSVファイル管理画面</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/csvTable.css">
-    <script src="${pageContext.request.contextPath}/js/modal.js"></script>    
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/modal.css">
+    <script src="${pageContext.request.contextPath}/js/modal.js"></script> 
+    <script src="${pageContext.request.contextPath}/js/error-message.js"></script>     
 </head>
 <body>
 
@@ -62,9 +64,9 @@
                                 </c:forEach>
                             </select>
                         </td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].expenseCategory" value="${item.expenseCategory}"></td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].amount" value="${item.amount}"></td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].memo" value="${item.memo}"></td>
+                        <td><input type="text" name="koutsuuhiList[${status.index}].expenseCategory" value="${item.expenseCategory}" onblur="validateExpenseCategory(this, '${status.index}')"><div id="error-expenseCategory-${status.index}" class="error-message" style="color:red; display:none;"></div></td>
+                        <td><input type="text" name="koutsuuhiList[${status.index}].amount" value="${item.amount}" onblur="validateAmount(this, '${status.index}')"><div id="error-amount-${status.index}" class="error-message" style="color:red; display:none;"></div></td>
+                        <td><input type="text" name="koutsuuhiList[${status.index}].memo" value="${item.memo}" onblur="validateMemo(this, '${status.index}')"><div id="error-memo-${status.index}" class="error-message" style="color:red; display:none;"></div></td>
                         <td><input type="text" name="koutsuuhiList[${status.index}].departmentName" value="${item.departmentName}" readonly></td>
                         <td><input type="text" name="koutsuuhiList[${status.index}].departmentCode" value="${item.departmentCode}" readonly></td>
                     </tr>

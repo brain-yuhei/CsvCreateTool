@@ -78,6 +78,9 @@
 
 ### アプリ起動時の操作
 
+![ターミナル画面](./pic/image30.png)
+クリーンビルドのためVSCodeのターミナルにて「./mvnw clean install」を実行
+
 ![ターミナル画面](./pic/image26.png)
 VSCodeのターミナルにて「./mvnw spring-boot:run」を入力し実行
 
