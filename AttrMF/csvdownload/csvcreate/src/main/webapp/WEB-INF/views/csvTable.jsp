@@ -14,7 +14,11 @@
 <body>
 
 <c:if test="${not empty message}">
-    <div class="error-message">${message}</div>
+    <div class="message">${message}</div>
+</c:if>
+
+<c:if test="${not empty errormessage}">
+    <div class="error-message">${errormessage}</div>
 </c:if>
          
 <div class="check_button">

@@ -110,7 +110,7 @@ public class CsvDownloadController {
             // 履歴ボタン押下時、ワークテーブルデータの履歴を取得
             return showHistoryData(selectedPayee, selectedMonth, model);
         } else {
-            model.addAttribute("message", "無効な操作です。");
+            model.addAttribute("errormessage", "無効な操作です。");
             return "csvTable";
         }
     }
@@ -153,7 +153,7 @@ public class CsvDownloadController {
 
         // ワークテーブルを月初～月末でソート
         if (!wrkKeiroService.existsWrkDataByDateOnly(startDate, endDate)) {
-            model.addAttribute("message", "履歴データが存在しません。");
+            model.addAttribute("errormessage", "履歴データが存在しません。");
             model.addAttribute("wrkList", new ArrayList<>());
             model.addAttribute("dateInfoList", new ArrayList<>());
             return "csvTable";
@@ -234,38 +234,63 @@ public class CsvDownloadController {
      */
     @PostMapping("/saveWorkTable")
     public String saveWorkTable(@ModelAttribute CsvFormWrapperDto csvFormWrapperDto, Model model) {
-
-        // フォームから選択された年月・経路を取得
+    
         String selectedMonth = csvFormWrapperDto.getSelectedMonth();
         String selectedPayee = csvFormWrapperDto.getSelectedPayee();
-
-        try {
-            // 選択年月のワークテーブルデータを削除
-            wrkKeiroService.deleteWrkData(selectedMonth);
-            // CSV管理表の編集データを保存
-            wrkKeiroService.saveWrkKeiroData(csvFormWrapperDto.getKoutsuuhiList());
+        List<WrkKeiroEntity > koutsuuhiList = csvFormWrapperDto.getKoutsuuhiList();
     
+        List<String> errorMessages = new ArrayList<>();
+        
+        // 必須項目のチェック
+        for (int i = 0; i < koutsuuhiList.size(); i++) {
+            WrkKeiroEntity  dto = koutsuuhiList.get(i);
+            if (dto.getExpenseCategory() == null || dto.getExpenseCategory().trim().isEmpty()) {
+                errorMessages.add((i + 1) + "行目: 経費科目が未入力です。");
+            }
+            if (dto.getAmount() == null) {
+                errorMessages.add((i + 1) + "行目: 金額が未入力です。");
+            }
+            if (dto.getMemo() == null || dto.getMemo().trim().isEmpty()) {
+                errorMessages.add((i + 1) + "行目: メモが未入力です。");
+            }           
+            
+        }
+    
+        if (!errorMessages.isEmpty()) {
+            // エラーがある場合は保存処理をスキップして再表示
+            model.addAttribute("errormessage", String.join("<br>", errorMessages));
+    
+            Map<String, Object> koutsuuhiData = csvDownloadService.getWrkDataForDisplay(selectedPayee, selectedMonth);
+            model.addAttribute("wrkList", koutsuuhiList); // 編集内容を再表示
+            model.addAttribute("dateInfoList", koutsuuhiData.get("dateInfoList"));
+            model.addAttribute("selectedPayees", csvDownloadService.getSelectedPayees());
+            model.addAttribute("currentMonth", selectedMonth);
+            model.addAttribute("selectedPayee", selectedPayee);
+            Map<String, String> monthRange = csvDownloadService.getMonthRange();
+            model.addAttribute("minMonth", monthRange.get("minMonth"));
+            model.addAttribute("maxMonth", monthRange.get("maxMonth"));
+            
+            return "csvTable";
+        }
+    
+        try {
+            wrkKeiroService.deleteWrkData(selectedMonth);
+            wrkKeiroService.saveWrkKeiroData(koutsuuhiList);
             model.addAttribute("message", "データを一時保存しました。");
         } catch (Exception e) {
-            model.addAttribute("message", "保存中にエラーが発生しました: " + e.getMessage());
+            model.addAttribute("errormessage", "保存中にエラーが発生しました: " + e.getMessage());
         }
-
-        // 新再表示用データを取得
+    
         Map<String, Object> koutsuuhiData = csvDownloadService.getWrkDataForDisplay(selectedPayee, selectedMonth);
-  
         model.addAttribute("wrkList", koutsuuhiData.get("wrkList"));
         model.addAttribute("dateInfoList", koutsuuhiData.get("dateInfoList"));
         model.addAttribute("selectedPayees", csvDownloadService.getSelectedPayees());
         model.addAttribute("currentMonth", selectedMonth);
         model.addAttribute("selectedPayee", selectedPayee);
-    
         Map<String, String> monthRange = csvDownloadService.getMonthRange();
         model.addAttribute("minMonth", monthRange.get("minMonth"));
         model.addAttribute("maxMonth", monthRange.get("maxMonth"));
     
         return "csvTable";
     }
-    
-
-
 }
