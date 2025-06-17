@@ -252,7 +252,9 @@ public class CsvDownloadController {
             }
             if (dto.getMemo() == null || dto.getMemo().trim().isEmpty()) {
                 errorMessages.add((i + 1) + "行目: メモが未入力です。");
-            }           
+            } else if (dto.getMemo().length() > 30) {
+                errorMessages.add((i + 1) + "行目: メモは30文字以内で入力してください。");
+            }        
             
         }
     
@@ -294,3 +296,5 @@ public class CsvDownloadController {
         return "csvTable";
     }
 }
+
+
