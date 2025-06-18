@@ -13,6 +13,22 @@
 </head>
 <body>
 
+    <c:if test="${not empty isFirstSave}">
+        <script>
+            window.onload = function() {
+                <c:choose>
+                    <c:when test="${isFirstSave}">
+                        alert("一時保存は今回が初回です。新しいデータとして保存されます。");
+                    </c:when>
+                    <c:otherwise>
+                        alert("同じ月と支払先のデータがすでに存在します。\nこの操作で既存のデータが上書きされます。");
+                    </c:otherwise>
+                </c:choose>
+            };
+        </script>
+    </c:if>
+    
+
 <c:if test="${not empty message}">
     <div class="message">${message}</div>
 </c:if>

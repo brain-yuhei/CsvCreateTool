@@ -13,6 +13,7 @@ import com.example.csvcreate.model.WrkKeiroEntity;
 import com.example.csvcreate.service.CsvDownloadService;
 import com.example.csvcreate.service.WrkKeiroService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.*;
@@ -78,6 +79,14 @@ public class CsvDownloadController {
         model.addAttribute("maxMonth", monthRange.get("maxMonth"));
     
         return "csvDownload"; // CSV管理表のJSP名
+    }
+
+    @GetMapping("/selectPayee")
+    public String showSelectPayeePage(Model model) {
+        // 画面表示に必要なモデルをセット
+        model.addAttribute("errormessage", "無効な操作です。");
+        // 何らかのデフォルト値などもセット
+        return "csvTable"; // JSP名など
     }
 
     /**
@@ -243,20 +252,30 @@ public class CsvDownloadController {
         
         // 必須項目のチェック
         for (int i = 0; i < koutsuuhiList.size(); i++) {
-            WrkKeiroEntity  dto = koutsuuhiList.get(i);
-            if (dto.getExpenseCategory() == null || dto.getExpenseCategory().trim().isEmpty()) {
-                errorMessages.add((i + 1) + "行目: 経費科目が未入力です。");
-            }
-            if (dto.getAmount() == null) {
-                errorMessages.add((i + 1) + "行目: 金額が未入力です。");
-            }
-            if (dto.getMemo() == null || dto.getMemo().trim().isEmpty()) {
-                errorMessages.add((i + 1) + "行目: メモが未入力です。");
-            } else if (dto.getMemo().length() > 30) {
-                errorMessages.add((i + 1) + "行目: メモは30文字以内で入力してください。");
-            }        
-            
+    WrkKeiroEntity dto = koutsuuhiList.get(i);
+
+    if (dto.getExpenseCategory() == null || dto.getExpenseCategory().trim().isEmpty()) {
+        errorMessages.add((i + 1) + "行目: 経費科目が未入力です。");
+    }
+
+    if (dto.getAmount() == null) {
+        errorMessages.add((i + 1) + "行目: 金額が未入力です。");
+    } else {
+        // ここで数字チェック（BigDecimalの文字列変換で例外が出れば非数字）
+        try {
+            new BigDecimal(dto.getAmount().toString());
+        } catch (NumberFormatException e) {
+            errorMessages.add((i + 1) + "行目: 金額は数字で入力してください。");
         }
+    }
+
+    if (dto.getMemo() == null || dto.getMemo().trim().isEmpty()) {
+        errorMessages.add((i + 1) + "行目: メモが未入力です。");
+    } else if (dto.getMemo().length() > 30) {
+        errorMessages.add((i + 1) + "行目: メモは30文字以内で入力してください。");
+    }
+}
+
     
         if (!errorMessages.isEmpty()) {
             // エラーがある場合は保存処理をスキップして再表示
@@ -275,6 +294,7 @@ public class CsvDownloadController {
             return "csvTable";
         }
     
+        
         try {
             wrkKeiroService.deleteWrkData(selectedMonth);
             wrkKeiroService.saveWrkKeiroData(koutsuuhiList);
@@ -296,5 +316,3 @@ public class CsvDownloadController {
         return "csvTable";
     }
 }
-
-

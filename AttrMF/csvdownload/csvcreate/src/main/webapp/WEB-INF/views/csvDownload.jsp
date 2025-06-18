@@ -18,7 +18,7 @@
     </div>
 
     <!-- 右上固定メニューとフォーム -->
-    <form id="payeeForm" action="/selectPayee" method="post">
+    <form id="payeeForm" action="/selectPayee" method="post" method="get">
         <div class="top_right">
             <a href="/csvUpload" class="nav-button">
                 <i class="fas fa-file-upload"></i> CSVファイルの登録画面へ

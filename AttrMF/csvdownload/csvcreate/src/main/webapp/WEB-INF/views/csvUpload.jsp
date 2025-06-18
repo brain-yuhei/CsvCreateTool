@@ -15,12 +15,16 @@
     <h2>CSVファイルアップロード画面</h2>
 
     <c:if test="${not empty message}">
-        <div class="error-message">${message}</div>
+        <div class="message">${message}</div>
+    </c:if>
+
+    <c:if test="${not empty errormessage}">
+        <div class="error-message">${errormessage}</div>
     </c:if>
 
     <form method="post" action="/csvUpload" enctype="multipart/form-data">
         <label for="uploadfile">CSVファイルを選択</label>
-        <input type="file" id="uploadfile" name="uploadfile">
+        <input type="file" id="uploadfile" name="uploadfile" accept=".csv">
         <button type="submit">アップロード</button>
         <button type="button" onclick="location.href='/'">戻る</button>
     </form>

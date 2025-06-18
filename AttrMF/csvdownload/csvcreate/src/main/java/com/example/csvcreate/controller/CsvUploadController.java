@@ -38,7 +38,7 @@ public class CsvUploadController {
             // ファイル名が空、または .csv でない場合はエラー
             String filename = uploadfile.getOriginalFilename();
             if (filename == null || !filename.toLowerCase().endsWith(".csv")) {
-                model.addAttribute("message", "CSVファイルを選択してください（拡張子が .csv である必要があります）");
+                model.addAttribute("errormessage", "CSVファイルを選択してください（拡張子が .csv である必要があります）");
                 return "csvUpload"; 
             }
     
@@ -47,7 +47,7 @@ public class CsvUploadController {
             model.addAttribute("message", "アップロードに成功しました！");
     
         } catch (Exception e) {
-            model.addAttribute("message", "アップロードに失敗しました: " + e.getMessage());
+            model.addAttribute("errormessage", "アップロードに失敗しました: " + e.getMessage());
             return "csvUpload"; 
         }
     
