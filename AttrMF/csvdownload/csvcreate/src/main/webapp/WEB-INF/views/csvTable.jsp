@@ -13,22 +13,6 @@
 </head>
 <body>
 
-    <c:if test="${not empty isFirstSave}">
-        <script>
-            window.onload = function() {
-                <c:choose>
-                    <c:when test="${isFirstSave}">
-                        alert("一時保存は今回が初回です。新しいデータとして保存されます。");
-                    </c:when>
-                    <c:otherwise>
-                        alert("同じ月と支払先のデータがすでに存在します。\nこの操作で既存のデータが上書きされます。");
-                    </c:otherwise>
-                </c:choose>
-            };
-        </script>
-    </c:if>
-    
-
 <c:if test="${not empty message}">
     <div class="message">${message}</div>
 </c:if>
@@ -87,8 +71,14 @@
                         <td><input type="text" name="koutsuuhiList[${status.index}].expenseCategory" value="${item.expenseCategory}" onblur="validateExpenseCategory(this, '${status.index}')"><div id="error-expenseCategory-${status.index}" class="error-message" style="color:red; display:none;"></div></td>
                         <td><input type="text" name="koutsuuhiList[${status.index}].amount" value="${item.amount}" onblur="validateAmount(this, '${status.index}')"><div id="error-amount-${status.index}" class="error-message" style="color:red; display:none;"></div></td>
                         <td><input type="text" name="koutsuuhiList[${status.index}].memo" value="${item.memo}" onblur="validateMemo(this, '${status.index}')"><div id="error-memo-${status.index}" class="error-message" style="color:red; display:none;"></div></td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].departmentName" value="${item.departmentName}" readonly></td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].departmentCode" value="${item.departmentCode}" readonly></td>
+                        <td>
+                            ${item.departmentName}
+                            <input type="hidden" name="koutsuuhiList[${status.index}].departmentName" value="${item.departmentName}" />
+                          </td>
+                          <td>
+                            ${item.departmentCode}
+                            <input type="hidden" name="koutsuuhiList[${status.index}].departmentCode" value="${item.departmentCode}" />
+                          </td>
                     </tr>
                 </c:forEach>
             </tbody>
