@@ -99,30 +99,30 @@ public class CsvDownloadController {
      * @return
      */
     @PostMapping("/selectPayee")
-    public String handlePayeeAction(@RequestParam("selectedPayee") String selectedPayee,
-                                    @RequestParam("selectedMonth") String selectedMonth,
-                                    @RequestParam("actionType") String actionType,
-                                    Model model) {
+    public String handlePayeeAction(
+        @RequestParam(value = "selectedPayee", required = false) String selectedPayee,
+        @RequestParam("selectedMonth") String selectedMonth,
+        @RequestParam("actionType") String actionType,
+        Model model) {
     
-        // 経路が未選択の場合
-        if (selectedPayee == null || selectedPayee.trim().isEmpty()) {
-            model.addAttribute("message", "経路を選択するか、経路を登録してください。");
+        // 新規作成時は経路必須
+        if ("create".equals(actionType) && (selectedPayee == null || selectedPayee.trim().isEmpty())) {
+            model.addAttribute("errormessage", "経路を選択するか、経路を登録してください。");
             model.addAttribute("currentMonth", selectedMonth);
-            return "csvDownload"; // 戻り先のJSPファイル名
+            return "csvDownload";
         }
     
-        // 新規or履歴の判定
         if ("create".equals(actionType)) {
-            // 新規ボタン押下時、ワークテーブルデータを新規作成し取得
             return createNewWrkData(selectedPayee, selectedMonth, model);
         } else if ("history".equals(actionType)) {
-            // 履歴ボタン押下時、ワークテーブルデータの履歴を取得
             return showHistoryData(selectedPayee, selectedMonth, model);
         } else {
             model.addAttribute("errormessage", "無効な操作です。");
             return "csvTable";
         }
     }
+    
+
     
 
     /**

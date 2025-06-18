@@ -198,6 +198,15 @@ function onPayeeChange(selectElement, rowIndex) {
     });
 }
 
+function removeRequired() {
+    document.getElementById('selectedPayee').removeAttribute('required');
+}
+
+function addRequired() {
+    document.getElementById('selectedPayee').setAttribute('required', 'required');
+}
+
+
 
 
 

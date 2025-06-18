@@ -25,7 +25,7 @@
             </a>
 
             <label for="selectedPayee">選択中の経路：</label>
-            <select name="selectedPayee" id="selectedPayee" required>
+            <select name="selectedPayee" id="selectedPayee">
                 <option value="">-- 選択してください --</option>
                 <c:forEach var="payee" items="${selectedPayees}">
                     <option value="${payee}" ${payee == selectedPayee ? 'selected' : ''}>${payee}</option>
@@ -34,7 +34,11 @@
         </div>
 
         <c:if test="${not empty message}">
-            <div class="error-message">${message}</div>
+            <div class="message">${message}</div>
+        </c:if>
+
+        <c:if test="${not empty errormessage}">
+            <div class="error-message">${errormessage}</div>
         </c:if>
 
         <!-- 中央の年月選択とボタン -->
@@ -43,10 +47,10 @@
             <input type="month" id="calendar_Text" name="selectedMonth" value="${currentMonth}"
                    min="${minMonth}" max="${maxMonth}" required />
 
-            <div class="action_buttons">
-                <button type="submit" name="actionType" value="history">履歴を表示</button>
-                <button type="submit" name="actionType" value="create">新規作成</button>
-            </div>
+                <div class="action_buttons">
+                    <button type="submit" name="actionType" value="history" onclick="removeRequired()">履歴を表示</button>
+                    <button type="submit" name="actionType" value="create" onclick="addRequired()">新規作成</button>
+                </div>
         </div>
     </form>
 
