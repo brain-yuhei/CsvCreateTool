@@ -76,7 +76,7 @@
                             </select>
                         </td>
                         <td><input type="text" name="koutsuuhiList[${status.index}].expenseCategory" value="${item.expenseCategory}" onblur="validateExpenseCategory(this, '${status.index}')"><div id="error-expenseCategory-${status.index}" class="error-message" style="color:red; display:none;"></div></td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].amount" value="${item.amount}" onblur="validateAmount(this, '${status.index}')"><div id="error-amount-${status.index}" class="error-message" style="color:red; display:none;"></div></td>
+                        <td><input type="number" name="koutsuuhiList[${status.index}].amount" value="${item.amount}" onblur="validateAmount(this, '${status.index}')"><div id="error-amount-${status.index}" class="error-message" style="color:red; display:none;"></div></td>
                         <td><input type="text" name="koutsuuhiList[${status.index}].memo" value="${item.memo}" onblur="validateMemo(this, '${status.index}')"><div id="error-memo-${status.index}" class="error-message" style="color:red; display:none;"></div></td>
                         <td>
                             ${item.departmentName}

@@ -90,6 +90,14 @@ h2 {
     border-radius: 5px;
 }
 
+.fixed-header-table input[type="number"],
+.fixed-header-table select {
+    width: 95%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
 .fixed-header-table input[type="checkbox"] {
     transform: scale(1.2);
     cursor: pointer;
