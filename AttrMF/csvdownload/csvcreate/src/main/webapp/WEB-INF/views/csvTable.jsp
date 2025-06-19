@@ -13,6 +13,13 @@
 </head>
 <body>
 
+<%-- 成功時のダイアログ表示 --%>
+<c:if test="${saveSuccess}">
+    <script>
+        alert("データを一時保存しました。");
+    </script>
+</c:if>
+
 <c:if test="${not empty message}">
     <div class="message">${message}</div>
 </c:if>

@@ -47,7 +47,7 @@ public class CsvUploadController {
             model.addAttribute("message", "アップロードに成功しました！");
     
         } catch (Exception e) {
-            model.addAttribute("errormessage", "アップロードに失敗しました: " + e.getMessage());
+            model.addAttribute("errormessage", "アップロードに失敗しました：CSVファイルの項目数が不足しています " + e.getMessage());
             return "csvUpload"; 
         }
     

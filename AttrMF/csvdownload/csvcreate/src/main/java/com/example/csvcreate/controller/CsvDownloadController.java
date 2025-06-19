@@ -81,12 +81,20 @@ public class CsvDownloadController {
         return "csvDownload"; // CSV管理表のJSP名
     }
 
+    /**
+     * URL実行時の処理
+     * 
+     * @return
+     */
     @GetMapping("/selectPayee")
-    public String showSelectPayeePage(Model model) {
-        // 画面表示に必要なモデルをセット
-        model.addAttribute("errormessage", "無効な操作です。");
-        // 何らかのデフォルト値などもセット
-        return "csvTable"; // JSP名など
+    public String redirectToError() {
+        return "redirect:/csvError";
+    }
+
+    @GetMapping("/csvError")
+    public String showInvalidPage(Model model) {
+        model.addAttribute("errorMessage", "不正なアクセスです。");
+        return "csvError"; 
     }
 
     /**
@@ -298,7 +306,7 @@ public class CsvDownloadController {
         try {
             wrkKeiroService.deleteWrkData(selectedMonth);
             wrkKeiroService.saveWrkKeiroData(koutsuuhiList);
-            model.addAttribute("message", "データを一時保存しました。");
+            model.addAttribute("saveSuccess", true); // 成功フラグ
         } catch (Exception e) {
             model.addAttribute("errormessage", "保存中にエラーが発生しました: " + e.getMessage());
         }
