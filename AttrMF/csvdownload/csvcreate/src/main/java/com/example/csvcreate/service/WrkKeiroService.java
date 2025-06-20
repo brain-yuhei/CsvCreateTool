@@ -61,17 +61,13 @@ public class WrkKeiroService {
      */
     @Transactional
     public void saveWrkKeiroData(List<WrkKeiroEntity> newList) {
-
-        // 交通費リストがNullか空欄の場合は返す
+    
         if (newList == null || newList.isEmpty()) return;
-
-        // 交通費リスト分ループ処理
+    
         for (WrkKeiroEntity newEntry : newList) {
-
-            // インスタンス生成
+    
             WrkKeiroEntity entityToSave = new WrkKeiroEntity();
-
-            // 各項目をセット
+    
             entityToSave.setDate(newEntry.getDate());
             entityToSave.setPayee(newEntry.getPayee());
             entityToSave.setExpenseCategory(newEntry.getExpenseCategory());
@@ -79,11 +75,12 @@ public class WrkKeiroService {
             entityToSave.setMemo(newEntry.getMemo());
             entityToSave.setDepartmentName(newEntry.getDepartmentName());
             entityToSave.setDepartmentCode(newEntry.getDepartmentCode());
-
-            // セットされたデータを保存
+            entityToSave.setChecked(newEntry.getChecked());
+    
             wrkKeiroRepository.save(entityToSave);
         }
     }
+    
 
     /**
      * 対象月のワークテーブルデータを取得処理

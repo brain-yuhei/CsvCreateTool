@@ -64,9 +64,17 @@ function toggleModal(show) {
 
 // チェックされている日付を取得
 function getSelectedDates() {
-    return Array.from(document.querySelectorAll('input[name="selectedDates"]:checked'))
-        .map(cb => cb.value);
+    // name属性が koutsuuhiList[0].checked などになっているチェックボックスを取得
+    const checkboxes = document.querySelectorAll('input[type="checkbox"][name$=".checked"]:checked');
+
+    return Array.from(checkboxes).map(cb => {
+        // 同じ行の中にある「日付」 hidden input から値を取得
+        const row = cb.closest('tr');
+        const dateInput = row.querySelector('input[name$=".date"]');
+        return dateInput ? dateInput.value.trim() : "";
+    });
 }
+
 
 // 日付セルのテキストを取得
 function getDateFromRow(row) {
@@ -113,10 +121,11 @@ function buildModalRow(originalRow) {
 
 
 // 全選択のチェックボックスに応じて、すべてのチェックボックスをON/OFF
-function selectAllCheckboxes() {
-    const selectAll = document.getElementById("selectAll").checked;
-    document.querySelectorAll('input[name="selectedDates"]').forEach(cb => {
-        cb.checked = selectAll;
+function selectAllCheckboxes(source) {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"][name$=".checked"]');
+
+    checkboxes.forEach(function(checkbox) {
+        checkbox.checked = source.checked;
     });
 }
 

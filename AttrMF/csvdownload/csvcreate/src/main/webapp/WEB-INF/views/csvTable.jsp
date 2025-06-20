@@ -57,8 +57,12 @@
                 <c:forEach var="info" items="${dateInfoList}" varStatus="status">
                     <tr>   
                         <td>
-                            <input type="checkbox" name="selectedDates" value="${info.date}"
-                                <c:if test="${info.checked}">checked</c:if> >
+                            <!-- チェックボックス -->
+                            <input type="checkbox" name="koutsuuhiList[${status.index}].checked" value="true"
+                            <c:if test="${info.checked}">checked</c:if> />
+
+                            <!-- チェックなし時 -->
+                            <input type="hidden" name="_koutsuuhiList[${status.index}].checked" value="off" />
                         </td>
 
                         <td>${info.dayOfWeek}</td>

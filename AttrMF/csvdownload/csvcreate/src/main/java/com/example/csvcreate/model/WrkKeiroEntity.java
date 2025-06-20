@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -28,5 +29,7 @@ public class WrkKeiroEntity {
     private String departmentName; // 費用負担部名
     private String departmentCode; // 費用負担部コード
     private LocalDate date;
-    
+    @Column(columnDefinition = "BIT", nullable = true)
+    private Boolean checked; 
+
 }
