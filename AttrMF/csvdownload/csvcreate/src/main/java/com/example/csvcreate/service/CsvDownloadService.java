@@ -149,8 +149,8 @@ public class CsvDownloadService {
         List<WrkKeiroEntity> wrkList = wrkKeiroRepository.findByDateBetween(startDate, endDate);
     
         // date -> WrkKeiroEntity のマップを作成
-        Map<LocalDate, WrkKeiroEntity> wrkMap = wrkList.stream()
-            .collect(Collectors.toMap(WrkKeiroEntity::getDate, e -> e));
+        Map<LocalDate, List<WrkKeiroEntity>> wrkMap = wrkList.stream()
+    .collect(Collectors.groupingBy(WrkKeiroEntity::getDate));
     
         // 日付情報（曜日＋チェック状態）
         List<Map<String, Object>> dateInfoList = startDate.datesUntil(endDate.plusDays(1))
@@ -160,8 +160,9 @@ public class CsvDownloadService {
                 map.put("dayOfWeek", date.format(DateTimeFormatter.ofPattern("E", Locale.JAPANESE)));
     
                 // ✅ ワークテーブルの checked を使う
-                WrkKeiroEntity entity = wrkMap.get(date);
-                map.put("checked", entity != null ? Boolean.TRUE.equals(entity.getChecked()) : false);
+                List<WrkKeiroEntity> entityList = wrkMap.get(date);
+                boolean checked = (entityList != null && entityList.stream().anyMatch(e -> Boolean.TRUE.equals(e.getChecked())));
+                map.put("checked", checked);
     
                 return map;
             })

@@ -260,31 +260,30 @@ public class CsvDownloadController {
         
         // 必須項目のチェック
         for (int i = 0; i < koutsuuhiList.size(); i++) {
-    WrkKeiroEntity dto = koutsuuhiList.get(i);
+        WrkKeiroEntity dto = koutsuuhiList.get(i);
 
-    if (dto.getExpenseCategory() == null || dto.getExpenseCategory().trim().isEmpty()) {
-        errorMessages.add((i + 1) + "行目: 経費科目が未入力です。");
-    }
+            if (dto.getExpenseCategory() == null || dto.getExpenseCategory().trim().isEmpty()) {
+                errorMessages.add((i + 1) + "行目: 経費科目が未入力です。");
+            }
 
-    if (dto.getAmount() == null) {
-        errorMessages.add((i + 1) + "行目: 金額が未入力です。");
-    } else {
-        // ここで数字チェック（BigDecimalの文字列変換で例外が出れば非数字）
-        try {
-            new BigDecimal(dto.getAmount().toString());
-        } catch (NumberFormatException e) {
-            errorMessages.add((i + 1) + "行目: 金額は数字で入力してください。");
+            if (dto.getAmount() == null) {
+                errorMessages.add((i + 1) + "行目: 金額が未入力です。");
+            } else {
+                // ここで数字チェック（BigDecimalの文字列変換で例外が出れば非数字）
+                try {
+                    new BigDecimal(dto.getAmount().toString());
+                } catch (NumberFormatException e) {
+                    errorMessages.add((i + 1) + "行目: 金額は数字で入力してください。");
+                }
+            }
+
+            if (dto.getMemo() == null || dto.getMemo().trim().isEmpty()) {
+                errorMessages.add((i + 1) + "行目: メモが未入力です。");
+            } else if (dto.getMemo().length() > 30) {
+                errorMessages.add((i + 1) + "行目: メモは30文字以内で入力してください。");
+            }
         }
-    }
 
-    if (dto.getMemo() == null || dto.getMemo().trim().isEmpty()) {
-        errorMessages.add((i + 1) + "行目: メモが未入力です。");
-    } else if (dto.getMemo().length() > 30) {
-        errorMessages.add((i + 1) + "行目: メモは30文字以内で入力してください。");
-    }
-}
-
-    
         if (!errorMessages.isEmpty()) {
             // エラーがある場合は保存処理をスキップして再表示
             model.addAttribute("errormessage", String.join("<br>", errorMessages));
