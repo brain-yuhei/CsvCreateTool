@@ -1,4 +1,3 @@
-<!-- JSPファイル (csvTable.jsp) -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -11,7 +10,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/modal.css">
     <script src="${pageContext.request.contextPath}/js/modal.js"></script>
     <script src="${pageContext.request.contextPath}/js/error-message.js"></script>
-    <script src="${pageContext.request.contextPath}/js/row-add.js"></script> <!-- 新規追加 -->
+    <script src="${pageContext.request.contextPath}/js/row-add.js"></script>
 </head>
 <body>
 
@@ -28,7 +27,7 @@
 
 <!-- ボタンエリア -->
 <div class="check_button">
-    <button id="checkOutputBtn" onclick="openModal()">出力内容確認</button>
+    <button id="checkOutputBtn" type="button" onclick="openModal()">出力内容確認</button>
     <button type="button" onclick="location.href='/'">戻る</button>
 </div>
 
@@ -37,6 +36,7 @@
     <input type="hidden" name="selectedMonth" value="${currentMonth}" />
     <input type="hidden" name="selectedPayee" value="${selectedPayee}" />
     <button type="submit">一時保存</button>
+
     <div class="scrollable-table-container">
         <table class="fixed-header-table" border="1">
             <thead>
@@ -54,36 +54,58 @@
                 </tr>
             </thead>
             <tbody id="mainTableBody">
-                <c:forEach var="info" items="${dateInfoList}" varStatus="status">
-                    <c:set var="item" value="${wrkList[status.index]}" />
-            
-                    <tr data-date="${info.date}" id="section-${info.date}">
-                        <td>
-                            <input type="checkbox" name="koutsuuhiList[${status.index}].checked" value="true"
-                            <c:if test="${info.checked}">checked</c:if> />
-                            <input type="hidden" name="_koutsuuhiList[${status.index}].checked" value="off" />
-                        </td>
-                        <td>${info.dayOfWeek}</td>
-                        <td data-type="date">${info.date}
-                            <input type="hidden" name="koutsuuhiList[${status.index}].date" value="${info.date}" />
-                        </td>
-                        <td>
-                            <select name="koutsuuhiList[${status.index}].payee" onchange="onPayeeChange(this, '${status.index}')">
-                                <c:forEach var="payee" items="${selectedPayees}">
-                                    <option value="${payee}" <c:if test="${fn:trim(payee) == fn:trim(item.payee)}">selected</c:if>>${payee}</option>
-                                </c:forEach>
-                            </select>
-                        </td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].expenseCategory" value="${item.expenseCategory}" onblur="validateExpenseCategory(this, '${status.index}')" /></td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].amount" value="${item.amount}" onblur="formatAmount(this); validateAmount(this, '${status.index}')" /></td>
-                        <td><input type="text" name="koutsuuhiList[${status.index}].memo" value="${item.memo}" onblur="validateMemo(this, '${status.index}')" /></td>
-                        <td>${item.departmentName}<input type="hidden" name="koutsuuhiList[${status.index}].departmentName" value="${item.departmentName}" /></td>
-                        <td>${item.departmentCode}<input type="hidden" name="koutsuuhiList[${status.index}].departmentCode" value="${item.departmentCode}" /></td>
-                        <td><button type="button" onclick="addRowToDate('${info.date}')">＋</button></td>
-                    </tr>
+                <c:set var="rowIndex" value="0" />
+                <c:forEach var="info" items="${dateInfoList}">
+                    <c:forEach var="item" items="${wrkList}">
+                        <c:if test="${item.date == info.date}">
+                            <tr id="section-${info.date}">
+                                <td>
+                                    <input type="checkbox" name="koutsuuhiList[${rowIndex}].checked" value="true"
+                                        <c:if test="${item.checked}">checked</c:if> />
+                                    <input type="hidden" name="_koutsuuhiList[${rowIndex}].checked" value="off" />
+                                </td>
+                                <td>${info.dayOfWeek}</td>
+                                <td data-type="date">${info.date}
+                                    <input type="hidden" name="koutsuuhiList[${rowIndex}].date" value="${info.date}" />
+                                </td>
+                                <td>
+                                    <select name="koutsuuhiList[${rowIndex}].payee" onchange="onPayeeChange(this, '${rowIndex}')">
+                                        <c:forEach var="payee" items="${selectedPayees}">
+                                            <option value="${payee}" <c:if test="${payee == item.payee}">selected</c:if>>${payee}</option>
+                                        </c:forEach>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" name="koutsuuhiList[${rowIndex}].expenseCategory"
+                                           value="${item.expenseCategory}"
+                                           onblur="validateExpenseCategory(this, '${rowIndex}')" />
+                                    <div id="error-expenseCategory-${rowIndex}" class="error-message" style="color:red; display:none;"></div>
+                                </td>
+                                <td>
+                                    <input type="text" name="koutsuuhiList[${rowIndex}].amount"
+                                           value="${item.amount}"
+                                           onblur="formatAmount(this); validateAmount(this, '${rowIndex}')" />
+                                    <div id="error-amount-${rowIndex}" class="error-message" style="color:red; display:none;"></div>
+                                </td>
+                                <td>
+                                    <input type="text" name="koutsuuhiList[${rowIndex}].memo"
+                                           value="${item.memo}"
+                                           onblur="validateMemo(this, '${rowIndex}')" />
+                                    <div id="error-memo-${rowIndex}" class="error-message" style="color:red; display:none;"></div>
+                                </td>
+                                <td>${item.departmentName}
+                                    <input type="hidden" name="koutsuuhiList[${rowIndex}].departmentName" value="${item.departmentName}" />
+                                </td>
+                                <td>${item.departmentCode}
+                                    <input type="hidden" name="koutsuuhiList[${rowIndex}].departmentCode" value="${item.departmentCode}" />
+                                </td>
+                                <td><button type="button" onclick="addRowToDate('${info.date}')">＋</button></td>
+                            </tr>
+                            <c:set var="rowIndex" value="${rowIndex + 1}" />
+                        </c:if>
+                    </c:forEach>
                 </c:forEach>
             </tbody>
-            
         </table>
     </div>
 </form>
