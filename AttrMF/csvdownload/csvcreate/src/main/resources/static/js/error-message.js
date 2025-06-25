@@ -1,4 +1,10 @@
-
+/**
+ * 金額欄のフォーカス移動時エラーチェック
+ * 
+ * @param {*} input 
+ * @param {*} index 
+ * @returns 
+ */
 function validateAmount(input, index) {
     index = parseInt(index);
     let value = input.value.trim();
@@ -27,7 +33,12 @@ function validateAmount(input, index) {
     input.value = formattedValue;
 }
 
-
+/**
+ * メモ欄のフォーカス移動時エラーチェック
+ * 
+ * @param {*} input 
+ * @param {*} index 
+ */
 function validateMemo(input, index) {
     index = parseInt(index);
     const value = input.value.trim();
@@ -45,7 +56,12 @@ function validateMemo(input, index) {
     }
 }
 
-
+/**
+ * 経費科目欄のフォーカス移動時エラーチェック
+ * 
+ * @param {*} input 
+ * @param {*} index 
+ */
 function validateExpenseCategory(input, index) {
     index = parseInt(index); // ← 必要なら数値に変換
     const value = input.value.trim();
@@ -60,6 +76,11 @@ function validateExpenseCategory(input, index) {
     }
 }
 
+/**
+ * 金額欄欄のフォーカス移動時変換機能
+ * 
+ * @param {*} input 
+ */
 function formatAmount(input) {
     let rawValue = input.value;
 

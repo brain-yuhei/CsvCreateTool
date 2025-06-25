@@ -150,7 +150,7 @@ public class CsvDownloadService {
     
         // date -> WrkKeiroEntity のマップを作成
         Map<LocalDate, List<WrkKeiroEntity>> wrkMap = wrkList.stream()
-    .collect(Collectors.groupingBy(WrkKeiroEntity::getDate));
+        .collect(Collectors.groupingBy(WrkKeiroEntity::getDate));
     
         // 日付情報（曜日＋チェック状態）
         List<Map<String, Object>> dateInfoList = startDate.datesUntil(endDate.plusDays(1))

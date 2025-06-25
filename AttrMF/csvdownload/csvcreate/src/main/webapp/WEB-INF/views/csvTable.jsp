@@ -41,7 +41,9 @@
         <table class="fixed-header-table" border="1">
             <thead>
                 <tr>
-                    <th>選択</th>
+                    <th>
+                        <input type="checkbox" id="checkAll" onclick="selectAllCheckboxes(this)" />
+                    </th>
                     <th>曜日</th>
                     <th>日付</th>
                     <th>支払先・内容</th>
