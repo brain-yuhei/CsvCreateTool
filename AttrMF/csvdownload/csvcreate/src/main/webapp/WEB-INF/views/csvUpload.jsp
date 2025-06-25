@@ -7,7 +7,6 @@
     <meta charset="UTF-8">
     <title>CSVファイルアップロード</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/csvUpload.css">
-    <script src="${pageContext.request.contextPath}/js/modal.js"></script>    
 </head>
 
 <body>

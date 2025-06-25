@@ -3,6 +3,7 @@ package com.example.csvcreate.service;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,13 +13,15 @@ import com.example.csvcreate.model.MstKeiroEntity;
 import com.example.csvcreate.repository.MstKeiroRepository;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-import java.nio.charset.Charset;
 
 @Service
-public class CsvService {
-
+public class CsvImportService {
+    
     @Autowired
     private MstKeiroRepository mstkeiroRepository;
+
+    @Autowired
+    private CsvValueService csvValueService;
 
     /**
      * マスタテーブルの生成・保存処理
@@ -46,7 +49,7 @@ public class CsvService {
 
                 // 「支払先・内容」と「金額（税込）」を取り出す
                 String payee = data[5];
-                BigDecimal amount = parseBigDecimal(data[23]);
+                BigDecimal amount = csvValueService.parseBigDecimal(data[23]);
 
                 MstKeiroEntity mstKeiro = null;
 
@@ -69,20 +72,6 @@ public class CsvService {
                     mstkeiroRepository.save(mstKeiro);
                 }
             }
-        }
-    }
-
-    /**
-     * 文字列を BigDecimal に変換するメソッド
-     *
-     * @param value 文字列
-     * @return 変換後の BigDecimal または null
-     */
-    private BigDecimal parseBigDecimal(String value) {
-        try {
-            return (value == null || value.isBlank()) ? null : new BigDecimal(value.trim());
-        } catch (NumberFormatException e) {
-            return null;
         }
     }
 

@@ -9,8 +9,13 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/csvTable.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/modal.css">
     <script src="${pageContext.request.contextPath}/js/modal.js"></script>
-    <script src="${pageContext.request.contextPath}/js/error-message.js"></script>
-    <script src="${pageContext.request.contextPath}/js/row-add.js"></script>
+    <script src="${pageContext.request.contextPath}/js/modal-data.js"></script>
+    <script src="${pageContext.request.contextPath}/js/export.js"></script>
+    <script src="${pageContext.request.contextPath}/js/fetch.js"></script>
+    <script src="${pageContext.request.contextPath}/js/formatting.js"></script>
+    <script src="${pageContext.request.contextPath}/js/row-editor.js"></script>
+    <script src="${pageContext.request.contextPath}/js/validation.js"></script>
+    <script src="${pageContext.request.contextPath}/js/checkbox.js"></script>
 </head>
 <body>
 

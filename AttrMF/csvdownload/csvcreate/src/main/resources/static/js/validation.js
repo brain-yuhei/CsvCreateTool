@@ -47,8 +47,8 @@ function validateMemo(input, index) {
     if (value === "") {
         errorDiv.textContent = "メモを入力してください。";
         errorDiv.style.display = "block";
-    } else if (value.length > 30) {
-        errorDiv.textContent = "メモは30文字以内で入力してください。";
+    } else if (value.length > 50) {
+        errorDiv.textContent = "メモは50文字以内で入力してください。";
         errorDiv.style.display = "block";
     } else {
         errorDiv.textContent = "";
@@ -76,36 +76,19 @@ function validateExpenseCategory(input, index) {
     }
 }
 
-/**
- * 金額欄欄のフォーカス移動時変換機能
- * 
- * @param {*} input 
- */
-function formatAmount(input) {
-    let rawValue = input.value;
-
-    // 全角数字 → 半角に変換（例："２３４．５" → "234.5"）
-    rawValue = rawValue.replace(/[０-９．]/g, s => 
-        String.fromCharCode(s.charCodeAt(0) - 65248)
-    );
-
-    // カンマや記号などの無効文字削除（数字とピリオドだけ残す）
-    let numericValue = rawValue.replace(/[^0-9.]/g, '');
-
-    // ピリオドが複数ある場合、最初の1つだけを使う
-    const parts = numericValue.split('.');
-    if (parts.length > 2) {
-        numericValue = parts[0] + '.' + parts[1];
+function submitPayeeForm() {
+    const payee = document.getElementById("selectedPayee").value;
+    if (payee === "") {
+        alert("経路を選択してください。");
+        return;
     }
-
-    // 数値に変換
-    const number = parseFloat(numericValue);
-    if (!isNaN(number)) {
-        // 整形して再代入（小数点2桁）
-        input.value = number.toFixed(2);
-    } else {
-        input.value = ''; // 無効な場合は空にする
-    }
+    document.getElementById("filterForm").submit();
 }
 
+function removeRequired() {
+    document.getElementById('selectedPayee').removeAttribute('required');
+}
 
+function addRequired() {
+    document.getElementById('selectedPayee').setAttribute('required', 'required');
+}

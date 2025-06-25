@@ -1,29 +1,19 @@
-package com.example.csvcreate.controller;
+package com.example.csvcreate.controller.upload;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import com.example.csvcreate.service.CsvService;
+
+import com.example.csvcreate.service.CsvImportService;
 
 @Controller
-public class CsvUploadController {
+public class UploadController {
 
     @Autowired
-    private CsvService csvService;
-
-    /**
-     * CSVアップロード画面を表示する
-     * 
-     * @return アップロード画面
-     */
-    @GetMapping("/csvUpload")
-    public String showUploadForm() {
-        return "csvUpload";  
-    }
+    private CsvImportService csvImportService; 
 
     /**
      * CSVファイルのアップロード処理
@@ -34,6 +24,7 @@ public class CsvUploadController {
      */
     @PostMapping("/csvUpload")
     public String uploadFile(@RequestParam("uploadfile") MultipartFile uploadfile, Model model) {
+
         try {
             // ファイル名が空、または .csv でない場合はエラー
             String filename = uploadfile.getOriginalFilename();
@@ -43,7 +34,7 @@ public class CsvUploadController {
             }
     
             // CSVファイルを読み込み、DBに保存する
-            csvService.saveDatabase(uploadfile);
+            csvImportService.saveDatabase(uploadfile);
             model.addAttribute("message", "アップロードに成功しました！");
     
         } catch (Exception e) {
@@ -52,7 +43,6 @@ public class CsvUploadController {
         }
     
         return "redirect:/currentMonth"; 
-    }
-    
+    }    
     
 }
