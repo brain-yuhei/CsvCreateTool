@@ -111,7 +111,7 @@ h2 {
 
 /* データ行のみスクロール */
 .scrollable-table-container {
-    max-height: 400px;
+    max-height: 550px;
     overflow-y: auto;
     border: 1px solid #ccc;
 }
@@ -185,4 +185,31 @@ h2 {
     margin-top: 10px;
     display: none;
     text-align: center;
+}
+
+.checked-row {
+    background-color: #d4f4dd; /* 薄緑（チェックあり） */
+}
+
+.unchecked-row {
+    background-color: #f8d7da; /* 薄赤（チェックなし） */
+}
+
+.flash-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    animation: fadeOut 1s ease-in-out 2s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
 }

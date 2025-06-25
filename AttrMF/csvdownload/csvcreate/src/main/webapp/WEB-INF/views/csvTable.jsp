@@ -21,7 +21,7 @@
 
 <!-- 成功・エラーメッセージ -->
 <c:if test="${saveSuccess}">
-    <script>alert("データを一時保存しました。");</script>
+    <div id="saveSuccessMessage" class="flash-message">データを一時保存しました。</div>
 </c:if>
 <c:if test="${not empty message}">
     <div class="message">${message}</div>
@@ -56,8 +56,8 @@
                     <th>金額</th>
                     <th>メモ</th>
                     <th>費用負担部門名</th>
-                    <th>費用負担部門コード</th>
-                    <th>行追加</th>
+                    <th>部門コード</th>
+                    <th>経路追加</th>
                 </tr>
             </thead>
             <tbody id="mainTableBody">
@@ -67,7 +67,7 @@
                         <c:if test="${item.date == info.date}">
                             <tr id="section-${info.date}">
                                 <td>
-                                    <input type="checkbox" name="koutsuuhiList[${rowIndex}].checked" value="true"
+                                    <input type="checkbox" name="koutsuuhiList[${rowIndex}].checked" value="true" onchange="updateRowBackground(this)"
                                         <c:if test="${item.checked}">checked</c:if> />
                                     <input type="hidden" name="_koutsuuhiList[${rowIndex}].checked" value="off" />
                                 </td>

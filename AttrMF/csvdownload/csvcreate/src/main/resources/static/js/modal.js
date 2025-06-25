@@ -1,40 +1,34 @@
 function openModal() {
     toggleModal(true);
 
-    const selectedDates = getSelectedDates();
+    const selectedDates = getSelectedDates(); // ✅ チェックされている日付のみ取得
     const modalBody = document.getElementById('modalTableBody');
     const warningDiv = document.getElementById('emptyFieldWarning');
-    let hasEmptyField = false;
+    modalBody.innerHTML = ""; // モーダルテーブル初期化
+    warningDiv.style.display = "none";
 
-    modalBody.innerHTML = "";
+    if (selectedDates.length === 0) {
+        warningDiv.style.display = "block";
+        warningDiv.textContent = "チェックされた行がありません。";
+        return;
+    }
 
-    const dataTable = document.querySelector('.scrollable-table-container table');
-    const dataRows = dataTable.querySelectorAll('tbody tr');
+    const mainTableRows = document.querySelectorAll('#mainTableBody tr');
 
-    dataRows.forEach(row => {
-        const dateText = getDateFromRow(row);
+    mainTableRows.forEach(row => {
+        const checkbox = row.querySelector('input[type="checkbox"][name$=".checked"]');
+        if (!checkbox || !checkbox.checked) {
+            return; // ✅ チェックされていない行はスキップ
+        }
 
-        if (selectedDates.includes(dateText)) {
-            const newRow = buildModalRow(row);
-
-            Array.from(newRow.children).forEach(cell => {
-                if (cell.textContent.trim() === "") {
-                    hasEmptyField = true;
-                }
-            });
-
-            modalBody.appendChild(newRow);
+        const date = getDateFromRow(row);
+        if (selectedDates.includes(date)) {
+            const modalRow = buildModalRow(row);
+            modalBody.appendChild(modalRow);
         }
     });
-
-    if (hasEmptyField) {
-        warningDiv.textContent = "空欄の箇所があります。出力してもよろしければ出力ボタンを押してください";
-        warningDiv.style.display = 'block';
-    } else {
-        warningDiv.textContent = "";
-        warningDiv.style.display = 'none';
-    }
 }
+
 
 
 // モーダルとオーバーレイを非表示にする
