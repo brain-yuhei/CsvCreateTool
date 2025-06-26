@@ -58,6 +58,7 @@
                     <th>費用負担部門名</th>
                     <th>部門コード</th>
                     <th>経路追加</th>
+                    <th>経路削除</th>
                 </tr>
             </thead>
             <tbody id="mainTableBody">
@@ -106,7 +107,13 @@
                                 <td>${item.departmentCode}
                                     <input type="hidden" name="koutsuuhiList[${rowIndex}].departmentCode" value="${item.departmentCode}" />
                                 </td>
-                                <td><button type="button" onclick="addRowToDate('${info.date}')">＋</button></td>
+                                <td>
+                                    <button type="button" onclick="addRowToDate('${info.date}')">＋</button>
+                                </td>
+                                <td>
+                                    <button type="button" onclick="markRowAsDeleted(this)">削除</button>
+                                    <input type="hidden" name="koutsuuhiList[${rowIndex}].deleted" value="false" />
+                                </td>
                             </tr>
                             <c:set var="rowIndex" value="${rowIndex + 1}" />
                         </c:if>

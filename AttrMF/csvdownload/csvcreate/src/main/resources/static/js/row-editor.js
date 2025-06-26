@@ -3,7 +3,7 @@ function addRowToDate(dateStr) {
     if (!targetRow) return;
 
     const newRow = document.createElement('tr');
-    const rowIndex = getNextRowIndex(); // 現在の行数を取得（0からの連番）
+    const rowIndex = getNextRowIndex(); // 現在の行数を取得
 
     newRow.innerHTML = `
         <td>
@@ -42,11 +42,27 @@ function addRowToDate(dateStr) {
             <span id="departmentCode-${rowIndex}"></span>
             <input type="hidden" name="koutsuuhiList[${rowIndex}].departmentCode" />
         </td>
-        <td><button type="button" onclick="removeRow(this)">－</button></td>
+        <td>
+            <button type="button" onclick="removeRow(this)">－</button>
+        </td>
     `;
 
     targetRow.parentNode.insertBefore(newRow, targetRow.nextSibling);
 }
+
+function markRowAsDeleted(button) {
+    const row = button.closest('tr');
+    if (!row) return;
+    
+    const deletedInput = row.querySelector('input[name$=".deleted"]');
+    if (deletedInput) {
+        deletedInput.value = "true";
+    }
+
+    row.style.display = "none"; // 視覚的に非表示に
+}
+
+
 
 function getNextRowIndex() {
     // tr要素数＝現在の入力データ数とする（削除後も番号が詰まる）

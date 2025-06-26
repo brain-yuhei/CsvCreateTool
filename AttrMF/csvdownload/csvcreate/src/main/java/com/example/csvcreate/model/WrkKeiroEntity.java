@@ -31,5 +31,6 @@ public class WrkKeiroEntity {
     private LocalDate date;
     @Column(columnDefinition = "BIT", nullable = true)
     private Boolean checked; 
+    private String deleted;
 
 }

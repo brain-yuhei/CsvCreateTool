@@ -16,17 +16,23 @@ function openModal() {
     const mainTableRows = document.querySelectorAll('#mainTableBody tr');
 
     mainTableRows.forEach(row => {
+        // 非表示の行はスキップ（削除済み）
+        if (row.style.display === "none") {
+            return;
+        }
+    
         const checkbox = row.querySelector('input[type="checkbox"][name$=".checked"]');
         if (!checkbox || !checkbox.checked) {
-            return; // ✅ チェックされていない行はスキップ
+            return; // チェックされていない行はスキップ
         }
-
+    
         const date = getDateFromRow(row);
         if (selectedDates.includes(date)) {
             const modalRow = buildModalRow(row);
             modalBody.appendChild(modalRow);
         }
     });
+    
 }
 
 
