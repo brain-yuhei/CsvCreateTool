@@ -51,6 +51,11 @@ public class CsvImportService {
                 String payee = data[5];
                 BigDecimal amount = csvValueService.parseBigDecimal(data[23]);
 
+                // 小数点以下切り捨て
+                if (amount != null) {
+                    amount = new BigDecimal(amount.intValue());
+                }
+
                 MstKeiroEntity mstKeiro = null;
 
                 // nullや空欄でなければ重複チェック、それ以外はスキップして保存

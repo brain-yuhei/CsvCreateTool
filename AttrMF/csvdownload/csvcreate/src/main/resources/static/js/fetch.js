@@ -12,14 +12,9 @@ function onPayeeChange(selectElement, rowIndex) {
     })
     .then(response => response.json())
     .then(data => {
-        // 金額を数値に変換し、小数点2桁で表示
-        const formattedAmount = data.amountInclusiveTax !== null
-            ? (Math.round(data.amountInclusiveTax * 100) / 100).toFixed(2)
-            : '';   
-
-        // 値を hidden フィールドに設定
+        // 金額はそのままセット（小数点2桁処理は削除）
         document.querySelector(`[name="koutsuuhiList[${rowIndex}].expenseCategory"]`).value = data.expense_category || '';
-        document.querySelector(`[name="koutsuuhiList[${rowIndex}].amount"]`).value = formattedAmount;
+        document.querySelector(`[name="koutsuuhiList[${rowIndex}].amount"]`).value = data.amountInclusiveTax != null ? data.amountInclusiveTax : '';
         document.querySelector(`[name="koutsuuhiList[${rowIndex}].memo"]`).value = data.memo || '';
         document.querySelector(`[name="koutsuuhiList[${rowIndex}].departmentName"]`).value = data.department_name || '';
         document.querySelector(`[name="koutsuuhiList[${rowIndex}].departmentCode"]`).value = data.department_code || '';

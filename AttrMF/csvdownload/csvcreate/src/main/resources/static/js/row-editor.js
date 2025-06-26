@@ -34,11 +34,11 @@ function addRowToDate(dateStr) {
                    onblur="validateMemo(this, '${rowIndex}')">
             <div id="error-memo-${rowIndex}" class="error-message" style="color:red; display:none;"></div>
         </td>
-        <td>
+        <td style="display: none;">
             <span id="departmentName-${rowIndex}"></span>
             <input type="hidden" name="koutsuuhiList[${rowIndex}].departmentName" />
         </td>
-        <td>
+        <td style="display: none;">
             <span id="departmentCode-${rowIndex}"></span>
             <input type="hidden" name="koutsuuhiList[${rowIndex}].departmentCode" />
         </td>

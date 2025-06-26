@@ -24,6 +24,7 @@ public class WrkKeiroEntity {
     private Long id; // ワークID
     private String payee; // 支払先・内容
     private String expenseCategory; // 経費科目
+    @Column(precision = 10, scale = 0)
     private BigDecimal amount; // 金額
     private String memo; // メモ
     private String departmentName; // 費用負担部名

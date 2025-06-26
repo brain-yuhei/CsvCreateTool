@@ -27,10 +27,6 @@ function validateAmount(input, index) {
     // バリデーションOK → エラー非表示
     errorDiv.textContent = "";
     errorDiv.style.display = "none";
-
-    // 小数点以下2桁に整形（例：100 → 100.00）
-    const formattedValue = parseFloat(value).toFixed(2);
-    input.value = formattedValue;
 }
 
 /**

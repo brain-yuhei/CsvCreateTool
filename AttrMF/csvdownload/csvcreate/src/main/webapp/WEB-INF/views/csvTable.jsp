@@ -55,8 +55,8 @@
                     <th>経費科目</th>
                     <th>金額</th>
                     <th>メモ</th>
-                    <th>部門名</th>
-                    <th>部門コード</th>
+                    <th style="display: none;">部門名</th>
+                    <th style="display: none;">部門コード</th>
                     <th>経路追加</th>
                     <th>経路削除</th>
                 </tr>
@@ -101,10 +101,10 @@
                                            onblur="validateMemo(this, '${rowIndex}')" />
                                     <div id="error-memo-${rowIndex}" class="error-message" style="color:red; display:none;"></div>
                                 </td>
-                                <td>${item.departmentName}
+                                <td style="display: none;">${item.departmentName}
                                     <input type="hidden" name="koutsuuhiList[${rowIndex}].departmentName" value="${item.departmentName}" />
                                 </td>
-                                <td>${item.departmentCode}
+                                <td style="display: none;">${item.departmentCode}
                                     <input type="hidden" name="koutsuuhiList[${rowIndex}].departmentCode" value="${item.departmentCode}" />
                                 </td>
                                 <td>

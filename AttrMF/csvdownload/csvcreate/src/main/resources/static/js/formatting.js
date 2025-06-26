@@ -8,7 +8,7 @@ function formatAmount(input) {
     let rawValue = input.value;
 
     // 全角数字 → 半角に変換（例："２３４．５" → "234.5"）
-    rawValue = rawValue.replace(/[０-９．]/g, s => 
+    rawValue = rawValue.replace(/[０-９．]/g, s =>
         String.fromCharCode(s.charCodeAt(0) - 65248)
     );
 
@@ -21,11 +21,10 @@ function formatAmount(input) {
         numericValue = parts[0] + '.' + parts[1];
     }
 
-    // 数値に変換
+    // 数値として無効なら空にする、有効ならそのまま
     const number = parseFloat(numericValue);
     if (!isNaN(number)) {
-        // 整形して再代入（小数点2桁）
-        input.value = number.toFixed(2);
+        input.value = numericValue; // 整形せずそのまま代入
     } else {
         input.value = ''; // 無効な場合は空にする
     }

@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,6 +45,7 @@ public class MstKeiroEntity {
     private String project_code; //プロジェクトコード
     private String tax_category; //税区分
     private String invoice_scheme; //インボイス経過措置
+    @Column(precision = 10, scale = 0)
     private BigDecimal amountInclusiveTax; //金額（税込）
     private String currency; //通貨
     private BigDecimal exchange_rate; //為替レート
