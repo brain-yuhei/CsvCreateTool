@@ -79,7 +79,7 @@ public class PageController {
         model.addAttribute("minMonth", monthRange.get("minMonth"));
         model.addAttribute("maxMonth", monthRange.get("maxMonth"));
     
-        return "csvDownload"; // CSV管理表のJSP名
+        return "csvMenu"; // CSV管理表のJSP名
     }
 
     /**

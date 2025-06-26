@@ -130,6 +130,8 @@
         <h3>出力内容確認画面</h3>
         <button onclick="downloadCSV()">CSVファイルを出力</button>
         <button onclick="closeModal()">閉じる</button>
+        <!-- エラーメッセージ（赤色・太文字） -->
+        <div style="color: red; font-weight: bold;"></div>
         <div class="modal-table">
             <table class="modal-header-table" border="1">
                 <thead>

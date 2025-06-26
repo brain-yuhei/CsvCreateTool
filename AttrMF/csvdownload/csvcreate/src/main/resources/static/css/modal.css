@@ -10,6 +10,7 @@
   word-break: break-word;  /* 長い単語も折り返す */
   white-space: normal;     /* 折り返しを有効に */
   padding: 5px;
+  font-weight: bold;
 }
 
 .modal-header-table td:nth-child(5) {

@@ -88,3 +88,42 @@ function removeRequired() {
 function addRequired() {
     document.getElementById('selectedPayee').setAttribute('required', 'required');
 }
+
+// 学習用
+// function errorText(input, index) {
+//     index = parseInt(index);
+//     const value = input.value.trim();
+//     const errorExpenseCategory = document.getElementById(`error-expenseCategory-${index}`);
+//     const errorMemo = document.getElementById(`error-memo-${index}`);
+//     const errorAmount = document.getElementById(`error-amount-${index}`);
+
+//     // 空欄チェック
+//     if (value === "") {
+//         errorExpenseCategory.textContent = "経費科目を入力してください。";
+//         errorExpenseCategory.style.display = "block";
+//         return
+//     }else if (errorMemo === "") {
+//         errorMemo.textContent = "メモを入力してください。";
+//         errorMemo.style.display = "block";  
+//         return 
+//     }else if (errorAmount === "") {
+//         errorAmount.textContent = "金額を入力してください。";
+//         errorAmount.style.display = "block";
+//         return   
+//     }else {
+
+//     }
+
+//     function Testerror(){
+//         // indexのインスタンス生成
+//         // 経費科目のインスタンス生成
+//         // メモのインスタンス生成
+//         // 金額のインスタンス生成
+
+//         // どの項目がチェック
+
+//         // 
+//     }
+
+
+// }

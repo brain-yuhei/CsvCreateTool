@@ -1,7 +1,7 @@
 function openModal() {
     toggleModal(true);
 
-    const selectedDates = getSelectedDates(); // ✅ チェックされている日付のみ取得
+    const selectedDates = getSelectedDates(); // チェックされている日付のみ取得
     const modalBody = document.getElementById('modalTableBody');
     const warningDiv = document.getElementById('emptyFieldWarning');
     modalBody.innerHTML = ""; // モーダルテーブル初期化
@@ -12,6 +12,8 @@ function openModal() {
         warningDiv.textContent = "チェックされた行がありません。";
         return;
     }
+
+    // 仮（空欄チェック処理を呼び出す）
 
     const mainTableRows = document.querySelectorAll('#mainTableBody tr');
 

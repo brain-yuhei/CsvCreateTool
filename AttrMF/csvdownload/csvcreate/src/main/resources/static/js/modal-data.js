@@ -27,6 +27,7 @@ function buildModalRow(originalRow) {
 
     const colOrder = [2, 3, 4, 5, 6, 7, 8];
 
+    // 1行づつ処理を行う
     colOrder.forEach(index => {
         const newCell = document.createElement('td');
         const cell = cells[index];
@@ -35,6 +36,7 @@ function buildModalRow(originalRow) {
         const input = cell.querySelector('input');
         const select = cell.querySelector('select');
 
+        // 空の文字列を用意
         let value = "";
         if (select) {
             // 選択中のオプションの表示テキストのみ取得
@@ -43,6 +45,11 @@ function buildModalRow(originalRow) {
             value = input.value.trim();
         } else {
             value = cell.textContent.trim();
+        }
+
+        // 空の文字列になってる場合は赤背景をセット
+        if(!value){
+            newCell.style.backgroundColor = '#ff0000'
         }
 
         // select や input を含まず、プレーンなテキストだけをセット

@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>CSVファイル簡易作成ツール</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/csvDownload.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/csvMenu.css">
     <script src="${pageContext.request.contextPath}/js/validation.js"></script>    
 </head>
 <body>
@@ -56,6 +56,3 @@
 
 </body>
 </html>
-
-
-

@@ -7,7 +7,7 @@ function addRowToDate(dateStr) {
 
     newRow.innerHTML = `
         <td>
-            <input type="checkbox" name="koutsuuhiList[${rowIndex}].checked" value="true">
+            <input type="checkbox" name="koutsuuhiList[${rowIndex}].checked" value="true" checked>
             <input type="hidden" name="_koutsuuhiList[${rowIndex}].checked" value="off">
         </td>
         <td>${getDayOfWeek(dateStr)}</td>

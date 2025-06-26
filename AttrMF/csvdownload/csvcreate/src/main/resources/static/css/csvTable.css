@@ -13,6 +13,7 @@ button, input[type="month"], input[type="file"] {
     font-size: 15px;
     border: 1px solid #bbb;
     transition: all 0.2s ease-in-out;
+    font-weight: bold;
 }
 
 button {
@@ -88,7 +89,7 @@ h2 {
     padding: 6px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 14px; 
+    font-size: 15px; 
     text-align: center;
     font-weight: bold;
 }
@@ -99,6 +100,7 @@ h2 {
     padding: 6px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-weight: bold;
 }
 
 .fixed-header-table input[type="checkbox"] {
@@ -108,7 +110,7 @@ h2 {
 
 .fixed-header-table th:nth-child(4),
 .fixed-header-table td:nth-child(4) {
-  width: 18%;
+  width: 20%;
   white-space: nowrap; /* 中身の途中切れを防ぐ */
   overflow: hidden;
   text-overflow: ellipsis;
@@ -123,7 +125,7 @@ h2 {
 
 .fixed-header-table th:nth-child(7),
 .fixed-header-table td:nth-child(7) {
-  width: 20%;
+  width: 18%;
   overflow: hidden;
   text-overflow: ellipsis;
 }

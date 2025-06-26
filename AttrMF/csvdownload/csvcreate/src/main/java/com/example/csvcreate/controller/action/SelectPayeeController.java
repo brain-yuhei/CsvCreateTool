@@ -58,7 +58,7 @@ public class SelectPayeeController {
         if ("create".equals(actionType) && (selectedPayee == null || selectedPayee.trim().isEmpty())) {
             model.addAttribute("errormessage", "経路を選択するか、経路を登録してください。");
             model.addAttribute("currentMonth", selectedMonth);
-            return "csvDownload";
+            return "csvMenu";
         }
     
         if ("create".equals(actionType)) {
