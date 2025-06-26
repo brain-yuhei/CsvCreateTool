@@ -103,6 +103,15 @@ h2 {
     cursor: pointer;
 }
 
+.fixed-header-table th:nth-child(4),
+.fixed-header-table td:nth-child(4) {
+  width: 18%;
+  white-space: nowrap; /* 中身の途中切れを防ぐ */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 /* テーブル全体をラップする */
 .table-wrapper {
     width: 96%;
