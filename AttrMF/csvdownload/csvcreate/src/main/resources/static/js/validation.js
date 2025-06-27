@@ -9,6 +9,7 @@ function validateAmount(input, index) {
     index = parseInt(index);
     let value = input.value.trim();
     const errorDiv = document.getElementById(`error-amount-${index}`);
+    // errorTextSet(errorDiv);
 
     // バリデーション：空チェック
     if (value === "") {
@@ -39,6 +40,7 @@ function validateMemo(input, index) {
     index = parseInt(index);
     const value = input.value.trim();
     const errorDiv = document.getElementById(`error-memo-${index}`);
+    // errorTextSet(errorDiv);
 
     if (value === "") {
         errorDiv.textContent = "メモを入力してください。";
@@ -62,6 +64,7 @@ function validateExpenseCategory(input, index) {
     index = parseInt(index); // ← 必要なら数値に変換
     const value = input.value.trim();
     const errorDiv = document.getElementById(`error-expenseCategory-${index}`);
+    // errorTextSet(errorDiv);    
 
     if (value === "") {
         errorDiv.textContent = "経費科目を入力してください。";
@@ -89,41 +92,31 @@ function addRequired() {
     document.getElementById('selectedPayee').setAttribute('required', 'required');
 }
 
-// 学習用
-// function errorText(input, index) {
+// /**
+//  * 学習用メソッド
+//  * エラーメッセージのセット処理を共通化
+//  * 
+//  * @param {*} input '${rowIndex}'
+//  * @param {*} index id
+//  */
+// function errorTextSet(input, index) {
 //     index = parseInt(index);
 //     const value = input.value.trim();
-//     const errorExpenseCategory = document.getElementById(`error-expenseCategory-${index}`);
-//     const errorMemo = document.getElementById(`error-memo-${index}`);
-//     const errorAmount = document.getElementById(`error-amount-${index}`);
+
+//     // 受け取った値の項目を判定
 
 //     // 空欄チェック
 //     if (value === "") {
 //         errorExpenseCategory.textContent = "経費科目を入力してください。";
 //         errorExpenseCategory.style.display = "block";
-//         return
 //     }else if (errorMemo === "") {
 //         errorMemo.textContent = "メモを入力してください。";
 //         errorMemo.style.display = "block";  
-//         return 
 //     }else if (errorAmount === "") {
 //         errorAmount.textContent = "金額を入力してください。";
-//         errorAmount.style.display = "block";
-//         return   
+//         errorAmount.style.display = "block"; 
 //     }else {
 
 //     }
-
-//     function Testerror(){
-//         // indexのインスタンス生成
-//         // 経費科目のインスタンス生成
-//         // メモのインスタンス生成
-//         // 金額のインスタンス生成
-
-//         // どの項目がチェック
-
-//         // 
-//     }
-
 
 // }

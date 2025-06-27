@@ -49,7 +49,10 @@ function buildModalRow(originalRow) {
 
         // 空の文字列になってる場合は赤背景をセット
         if(!value){
+            // 背景色をセット
             newCell.style.backgroundColor = '#ff0000'
+            // エラーメッセージをセット
+            document.getElementById("modalerror").innerHTML="未入力箇所があります、確認してください。";          
         }
 
         // select や input を含まず、プレーンなテキストだけをセット

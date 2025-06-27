@@ -131,7 +131,7 @@
         <button onclick="downloadCSV()">CSVファイルを出力</button>
         <button onclick="closeModal()">閉じる</button>
         <!-- エラーメッセージ（赤色・太文字） -->
-        <div style="color: red; font-weight: bold;"></div>
+        <div id="modalerror" style="color: red; font-weight: bold; text-align: center;"></div>
         <div class="modal-table">
             <table class="modal-header-table" border="1">
                 <thead>
