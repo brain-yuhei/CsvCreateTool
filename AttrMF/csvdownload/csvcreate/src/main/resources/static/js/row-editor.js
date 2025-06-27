@@ -10,10 +10,10 @@ function addRowToDate(dateStr) {
             <input type="checkbox" name="koutsuuhiList[${rowIndex}].checked" value="true" checked>
             <input type="hidden" name="_koutsuuhiList[${rowIndex}].checked" value="off">
         </td>
-        <td>${getDayOfWeek(dateStr)}</td>
         <td data-type="date">${dateStr}
             <input type="hidden" name="koutsuuhiList[${rowIndex}].date" value="${dateStr}" />
         </td>
+        <td>${getDayOfWeek(dateStr)}</td>
         <td>
             <select name="koutsuuhiList[${rowIndex}].payee" onchange="onPayeeChange(this, '${rowIndex}')">
                 ${getPayeeOptions()}

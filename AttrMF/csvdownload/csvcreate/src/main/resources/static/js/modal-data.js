@@ -25,7 +25,7 @@ function buildModalRow(originalRow) {
     const newRow = document.createElement('tr');
     const cells = originalRow.querySelectorAll('td');
 
-    const colOrder = [2, 3, 4, 5, 6, 7, 8];
+    const colOrder = [1, 3, 4, 5, 6, 7, 8];
 
     // 1行づつ処理を行う
     colOrder.forEach(index => {

@@ -3,6 +3,7 @@ package com.example.csvcreate.service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
+// import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,8 @@ public class WrkTableUpdateService {
         LocalDate endDate = yearMonth.atEndOfMonth();
     
         List<LocalDate> datesInMonth = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
+
+        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd");
     
         MstKeiroEntity baseDate = mstKeiroRepository.findByPayeeContent(selectedPayee).get(0);
     
@@ -56,6 +59,7 @@ public class WrkTableUpdateService {
             entity.setDepartmentName(baseDate.getDepartment_name());
             entity.setDepartmentCode(baseDate.getDepartment_code());
             entity.setDate(date);
+            //entity.setDate(date.format(formatter));
     
             // ✅ チェック状態の初期登録
             boolean isWeekday = !(date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY);
