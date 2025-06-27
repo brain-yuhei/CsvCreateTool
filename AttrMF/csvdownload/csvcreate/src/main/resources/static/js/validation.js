@@ -9,7 +9,9 @@ function validateAmount(input, index) {
     index = parseInt(index);
     let value = input.value.trim();
     const errorDiv = document.getElementById(`error-amount-${index}`);
-    // errorTextSet(errorDiv);
+
+    // 空欄のチェックを呼び出す
+    // errorTextSet(input, index, errorDiv, "金額を入力してください。");
 
     // バリデーション：空チェック
     if (value === "") {
@@ -40,7 +42,9 @@ function validateMemo(input, index) {
     index = parseInt(index);
     const value = input.value.trim();
     const errorDiv = document.getElementById(`error-memo-${index}`);
-    // errorTextSet(errorDiv);
+
+    // 空欄のチェックを呼び出す
+    // errorTextSet(input, index, errorDiv, "メモを入力してください。");
 
     if (value === "") {
         errorDiv.textContent = "メモを入力してください。";
@@ -57,14 +61,16 @@ function validateMemo(input, index) {
 /**
  * 経費科目欄のフォーカス移動時エラーチェック
  * 
- * @param {*} input 
- * @param {*} index 
+ * @param {*} input 入力内容
+ * @param {*} index 行番号
  */
 function validateExpenseCategory(input, index) {
     index = parseInt(index); // ← 必要なら数値に変換
     const value = input.value.trim();
     const errorDiv = document.getElementById(`error-expenseCategory-${index}`);
-    // errorTextSet(errorDiv);    
+
+    // 空欄のチェックを呼び出す
+    // errorTextSet(input, index, errorDiv, "経費科目を入力してください。");    
 
     if (value === "") {
         errorDiv.textContent = "経費科目を入力してください。";
@@ -99,24 +105,17 @@ function addRequired() {
 //  * @param {*} input '${rowIndex}'
 //  * @param {*} index id
 //  */
-// function errorTextSet(input, index) {
+// function errorTextSet(input, index, errorDiv, message) {
 //     index = parseInt(index);
 //     const value = input.value.trim();
 
-//     // 受け取った値の項目を判定
-
 //     // 空欄チェック
 //     if (value === "") {
-//         errorExpenseCategory.textContent = "経費科目を入力してください。";
-//         errorExpenseCategory.style.display = "block";
-//     }else if (errorMemo === "") {
-//         errorMemo.textContent = "メモを入力してください。";
-//         errorMemo.style.display = "block";  
-//     }else if (errorAmount === "") {
-//         errorAmount.textContent = "金額を入力してください。";
-//         errorAmount.style.display = "block"; 
-//     }else {
-
+//         errorDiv.textContent = message;
+//         errorDiv.style.display = "block";
+//     } else {
+//         errorDiv.textContent = "";
+//         errorDiv.style.display = "none";
 //     }
 
 // }
