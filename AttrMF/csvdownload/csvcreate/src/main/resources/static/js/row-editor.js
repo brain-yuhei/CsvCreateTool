@@ -3,14 +3,15 @@ function addRowToDate(dateStr) {
     if (!targetRow) return;
 
     const newRow = document.createElement('tr');
-    const rowIndex = getNextRowIndex(); // 現在の行数を取得
+    const rowIndex = getNextRowIndex();
+    const displayDate = formatDateDisplay(dateStr);
 
     newRow.innerHTML = `
         <td>
             <input type="checkbox" name="koutsuuhiList[${rowIndex}].checked" value="true" checked>
             <input type="hidden" name="_koutsuuhiList[${rowIndex}].checked" value="off">
         </td>
-        <td data-type="date">${dateStr}
+        <td data-type="date">${displayDate}
             <input type="hidden" name="koutsuuhiList[${rowIndex}].date" value="${dateStr}" />
         </td>
         <td>${getDayOfWeek(dateStr)}</td>
@@ -49,6 +50,7 @@ function addRowToDate(dateStr) {
 
     targetRow.parentNode.insertBefore(newRow, targetRow.nextSibling);
 }
+
 
 function markRowAsDeleted(button) {
     const row = button.closest('tr');
@@ -96,6 +98,14 @@ document.addEventListener('DOMContentLoaded', () => {
     .map(opt => opt.value)
     .filter((v, i, a) => a.indexOf(v) === i);
 });
+
+function formatDateDisplay(dateStr) {
+    const date = new Date(dateStr);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${month}/${day}`; 
+}
+
 
 
 

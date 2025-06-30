@@ -72,7 +72,8 @@
                                         <c:if test="${item.checked}">checked</c:if> />
                                     <input type="hidden" name="_koutsuuhiList[${rowIndex}].checked" value="off" />
                                 </td>
-                                <td data-type="date">${info.date}
+                                <td data-type="date">
+                                    ${info.displayDate}
                                     <input type="hidden" name="koutsuuhiList[${rowIndex}].date" value="${info.date}" />
                                 </td>                                
                                 <td>${info.dayOfWeek}</td>

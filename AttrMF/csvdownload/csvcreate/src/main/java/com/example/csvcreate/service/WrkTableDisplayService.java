@@ -3,8 +3,6 @@ package com.example.csvcreate.service;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.*;
 
@@ -45,6 +43,7 @@ public class WrkTableDisplayService {
             .map(date -> {
                 Map<String, Object> map = new HashMap<>();
                 map.put("date", date);
+                map.put("displayDate", date.format(DateTimeFormatter.ofPattern("M/d")));
                 map.put("dayOfWeek", date.format(DateTimeFormatter.ofPattern("E", Locale.JAPANESE)));
     
                 // ✅ ワークテーブルの checked を使う
