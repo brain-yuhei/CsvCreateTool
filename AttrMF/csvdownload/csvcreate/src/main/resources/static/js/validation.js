@@ -1,8 +1,8 @@
 /**
  * 金額欄のフォーカス移動時エラーチェック
  * 
- * @param {*} input 
- * @param {*} index 
+ * @param {*} input 入力内容
+ * @param {*} index 行番号
  * @returns 
  */
 function validateAmount(input, index) {
@@ -11,32 +11,15 @@ function validateAmount(input, index) {
     const errorDiv = document.getElementById(`error-amount-${index}`);
 
     // 空欄のチェックを呼び出す
-    // errorTextSet(input, index, errorDiv, "金額を入力してください。");
+    errorTextSet(input, errorDiv, "金額を入力してください。");
 
-    // バリデーション：空チェック
-    if (value === "") {
-        errorDiv.textContent = "金額を入力してください。";
-        errorDiv.style.display = "block";
-        return;
-    }
-
-    // バリデーション：数値チェック（整数または小数）
-    if (!/^\d+(\.\d{0,2})?$/.test(value)) {
-        errorDiv.textContent = "金額は正しい数値で入力してください。";
-        errorDiv.style.display = "block";
-        return;
-    }
-
-    // バリデーションOK → エラー非表示
-    errorDiv.textContent = "";
-    errorDiv.style.display = "none";
 }
 
 /**
  * メモ欄のフォーカス移動時エラーチェック
  * 
- * @param {*} input 
- * @param {*} index 
+ * @param {*} input 入力内容
+ * @param {*} index 行番号
  */
 function validateMemo(input, index) {
     index = parseInt(index);
@@ -44,18 +27,13 @@ function validateMemo(input, index) {
     const errorDiv = document.getElementById(`error-memo-${index}`);
 
     // 空欄のチェックを呼び出す
-    // errorTextSet(input, index, errorDiv, "メモを入力してください。");
+    errorTextSet(input, errorDiv, "メモを入力してください。");
 
-    if (value === "") {
-        errorDiv.textContent = "メモを入力してください。";
-        errorDiv.style.display = "block";
-    } else if (value.length > 50) {
+    if (value.length > 50) {
         errorDiv.textContent = "メモは50文字以内で入力してください。";
         errorDiv.style.display = "block";
-    } else {
-        errorDiv.textContent = "";
-        errorDiv.style.display = "none";
-    }
+        return;
+    } 
 }
 
 /**
@@ -70,15 +48,8 @@ function validateExpenseCategory(input, index) {
     const errorDiv = document.getElementById(`error-expenseCategory-${index}`);
 
     // 空欄のチェックを呼び出す
-    // errorTextSet(input, index, errorDiv, "経費科目を入力してください。");    
+    errorTextSet(input, errorDiv, "経費科目を入力してください。");    
 
-    if (value === "") {
-        errorDiv.textContent = "経費科目を入力してください。";
-        errorDiv.style.display = "block";
-    } else {
-        errorDiv.textContent = "";
-        errorDiv.style.display = "none";
-    }
 }
 
 function submitPayeeForm() {
@@ -98,24 +69,26 @@ function addRequired() {
     document.getElementById('selectedPayee').setAttribute('required', 'required');
 }
 
-// /**
-//  * 学習用メソッド
-//  * エラーメッセージのセット処理を共通化
-//  * 
-//  * @param {*} input '${rowIndex}'
-//  * @param {*} index id
-//  */
-// function errorTextSet(input, index, errorDiv, message) {
-//     index = parseInt(index);
-//     const value = input.value.trim();
+/**
+ * 未入力チェック処理
+ * 
+ * @param {*} input 入力内容
+ * @param {*} errorDiv 行情報
+ * @param {*} message エラーメッセージ
+ */
+function errorTextSet(input, errorDiv, message) {
 
-//     // 空欄チェック
-//     if (value === "") {
-//         errorDiv.textContent = message;
-//         errorDiv.style.display = "block";
-//     } else {
-//         errorDiv.textContent = "";
-//         errorDiv.style.display = "none";
-//     }
+    // 入力内容を変数に格納
+    const value = input.value.trim();
 
-// }
+    // 未入力チェック
+    if (value === "") {
+        errorDiv.textContent = message;
+        errorDiv.style.display = "block";
+        return;
+    } else {
+        errorDiv.textContent = "";
+        errorDiv.style.display = "none";
+    }
+
+}
