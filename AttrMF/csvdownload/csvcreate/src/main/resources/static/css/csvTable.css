@@ -123,6 +123,20 @@ h2 {
   text-overflow: ellipsis;
 }
 
+.fixed-header-table th:nth-child(2),
+.fixed-header-table td:nth-child(2) {
+  width: 5%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fixed-header-table th:nth-child(3),
+.fixed-header-table td:nth-child(3) {
+  width: 5%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .fixed-header-table th:nth-child(7),
 .fixed-header-table td:nth-child(7) {
   width: 18%;
@@ -241,3 +255,14 @@ h2 {
         visibility: hidden;
     }
 }
+
+.sunday {
+    color: red;
+}
+.saturday {
+    color: blue;
+}
+.holiday {
+    color: green;
+}
+

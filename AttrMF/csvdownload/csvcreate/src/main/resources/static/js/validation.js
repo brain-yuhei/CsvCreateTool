@@ -10,8 +10,11 @@ function validateAmount(input, index) {
     let value = input.value.trim();
     const errorDiv = document.getElementById(`error-amount-${index}`);
 
+    errorDiv.style.fontSize = "12px"; 
+    errorDiv.style.fontWeight = "bold";
+
     // 空欄のチェックを呼び出す
-    errorTextSet(input, errorDiv, "金額を入力してください。");
+    errorTextSet(input, errorDiv);
 
 }
 
@@ -26,8 +29,11 @@ function validateMemo(input, index) {
     const value = input.value.trim();
     const errorDiv = document.getElementById(`error-memo-${index}`);
 
+    errorDiv.style.fontSize = "12px"; 
+    errorDiv.style.fontWeight = "bold";
+
     // 空欄のチェックを呼び出す
-    errorTextSet(input, errorDiv, "メモを入力してください。");
+    errorTextSet(input, errorDiv);
 
     if (value.length > 50) {
         errorDiv.textContent = "メモは50文字以内で入力してください。";
@@ -47,8 +53,11 @@ function validateExpenseCategory(input, index) {
     const value = input.value.trim();
     const errorDiv = document.getElementById(`error-expenseCategory-${index}`);
 
+    errorDiv.style.fontSize = "12px"; 
+    errorDiv.style.fontWeight = "bold";
+
     // 空欄のチェックを呼び出す
-    errorTextSet(input, errorDiv, "経費科目を入力してください。");    
+    errorTextSet(input, errorDiv);    
 
 }
 
@@ -76,14 +85,14 @@ function addRequired() {
  * @param {*} errorDiv 行情報
  * @param {*} message エラーメッセージ
  */
-function errorTextSet(input, errorDiv, message) {
+function errorTextSet(input, errorDiv) {
 
     // 入力内容を変数に格納
     const value = input.value.trim();
 
     // 未入力チェック
     if (value === "") {
-        errorDiv.textContent = message;
+        errorDiv.textContent = "未入力です。";
         errorDiv.style.display = "block";
         return;
     } else {

@@ -76,7 +76,7 @@
                                     ${info.displayDate}
                                     <input type="hidden" name="koutsuuhiList[${rowIndex}].date" value="${info.date}" />
                                 </td>                                
-                                <td>${info.dayOfWeek}</td>
+                                <td class="${info.dayOfWeekClass}">${info.dayOfWeek}</td>
                                 <td>
                                     <select name="koutsuuhiList[${rowIndex}].payee" onchange="onPayeeChange(this, '${rowIndex}')">
                                         <c:forEach var="payee" items="${selectedPayees}">
