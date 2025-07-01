@@ -72,11 +72,10 @@
                                         <c:if test="${item.checked}">checked</c:if> />
                                     <input type="hidden" name="_koutsuuhiList[${rowIndex}].checked" value="off" />
                                 </td>
-                                <td data-type="date">
-                                    ${info.displayDate}
+                                <td data-type="date">${info.date}
                                     <input type="hidden" name="koutsuuhiList[${rowIndex}].date" value="${info.date}" />
                                 </td>                                
-                                <td class="${info.dayOfWeekClass}">${info.dayOfWeek}</td>
+                                <td>${info.dayOfWeek}</td>
                                 <td>
                                     <select name="koutsuuhiList[${rowIndex}].payee" onchange="onPayeeChange(this, '${rowIndex}')">
                                         <c:forEach var="payee" items="${selectedPayees}">

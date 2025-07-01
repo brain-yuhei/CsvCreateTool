@@ -21,96 +21,118 @@ import com.example.csvcreate.service.WrkTableDisplayService;
 public class SaveController {
 
     @Autowired
-    private MstKeiroService mstKeiroService; 
-    
+    private MstKeiroService mstKeiroService;
+
     @Autowired
-    private DateService dateService;  
-    
+    private DateService dateService;
+
     @Autowired
-    private WrkTableDisplayService wrkTableDisplayService;   
-    
+    private WrkTableDisplayService wrkTableDisplayService;
+
     @Autowired
-    private WrkKeiroPersistenceService wrkKeiroPersistenceService;     
+    private WrkKeiroPersistenceService wrkKeiroPersistenceService;
 
     /**
      * 一時保存ボタン押下時の処理
-     * 
-     * @param csvFormWrapperDto
-     * @param model
-     * @return
+     *
+     * @param csvFormWrapperDto 入力データ
+     * @param model              モデル
+     * @return 遷移先ビュー
      */
-@PostMapping("/saveWorkTable")
-public String saveWorkTable(@ModelAttribute CsvFormWrapperDto csvFormWrapperDto, Model model) {
+    @PostMapping("/saveWorkTable")
+    public String saveWorkTable(@ModelAttribute CsvFormWrapperDto csvFormWrapperDto, Model model) {
 
-    String selectedMonth = csvFormWrapperDto.getSelectedMonth();
-    String selectedPayee = csvFormWrapperDto.getSelectedPayee();
+        String selectedMonth = csvFormWrapperDto.getSelectedMonth();
+        String selectedPayee = csvFormWrapperDto.getSelectedPayee();
 
-    List<WrkKeiroEntity> originalList = csvFormWrapperDto.getKoutsuuhiList();
+        List<WrkKeiroEntity> originalList = csvFormWrapperDto.getKoutsuuhiList();
 
-    // 削除された行（deleted == true）は除外
-    List<WrkKeiroEntity> koutsuuhiList = originalList.stream()
-        .filter(dto -> !"true".equals(dto.getDeleted()))
-        .collect(Collectors.toList());
+        // 削除された行（deleted == true）は除外
+        List<WrkKeiroEntity> koutsuuhiList = originalList.stream()
+            .filter(dto -> !"true".equals(dto.getDeleted()))
+            .collect(Collectors.toList());
 
-    List<String> errorMessages = new ArrayList<>();
+        // 頭の体操実施中
+        List<String> errorMessages = validateInputs(koutsuuhiList);
 
-    // 必須項目のチェック（削除されていないデータに対してのみ）
-    for (int i = 0; i < koutsuuhiList.size(); i++) {
-        WrkKeiroEntity dto = koutsuuhiList.get(i);
-
-        if (dto.getExpenseCategory() == null || dto.getExpenseCategory().trim().isEmpty()) {
-            errorMessages.add((i + 1) + "行目: 経費科目が未入力です。");
+        if (!errorMessages.isEmpty()) {
+            model.addAttribute("errormessage", String.join("<br>", errorMessages));
+            model.addAttribute("wrkList", originalList); 
+            model.addAttribute("dateInfoList", wrkTableDisplayService
+                .getWrkDataForDisplay(selectedPayee, selectedMonth).get("dateInfoList"));
+            model.addAttribute("selectedPayees", mstKeiroService.getSelectedPayees());
+            model.addAttribute("currentMonth", selectedMonth);
+            model.addAttribute("selectedPayee", selectedPayee);
+            Map<String, String> monthRange = dateService.getMonthRange();
+            model.addAttribute("minMonth", monthRange.get("minMonth"));
+            model.addAttribute("maxMonth", monthRange.get("maxMonth"));
+            return "csvTable";
         }
 
-        if (dto.getAmount() == null) {
-            errorMessages.add((i + 1) + "行目: 金額が未入力です。");
-        } else {
-            try {
-                new BigDecimal(dto.getAmount().toString());
-            } catch (NumberFormatException e) {
-                errorMessages.add((i + 1) + "行目: 金額は数字で入力してください。");
-            }
+        try {
+            wrkKeiroPersistenceService.deleteWrkData(selectedMonth);
+            wrkKeiroPersistenceService.saveWrkKeiroData(koutsuuhiList); 
+            model.addAttribute("saveSuccess", true);
+        } catch (Exception e) {
+            model.addAttribute("errormessage", "保存中にエラーが発生しました: " + e.getMessage());
         }
 
-        if (dto.getMemo() == null || dto.getMemo().trim().isEmpty()) {
-            errorMessages.add((i + 1) + "行目: メモが未入力です。");
-        } else if (dto.getMemo().length() > 50) {
-            errorMessages.add((i + 1) + "メモは50文字以内で入力してください。");
-        }
-    }
-
-    if (!errorMessages.isEmpty()) {
-        model.addAttribute("errormessage", String.join("<br>", errorMessages));
-        model.addAttribute("wrkList", originalList); // 元の入力データを再表示（削除行含む）
-        model.addAttribute("dateInfoList", wrkTableDisplayService.getWrkDataForDisplay(selectedPayee, selectedMonth).get("dateInfoList"));
+        Map<String, Object> koutsuuhiData = wrkTableDisplayService.getWrkDataForDisplay(selectedPayee, selectedMonth);
+        model.addAttribute("wrkList", koutsuuhiData.get("wrkList"));
+        model.addAttribute("dateInfoList", koutsuuhiData.get("dateInfoList"));
         model.addAttribute("selectedPayees", mstKeiroService.getSelectedPayees());
         model.addAttribute("currentMonth", selectedMonth);
         model.addAttribute("selectedPayee", selectedPayee);
         Map<String, String> monthRange = dateService.getMonthRange();
         model.addAttribute("minMonth", monthRange.get("minMonth"));
         model.addAttribute("maxMonth", monthRange.get("maxMonth"));
+
         return "csvTable";
     }
 
-    try {
-        wrkKeiroPersistenceService.deleteWrkData(selectedMonth);
-        wrkKeiroPersistenceService.saveWrkKeiroData(koutsuuhiList); // 削除除外済みデータのみ保存
-        model.addAttribute("saveSuccess", true);
-    } catch (Exception e) {
-        model.addAttribute("errormessage", "保存中にエラーが発生しました: " + e.getMessage());
+    /**
+     * 入力チェック処理
+     * 
+     * @param koutsuuhiList
+     * @return
+     */
+    private List<String> validateInputs(List<WrkKeiroEntity>koutsuuhiList){
+
+        // 配列型でインスタンス生成
+        List<String> errorMessages = new ArrayList<>();
+
+        // koutsuuhiList内の行ごとにループ処理
+        for (int i = 0; i < koutsuuhiList.size(); i++) {
+            WrkKeiroEntity dto = koutsuuhiList.get(i);
+
+            // 経費科目が未入力の場合
+            if (dto.getExpenseCategory() == null || dto.getExpenseCategory().trim().isEmpty()) {
+                errorMessages.add((i + 1) + "行目: 経費科目が未入力です。");
+            }
+
+            // 金額が未入力の場合
+            if (dto.getAmount() == null) {
+                errorMessages.add((i + 1) + "行目: 金額が未入力です。");
+            } else {
+                try {
+                    // 数字のチェック
+                    new BigDecimal(dto.getAmount().toString());
+                } catch (NumberFormatException e) {
+                    errorMessages.add((i + 1) + "行目: 金額は数字で入力してください。");
+                }
+            }
+
+            // メモが未入力の場合
+            if (dto.getMemo() == null || dto.getMemo().trim().isEmpty()) {
+                errorMessages.add((i + 1) + "行目: メモが未入力です。");
+            // 50文字以上の場合    
+            } else if (dto.getMemo().length() > 50) {
+                errorMessages.add((i + 1) + "行目: メモは50文字以内で入力してください。");
+            }
+        }
+
+        return errorMessages;
+
     }
-
-    Map<String, Object> koutsuuhiData = wrkTableDisplayService.getWrkDataForDisplay(selectedPayee, selectedMonth);
-    model.addAttribute("wrkList", koutsuuhiData.get("wrkList"));
-    model.addAttribute("dateInfoList", koutsuuhiData.get("dateInfoList"));
-    model.addAttribute("selectedPayees", mstKeiroService.getSelectedPayees());
-    model.addAttribute("currentMonth", selectedMonth);
-    model.addAttribute("selectedPayee", selectedPayee);
-    Map<String, String> monthRange = dateService.getMonthRange();
-    model.addAttribute("minMonth", monthRange.get("minMonth"));
-    model.addAttribute("maxMonth", monthRange.get("maxMonth"));
-
-    return "csvTable";
 }
 
-}
