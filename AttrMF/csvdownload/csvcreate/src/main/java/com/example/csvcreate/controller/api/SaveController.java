@@ -96,43 +96,37 @@ public class SaveController {
      * @param koutsuuhiList
      * @return
      */
-    private List<String> validateInputs(List<WrkKeiroEntity>koutsuuhiList){
-
-        // 配列型でインスタンス生成
+    private List<String> validateInputs(List<WrkKeiroEntity> koutsuuhiList) {
         List<String> errorMessages = new ArrayList<>();
-
-        // koutsuuhiList内の行ごとにループ処理
+    
         for (int i = 0; i < koutsuuhiList.size(); i++) {
             WrkKeiroEntity dto = koutsuuhiList.get(i);
-
-            // 経費科目が未入力の場合
+    
+            String prefix = (Boolean.TRUE.equals(dto.getIsNewRow())) ? "[追加行]" : "[既存行]";
+            String rowLabel = prefix + (i + 1) + "行目";
+    
             if (dto.getExpenseCategory() == null || dto.getExpenseCategory().trim().isEmpty()) {
-                errorMessages.add((i + 1) + "行目: 経費科目が未入力です。");
+                errorMessages.add(rowLabel + ": 経費科目が未入力です。");
             }
-
-            // 金額が未入力の場合
+    
             if (dto.getAmount() == null) {
-                errorMessages.add((i + 1) + "行目: 金額が未入力です。");
+                errorMessages.add(rowLabel + ": 金額が未入力です。");
             } else {
                 try {
-                    // 数字のチェック
                     new BigDecimal(dto.getAmount().toString());
                 } catch (NumberFormatException e) {
-                    errorMessages.add((i + 1) + "行目: 金額は数字で入力してください。");
+                    errorMessages.add(rowLabel + ": 金額は数字で入力してください。");
                 }
             }
-
-            // メモが未入力の場合
+    
             if (dto.getMemo() == null || dto.getMemo().trim().isEmpty()) {
-                errorMessages.add((i + 1) + "行目: メモが未入力です。");
-            // 50文字以上の場合    
+                errorMessages.add(rowLabel + ": メモが未入力です。");
             } else if (dto.getMemo().length() > 50) {
-                errorMessages.add((i + 1) + "行目: メモは50文字以内で入力してください。");
+                errorMessages.add(rowLabel + ": メモは50文字以内で入力してください。");
             }
         }
-
         return errorMessages;
-
     }
+    
 }
 

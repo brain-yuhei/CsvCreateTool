@@ -81,6 +81,10 @@ function addRowToDate(dateStr) {
         <td>
             <button type="button" onclick="removeRow(this)">－</button>
         </td>
+
+        <!-- 追加行フラグ -->
+        <input type="hidden" name="koutsuuhiList[${rowIndex}].isNewRow" value="true" />
+        <input type="hidden" name="koutsuuhiList[${rowIndex}].deleted" value="false" />
     `;
 
     // 追加先の行の直後に新しい行を挿入

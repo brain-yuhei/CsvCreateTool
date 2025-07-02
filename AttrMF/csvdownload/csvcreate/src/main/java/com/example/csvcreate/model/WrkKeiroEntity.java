@@ -33,6 +33,7 @@ public class WrkKeiroEntity {
     @Column(columnDefinition = "BIT", nullable = true)
     private Boolean checked; 
     private String deleted;
-    private String rowId;
+    @Column(nullable = true)
+    private Boolean isNewRow;
 
 }

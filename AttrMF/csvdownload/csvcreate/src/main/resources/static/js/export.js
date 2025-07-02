@@ -16,7 +16,8 @@ function downloadCSV() {
 
     // CSV文字列を生成
     const csvContent = [headers.join(","), ...rows].join("\n");
-    const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
+    // 
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
 
     // 仮のリンクを作成してダウンロード実行
     const link = document.createElement("a");
