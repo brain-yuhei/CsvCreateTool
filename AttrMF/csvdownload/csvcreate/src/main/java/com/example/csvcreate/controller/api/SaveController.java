@@ -52,12 +52,12 @@ public class SaveController {
             .filter(dto -> !"true".equals(dto.getDeleted()))
             .collect(Collectors.toList());
 
-        // 頭の体操実施中
+        // 入力チェック処理
         List<String> errorMessages = validateInputs(koutsuuhiList);
 
         if (!errorMessages.isEmpty()) {
             model.addAttribute("errormessage", String.join("<br>", errorMessages));
-            model.addAttribute("wrkList", originalList); 
+            model.addAttribute("wrkList", koutsuuhiList); 
             model.addAttribute("dateInfoList", wrkTableDisplayService
                 .getWrkDataForDisplay(selectedPayee, selectedMonth).get("dateInfoList"));
             model.addAttribute("selectedPayees", mstKeiroService.getSelectedPayees());
@@ -102,8 +102,9 @@ public class SaveController {
         for (int i = 0; i < koutsuuhiList.size(); i++) {
             WrkKeiroEntity dto = koutsuuhiList.get(i);
     
-            String prefix = (Boolean.TRUE.equals(dto.getIsNewRow())) ? "[追加行]" : "[既存行]";
-            String rowLabel = prefix + (i + 1) + "行目";
+            int displayIndex = dto.getDisplayIndex() != null ? dto.getDisplayIndex() : (i + 1);    
+            String prefix = (Boolean.TRUE.equals(dto.getIsNewRow())) ? "追加行の" : "既存行の";
+            String rowLabel = prefix + displayIndex + "行目";
     
             if (dto.getExpenseCategory() == null || dto.getExpenseCategory().trim().isEmpty()) {
                 errorMessages.add(rowLabel + ": 経費科目が未入力です。");

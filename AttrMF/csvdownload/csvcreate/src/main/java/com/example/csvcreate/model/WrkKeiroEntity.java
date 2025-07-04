@@ -35,5 +35,6 @@ public class WrkKeiroEntity {
     private String deleted;
     @Column(nullable = true)
     private Boolean isNewRow;
+    private Integer displayIndex;
 
 }

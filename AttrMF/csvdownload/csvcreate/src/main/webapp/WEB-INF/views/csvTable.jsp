@@ -37,7 +37,7 @@
 </div>
 
 <!-- フォーム -->
-<form id="csvForm" action="/saveWorkTable" method="post">
+<form id="csvForm" action="/saveWorkTable" method="post" onsubmit="updateDisplayIndexes()">
     <input type="hidden" name="selectedMonth" value="${currentMonth}" />
     <input type="hidden" name="selectedPayee" value="${selectedPayee}" />
     <button type="submit">一時保存</button>
@@ -74,8 +74,9 @@
                                 </td>
                                 <td data-type="date">${info.displayDate}
                                     <input type="hidden" name="koutsuuhiList[${rowIndex}].date" value="${info.date}" />
+                                    <input type="hidden" name="koutsuuhiList[${rowIndex}].displayIndex" value="${rowIndex + 1}" />
                                     <input type="hidden" name="koutsuuhiList[${rowIndex}].isNewRow" value="${item.isNewRow}" />
-                                </td>                                
+                                </td>                                                               
                                 <td>${info.dayOfWeek}</td>
                                 <td>
                                     <select name="koutsuuhiList[${rowIndex}].payee" onchange="onPayeeChange(this, '${rowIndex}')">
