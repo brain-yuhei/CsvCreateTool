@@ -46,11 +46,23 @@ public class SaveController {
         String selectedPayee = csvFormWrapperDto.getSelectedPayee();
 
         List<WrkKeiroEntity> originalList = csvFormWrapperDto.getKoutsuuhiList();
+        if (originalList == null || originalList.isEmpty()) {
+            model.addAttribute("errormessage", "保存対象のデータがありません（入力データなし）");
+            model.addAttribute("wrkList", new ArrayList<>());
+            model.addAttribute("dateInfoList", new ArrayList<>());
+            model.addAttribute("selectedPayees", mstKeiroService.getSelectedPayees());
+            model.addAttribute("currentMonth", selectedMonth);
+            model.addAttribute("selectedPayee", selectedPayee);
+            Map<String, String> monthRange = dateService.getMonthRange();
+            model.addAttribute("minMonth", monthRange.get("minMonth"));
+            model.addAttribute("maxMonth", monthRange.get("maxMonth"));
+            return "csvTable";
+        }
 
         // 削除された行（deleted == true）は除外
         List<WrkKeiroEntity> koutsuuhiList = originalList.stream()
             .filter(dto -> !"true".equals(dto.getDeleted()))
-            .collect(Collectors.toList());
+            .collect(Collectors.toList());  
 
         // 入力チェック処理
         List<String> errorMessages = validateInputs(koutsuuhiList);
