@@ -2,6 +2,8 @@
 
 echo "Visual Studio Code の拡張機能をインストール中..."
 
+VSCODE="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+
 extensions=(
     vscjava.vscode-maven
     vmware.vscode-boot-dev-pack
@@ -10,5 +12,10 @@ extensions=(
     davidanson.vscode-markdownlint
 )
 
-echo " 拡張機能のインストールが完了しました。"
+for ext in "${extensions[@]}"
+do
+    "$VSCODE" --install-extension "$ext" || echo "$ext のインストールに失敗しました"
+done
+
+echo "拡張機能のインストールが完了しました。"
 read -p "Enter キーを押すと終了します。"

@@ -140,6 +140,23 @@ public class SelectPayeeController {
         model.addAttribute("selectedPayee", selectedPayee);
     
         return "csvTable";
-    }    
+    } 
+    
+    @PostMapping("/returnFromConfirm")
+    public String returnFromConfirm(@RequestParam("selectedPayee") String selectedPayee,
+                                    @RequestParam("selectedMonth") String selectedMonth,
+                                    Model model) {
+        model.addAttribute("selectedPayee", selectedPayee);
+        model.addAttribute("currentMonth", selectedMonth);
+        model.addAttribute("selectedPayees", mstKeiroService.getSelectedPayees());
+        Map<String, String> monthRange = dateService.getMonthRange();
+        model.addAttribute("minMonth", monthRange.get("minMonth"));
+        model.addAttribute("maxMonth", monthRange.get("maxMonth"));
+    
+        return "csvMenu";
+    }
+    
+    
+
 
 }

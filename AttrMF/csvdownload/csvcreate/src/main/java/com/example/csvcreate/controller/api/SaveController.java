@@ -86,7 +86,7 @@ public class SaveController {
             wrkKeiroPersistenceService.saveWrkKeiroData(koutsuuhiList); 
             model.addAttribute("saveSuccess", true);
         } catch (Exception e) {
-            model.addAttribute("errormessage", "保存中にエラーが発生しました: " + e.getMessage());
+            model.addAttribute("errormessage", "同じ日付に対して同じ経路が登録されています");
         }
 
         Map<String, Object> koutsuuhiData = wrkTableDisplayService.getWrkDataForDisplay(selectedPayee, selectedMonth);

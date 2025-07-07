@@ -1,11 +1,11 @@
 @echo off
-echo Visual Studio Code ã®æ‹¡å¼µæ©Ÿèƒ½ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ä¸­...
+echo Visual Studio Code ‚ÌŠg’£‹@”\‚ğƒCƒ“ƒXƒg[ƒ‹’†...
 
-code --install-extension vscjava.vscode-maven
-code --install-extension vmware.vscode-boot-dev-pack
-code --install-extension yzhang.markdown-all-in-one
-code --install-extension bierner.markdown-mermaid
-code --install-extension davidanson.vscode-markdownlint
+call code --install-extension vscjava.vscode-maven
+call code --install-extension vmware.vscode-boot-dev-pack
+call code --install-extension yzhang.markdown-all-in-one
+call code --install-extension bierner.markdown-mermaid
+call code --install-extension davidanson.vscode-markdownlint
 
-echo æ‹¡å¼µæ©Ÿèƒ½ã®ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ãŒå®Œäº†ã—ã¾ã—ãŸã€‚
+echo Šg’£‹@”\‚ÌƒCƒ“ƒXƒg[ƒ‹‚ªŠ®—¹‚µ‚Ü‚µ‚½B
 pause

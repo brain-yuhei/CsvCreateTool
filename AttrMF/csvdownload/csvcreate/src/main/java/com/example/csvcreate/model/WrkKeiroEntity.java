@@ -7,8 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+// import jakarta.persistence.Table;
+// import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.Id;
@@ -16,7 +16,7 @@ import jakarta.persistence.Id;
 @Entity // このクラスがDBのテーブルと対応することを示す
 @Getter // Lombokを使用して、すべてのフィールドのゲッターを自動生成
 @Setter // Lombokを使用して、すべてのフィールドのセッターを自動生成
-@Table(name = "wrk_keiro", uniqueConstraints = @UniqueConstraint(columnNames = {"payee", "date"}))
+// @Table(name = "wrk_keiro", uniqueConstraints = @UniqueConstraint(columnNames = {"payee", "date"}))
 public class WrkKeiroEntity {
 
     @Id
