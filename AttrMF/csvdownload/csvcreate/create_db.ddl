@@ -1,0 +1,7 @@
+CREATE DATABASE IF NOT EXISTS testdb;
+
+CREATE USER IF NOT EXISTS 'test'@'localhost' IDENTIFIED BY 'testpassword';
+
+GRANT ALL PRIVILEGES ON testdb.* TO 'test'@'localhost';
+
+FLUSH PRIVILEGES;
