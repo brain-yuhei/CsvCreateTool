@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.csvcreate.constants.Constants;
 import com.example.csvcreate.service.DateService;
 import com.example.csvcreate.service.MstKeiroService;
 import com.example.csvcreate.service.WrkKeiroPersistenceService;
@@ -55,15 +56,15 @@ public class SelectPayeeController {
         Model model) {
     
         // 新規作成時は経路必須
-        if ("create".equals(actionType) && (selectedPayee == null || selectedPayee.trim().isEmpty())) {
+        if (Constants.ACTION_TYPE_CREATE.equals(actionType) && (selectedPayee == null || selectedPayee.trim().isEmpty())) {
             model.addAttribute("errormessage", "経路を選択するか、経路を登録してください。");
             model.addAttribute("currentMonth", selectedMonth);
             return "csvMenu";
         }
     
-        if ("create".equals(actionType)) {
+        if (Constants.ACTION_TYPE_CREATE.equals(actionType)) {
             return createNewWrkData(selectedPayee, selectedMonth, model);
-        } else if ("history".equals(actionType)) {
+        } else if (Constants.ACTION_TYPE_HISTORY.equals(actionType)) {
             return showHistoryData(selectedPayee, selectedMonth, model);
         } else {
             model.addAttribute("errormessage", "無効な操作です。");
