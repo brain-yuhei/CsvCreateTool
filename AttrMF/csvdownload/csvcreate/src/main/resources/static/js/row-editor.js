@@ -15,6 +15,10 @@ function addRowToDate(dateStr) {
 
     const displayDate = formatDateDisplay(dateStr);
 
+    // 直前の行の支払先を取得
+    const lastPayeeSelect = targetRow.querySelector(`select[name^="koutsuuhiList"]`);
+    const selectedPayee = lastPayeeSelect ? lastPayeeSelect.value : "";
+
     newRow.innerHTML = `
         <td>
             <input type="checkbox" name="koutsuuhiList[${rowIndex}].checked" value="true" checked>
@@ -31,7 +35,7 @@ function addRowToDate(dateStr) {
 
         <td>
             <select name="koutsuuhiList[${rowIndex}].payee" onchange="onPayeeChange(this, '${rowIndex}')">
-                ${getPayeeOptions()}
+                ${getPayeeOptions(selectedPayee)}
             </select>
         </td>
 
@@ -71,21 +75,42 @@ function addRowToDate(dateStr) {
     `;
 
     targetRow.parentNode.insertBefore(newRow, targetRow.nextSibling);
+
+    // 追加した行の支払先を取得
+    const newPayeeSelect = newRow.querySelector(`select[name="koutsuuhiList[${rowIndex}].payee"]`);
+
+    // 自動反映処理を呼び出す
+    onPayeeChange(newPayeeSelect, rowIndex);
 }
-
-
 
 function markRowAsDeleted(button) {
     const row = button.closest('tr');
     if (!row) return;
-    
+
+    const dateValue = row.querySelector('input[name$=".date"]')?.value;
+    if (!dateValue) return;
+
+    // 同じ日付の行がいくつあるか確認（未削除のみ）
+    const allRows = document.querySelectorAll(`#mainTableBody tr`);
+    const sameDateRows = Array.from(allRows).filter(r => {
+        const hiddenDate = r.querySelector('input[name$=".date"]')?.value;
+        const deleted = r.querySelector('input[name$=".deleted"]')?.value;
+        return hiddenDate === dateValue && deleted === "false" && r.style.display !== "none";
+    });
+
+    if (sameDateRows.length <= 1) {
+        alert(`最低1日分は必要です。削除できません。`);
+        return;
+    }
+
     const deletedInput = row.querySelector('input[name$=".deleted"]');
     if (deletedInput) {
         deletedInput.value = "true";
     }
 
-    row.style.display = "none"; // 視覚的に非表示に
+    row.style.display = "none";
 }
+
 
 function updateDisplayIndexes() {
     const rows = document.querySelectorAll('#mainTableBody tr');
@@ -118,10 +143,14 @@ function getDayOfWeek(dateStr) {
     return ['日','月','火','水','木','金','土'][date.getDay()];
 }
 
-function getPayeeOptions() {
+function getPayeeOptions(selectedPayee = "") {
     const payees = window.selectedPayees || [];
-    return payees.map(p => `<option value="${p}">${p}</option>`).join('');
+    return payees.map(p => {
+        const selected = (p === selectedPayee) ? ' selected' : '';
+        return `<option value="${p}"${selected}>${p}</option>`;
+    }).join('');
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // JSPからselectedPayeesを受け取る

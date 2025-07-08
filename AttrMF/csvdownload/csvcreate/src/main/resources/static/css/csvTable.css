@@ -59,6 +59,12 @@ h2 {
     margin: 30px 0;
 }
 
+.check_button form,
+.check_button button {
+    display: inline-block;
+    margin: 0 10px;
+}
+
 /* テーブル共通 */
 .fixed-header-table {
     width: 100%;

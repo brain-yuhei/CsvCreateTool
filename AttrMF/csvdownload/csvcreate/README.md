@@ -24,6 +24,8 @@
 
 ### VSCode拡張機能追加
 
+以下の拡張機能がすべて未追加の場合はextension.batファイルをエクスプローラーで開きダブルクリックで一括追加が可能です。
+
 - [ ] 「Maven for Java」を追加してください
 
 - [ ] 「Spring Boot Extension Pack」を追加してください
@@ -47,6 +49,8 @@
 - [ ] 経路情報を管理するためにMySQLのインストールを以下のサイトをチェックしながら行ってください。
 
 - [MySQLのインストール](https://qiita.com/taiyang-ks/items/434495a42ae07f27022c)
+
+- [ ] MySQLインストール作業が完了していればconnect.batファイルをエクスプローラーでダブルクリックすればDB作成（csv_tool_db）を自動で行います。
 
 - [ ] MySQL8.0 Command Line Clientを起動し自身で設定したPWでログイン
 ![ログイン画面](./pic/image27.png)
@@ -78,8 +82,10 @@
 
 ### アプリ起動時の操作
 
+ran.batファイルをエクスプローラーでダブルクリックすれば以下の2工程を自動で行います。
+
 ![ターミナル画面](./pic/image30.png)
-クリーンビルドのためVSCodeのターミナルにて「./mvnw clean install」を実行
+クリーンインストールのためVSCodeのターミナルにて「./mvnw clean install」を実行
 
 ![ターミナル画面](./pic/image26.png)
 VSCodeのターミナルにて「./mvnw spring-boot:run」を入力し実行

@@ -31,11 +31,16 @@
 </c:if>
 
 <!-- ボタンエリア -->
-<form action="/returnFromConfirm" method="post">
-    <input type="hidden" name="selectedPayee" value="${selectedPayee}" />
-    <input type="hidden" name="selectedMonth" value="${currentMonth}" />
-    <button type="submit">戻る</button>
-</form>
+<div class="check_button">
+
+    <form action="/returnFromConfirm" method="post">
+        <input type="hidden" name="selectedPayee" value="${selectedPayee}" />
+        <input type="hidden" name="selectedMonth" value="${currentMonth}" />
+        <button type="submit">戻る</button>
+    </form>
+
+    <button id="checkOutputBtn" type="button" onclick="openModal()">出力内容確認</button>
+</div>
 
 <!-- フォーム -->
 <form id="csvForm" action="/saveWorkTable" method="post" onsubmit="updateDisplayIndexes()">
