@@ -70,9 +70,4 @@ window.addEventListener('click', function(event) {
 document.getElementById('outputModal').addEventListener('click', function(event) {
     event.stopPropagation(); 
 });
-
-
-
-
-
-  
+ 

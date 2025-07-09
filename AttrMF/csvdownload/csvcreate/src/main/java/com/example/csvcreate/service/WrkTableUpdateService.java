@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.csvcreate.model.MstKeiroEntity;
 import com.example.csvcreate.model.WrkKeiroEntity;
 import com.example.csvcreate.repository.MstHolidayRepository;
-import com.example.csvcreate.repository.MstKeiroRepository;
+import com.example.csvcreate.repository.MstKeiroListRepository;
 import com.example.csvcreate.repository.WrkKeiroRepository;
 
 import java.util.*;
@@ -22,7 +22,7 @@ import java.util.*;
 public class WrkTableUpdateService {
 
     @Autowired
-    private MstKeiroRepository mstKeiroRepository;
+    private MstKeiroListRepository mstKeiroListRepository;
 
     @Autowired
     private WrkKeiroRepository wrkKeiroRepository;
@@ -45,7 +45,7 @@ public class WrkTableUpdateService {
     
         List<LocalDate> datesInMonth = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
     
-        MstKeiroEntity baseDate = mstKeiroRepository.findByPayeeContent(selectedPayee).get(0);
+        MstKeiroEntity baseDate = mstKeiroListRepository.findByPayeeContent(selectedPayee).get(0);
     
         for (LocalDate date : datesInMonth) {
             WrkKeiroEntity entity = new WrkKeiroEntity();

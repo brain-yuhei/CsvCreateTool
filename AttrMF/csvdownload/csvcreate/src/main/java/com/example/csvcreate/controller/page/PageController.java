@@ -87,7 +87,7 @@ public class PageController {
      * 
      * @return
      */
-    @GetMapping("/selectPayee")
+    @GetMapping(value = {"/csvDeleteHistory", "/selectPayee", "/saveWorkTable"})
     public String redirectToError() {
         return "redirect:/csvError";
     }

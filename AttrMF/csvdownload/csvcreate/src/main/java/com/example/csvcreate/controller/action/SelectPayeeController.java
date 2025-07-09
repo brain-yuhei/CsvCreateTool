@@ -63,6 +63,15 @@ public class SelectPayeeController {
         }
     
         if (Constants.ACTION_TYPE_CREATE.equals(actionType)) {
+            // 選択年月の月初と月末を取得
+            YearMonth yearMonth = YearMonth.parse(selectedMonth);
+            LocalDate startDate = yearMonth.atDay(1);
+            LocalDate endDate = yearMonth.atEndOfMonth(); 
+            if (wrkKeiroPersistenceService.existsWrkDataByDateOnly(startDate, endDate)) {
+                model.addAttribute("selectedPayee", selectedPayee);
+                model.addAttribute("selectedMonth", selectedMonth);
+                return "csvDeleteHistory";
+            }
             return createNewWrkData(selectedPayee, selectedMonth, model);
         } else if (Constants.ACTION_TYPE_HISTORY.equals(actionType)) {
             return showHistoryData(selectedPayee, selectedMonth, model);
@@ -90,6 +99,21 @@ public class SelectPayeeController {
 
         // CSV管理表に表示
         return displayWrkData(selectedPayee, selectedMonth, model);
+    }
+
+    /**
+     * 
+     * 
+     * @param selectedPayee
+     * @param selectedMonth
+     * @param model
+     * @return
+     */
+    @PostMapping("/csvDeleteHistory")
+    public String csvDeleteAndCreate(@RequestParam("selectedPayee") String selectedPayee,
+                                     @RequestParam("selectedMonth") String selectedMonth,
+                                     Model model) {
+    return createNewWrkData(selectedPayee, selectedMonth, model);
     }
     
     /**
@@ -156,8 +180,7 @@ public class SelectPayeeController {
     
         return "csvMenu";
     }
+
     
     
-
-
 }

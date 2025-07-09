@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.example.csvcreate.model.MstKeiroEntity;
 import com.example.csvcreate.model.WrkKeiroEntity;
-import com.example.csvcreate.repository.MstKeiroRepository;
+import com.example.csvcreate.repository.MstKeiroListRepository;
 
 @Service
 public class WrkKeiroCreateService {
  
     @Autowired
-    private MstKeiroRepository mstKeiroRepository; 
+    private MstKeiroListRepository mstKeiroListRepository; 
 
     /**
      * 1行分のワークテーブルデータを作成
@@ -26,7 +26,7 @@ public class WrkKeiroCreateService {
     public WrkKeiroEntity updateRowByPayee(String payee, LocalDate date) {
 
         // 選択経路と一致する支払先・内容のデータ一覧を取得
-        List<MstKeiroEntity> matchedList = mstKeiroRepository.findByPayeeContent(payee);
+        List<MstKeiroEntity> matchedList = mstKeiroListRepository.findByPayeeContent(payee);
 
         // データ一覧が空の場合はNullを返す
         if (matchedList.isEmpty()) {

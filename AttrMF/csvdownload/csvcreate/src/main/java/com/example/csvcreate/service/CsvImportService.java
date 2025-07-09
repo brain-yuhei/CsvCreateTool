@@ -59,12 +59,26 @@ public class CsvImportService {
                 MstKeiroEntity mstKeiro = null;
 
                 // nullや空欄でなければ重複チェック、それ以外はスキップして保存
-                if (payee != null && !payee.isBlank()) {
-                    mstKeiro = mstkeiroRepository.findByPayeeContentAndAmountInclusiveTax(payee, amount);
+                if (payee == null || payee.isBlank()) {
+                    continue; // 支払先が無効ならスキップ
                 }
 
-                if (mstKeiro == null) {
-                    // マスタテーブルを作成
+                mstKeiro = mstkeiroRepository.findByPayeeContent(payee);
+
+                if (mstKeiro != null) {
+                    // 金額が異なる場合のみ更新
+                    if (mstKeiro.getAmountInclusiveTax() == null || !mstKeiro.getAmountInclusiveTax().equals(amount)) {
+                        mstKeiro.setAmountInclusiveTax(amount);
+                    }
+                
+                    // 他の項目は常に上書き（必要に応じて比較してもOK）
+                    mstKeiro.setExpense_category(data.length > 6 ? data[6] : null);
+                    mstKeiro.setMemo(data.length > 10 ? data[10] : null);
+                    mstKeiro.setDepartment_code(data.length > 17 ? data[17] : null);
+                    mstKeiro.setDepartment_name(data.length > 18 ? data[18] : null);
+                
+                } else {
+                    // 新規登録
                     mstKeiro = new MstKeiroEntity();
                     mstKeiro.setPayeeContent(payee);
                     mstKeiro.setAmountInclusiveTax(amount);
@@ -72,10 +86,11 @@ public class CsvImportService {
                     mstKeiro.setMemo(data.length > 10 ? data[10] : null);
                     mstKeiro.setDepartment_code(data.length > 17 ? data[17] : null);
                     mstKeiro.setDepartment_name(data.length > 18 ? data[18] : null);
-
-                    // マスタテーブルを保存
-                    mstkeiroRepository.save(mstKeiro);
                 }
+                
+
+                // マスタテーブルを保存
+                mstkeiroRepository.save(mstKeiro);
             }
         }
     }
