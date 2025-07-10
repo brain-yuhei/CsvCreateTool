@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <title>CSVファイル簡易作成ツール</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/csvMenu.css">
-    <script src="${pageContext.request.contextPath}/js/validation.js"></script>    
+    <script src="${pageContext.request.contextPath}/js/validation.js"defer></script>    
 </head>
 <body>
 

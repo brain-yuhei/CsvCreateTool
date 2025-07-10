@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.csvcreate.model.CsvFormWrapperDto;
+import com.example.csvcreate.model.MstKeiroEntity;
+import com.example.csvcreate.model.MstKeiroFormDto;
 import com.example.csvcreate.model.WrkKeiroEntity;
 import com.example.csvcreate.service.DateService;
 import com.example.csvcreate.service.MstKeiroService;
+import com.example.csvcreate.service.MstkeiroPersistenceService;
 import com.example.csvcreate.service.WrkKeiroPersistenceService;
 import com.example.csvcreate.service.WrkTableDisplayService;
 
@@ -31,6 +34,9 @@ public class SaveController {
 
     @Autowired
     private WrkKeiroPersistenceService wrkKeiroPersistenceService;
+
+    @Autowired
+    MstkeiroPersistenceService mstkeiroPersistenceService;
 
     /**
      * 一時保存ボタン押下時の処理
@@ -140,6 +146,23 @@ public class SaveController {
         }
         return errorMessages;
     }
-    
+
+    /**
+     *更新ボタン押下時の処理
+     * 
+     * @return
+     */
+    @PostMapping("/viewMasterTable")
+    public String saveMasterTable(@ModelAttribute MstKeiroFormDto formDto, Model model) {
+
+        // 登録経路一覧表のデータをリスト追加
+        List<MstKeiroEntity> newMstList = formDto.getMstKeiroList();
+
+        // 入力された値をマスタテーブルに保存する処理
+        mstkeiroPersistenceService.saveMstKeiroData(newMstList);
+
+        model.addAttribute("mstdataList", newMstList);
+        return "mstTableview";
+    }
 }
 

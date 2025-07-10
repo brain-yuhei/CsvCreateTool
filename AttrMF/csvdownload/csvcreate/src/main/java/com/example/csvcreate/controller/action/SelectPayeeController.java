@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.context.MessageSource;
 
 import com.example.csvcreate.constants.Constants;
 import com.example.csvcreate.service.DateService;
@@ -33,7 +34,10 @@ public class SelectPayeeController {
     private WrkTableDisplayService wrkTableDisplayService;  
     
     @Autowired
-    private WrkKeiroPersistenceService wrkKeiroPersistenceService;      
+    private WrkKeiroPersistenceService wrkKeiroPersistenceService;  
+    
+    @Autowired
+    private MessageSource messageSource;
 
     SelectPayeeController(MstKeiroService mstKeiroService) {
         this.mstKeiroService = mstKeiroService;
@@ -57,7 +61,6 @@ public class SelectPayeeController {
     
         // 新規作成時は経路必須
         if (Constants.ACTION_TYPE_CREATE.equals(actionType) && (selectedPayee == null || selectedPayee.trim().isEmpty())) {
-            model.addAttribute("errormessage", "経路を選択するか、経路を登録してください。");
             model.addAttribute("currentMonth", selectedMonth);
             return "csvMenu";
         }
@@ -95,7 +98,7 @@ public class SelectPayeeController {
         wrkTableUpdateService.deleteWrkDataByYearMonth(selectedMonth);
         // ワークテーブル作成
         wrkTableUpdateService.createWrkDataFromMaster(selectedPayee, selectedMonth);
-        model.addAttribute("message", "ワークテーブルを新規に作成しました。");
+        model.addAttribute("message", messageSource.getMessage("newtable",new String[]{}, Locale.getDefault()));
 
         // CSV管理表に表示
         return displayWrkData(selectedPayee, selectedMonth, model);
@@ -113,7 +116,7 @@ public class SelectPayeeController {
     public String csvDeleteAndCreate(@RequestParam("selectedPayee") String selectedPayee,
                                      @RequestParam("selectedMonth") String selectedMonth,
                                      Model model) {
-    return createNewWrkData(selectedPayee, selectedMonth, model);
+        return createNewWrkData(selectedPayee, selectedMonth, model);
     }
     
     /**

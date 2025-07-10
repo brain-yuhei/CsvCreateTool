@@ -8,14 +8,14 @@
     <title>CSVファイル管理画面</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/csvTable.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/modal.css">
-    <script src="${pageContext.request.contextPath}/js/modal.js"></script>
-    <script src="${pageContext.request.contextPath}/js/modal-data.js"></script>
-    <script src="${pageContext.request.contextPath}/js/export.js"></script>
-    <script src="${pageContext.request.contextPath}/js/fetch.js"></script>
-    <script src="${pageContext.request.contextPath}/js/formatting.js"></script>
-    <script src="${pageContext.request.contextPath}/js/row-editor.js"></script>
-    <script src="${pageContext.request.contextPath}/js/validation.js"></script>
-    <script src="${pageContext.request.contextPath}/js/checkbox.js"></script>
+    <script src="${pageContext.request.contextPath}/js/modal.js"defer></script>
+    <script src="${pageContext.request.contextPath}/js/modal-data.js"defer></script>
+    <script src="${pageContext.request.contextPath}/js/export.js"defer></script>
+    <script src="${pageContext.request.contextPath}/js/fetch.js"defer></script>
+    <script src="${pageContext.request.contextPath}/js/formatting.js"defer></script>
+    <script src="${pageContext.request.contextPath}/js/row-editor.js"defer></script>
+    <script src="${pageContext.request.contextPath}/js/validation.js"defer></script>
+    <script src="${pageContext.request.contextPath}/js/checkbox.js"defer></script>
 </head>
 <body>
 
