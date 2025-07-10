@@ -21,6 +21,8 @@ public class MstkeiroPersistenceService {
      */
     @Transactional
     public void saveMstKeiroData(List<MstKeiroEntity> newMstList) {
+
+        
         for (MstKeiroEntity newEntry : newMstList) {
 
             Optional<MstKeiroEntity> existing = mstKeiroRepository.findById(newEntry.getId());
@@ -30,6 +32,7 @@ public class MstkeiroPersistenceService {
             entityToSave.setDate(newEntry.getDate());
             entityToSave.setPayeeContent(newEntry.getPayeeContent());
             entityToSave.setAmountInclusiveTax(newEntry.getAmountInclusiveTax());
+            entityToSave.setExpense_category(newEntry.getExpense_category());
             entityToSave.setMemo(newEntry.getMemo());
             entityToSave.setDepartment_name(newEntry.getDepartment_name());
             entityToSave.setDepartment_code(newEntry.getDepartment_code());

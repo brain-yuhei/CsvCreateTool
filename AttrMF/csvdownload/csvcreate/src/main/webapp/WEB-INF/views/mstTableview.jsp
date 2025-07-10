@@ -6,7 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <title>登録経路編集画面</title>
- 
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/mstTableView.css">
+    <script src="${pageContext.request.contextPath}/js/delete.js"defer></script>
 </head>
 
 <body>
@@ -42,7 +43,7 @@
                             <td><input type="text" name="mstKeiroList[${status.index}].expense_category" value="${row.expense_category}" required></td>
                             <td>${row.department_name}<input type="hidden" name="mstKeiroList[${status.index}].department_name" value="${row.department_name}" required></td>
                             <td>${row.department_code}<input type="hidden" name="mstKeiroList[${status.index}].department_code" value="${row.department_code}" required></td>
-                            <td></td>
+                            <td><button type="button">削除</button></td>
                         </tr>
                     </c:forEach>
                 </tbody>
