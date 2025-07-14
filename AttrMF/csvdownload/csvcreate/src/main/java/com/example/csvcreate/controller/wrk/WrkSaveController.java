@@ -1,7 +1,8 @@
-package com.example.csvcreate.controller.api;
+package com.example.csvcreate.controller.wrk;
 
-import java.math.BigDecimal;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,20 +12,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.example.csvcreate.controller.view.CsvTableController;
 import com.example.csvcreate.model.CsvFormWrapperDto;
-import com.example.csvcreate.model.MstCreateFormDto;
-import com.example.csvcreate.model.MstKeiroEntity;
-import com.example.csvcreate.model.MstKeiroFormDto;
 import com.example.csvcreate.model.WrkKeiroEntity;
-import com.example.csvcreate.repository.MstKeiroRepository;
 import com.example.csvcreate.service.DateService;
 import com.example.csvcreate.service.MstKeiroService;
-import com.example.csvcreate.service.MstkeiroPersistenceService;
 import com.example.csvcreate.service.WrkKeiroPersistenceService;
 import com.example.csvcreate.service.WrkTableDisplayService;
 
 @Controller
-public class SaveController {
+public class WrkSaveController {
 
     @Autowired
     private MstKeiroService mstKeiroService;
@@ -38,14 +35,12 @@ public class SaveController {
     @Autowired
     private WrkKeiroPersistenceService wrkKeiroPersistenceService;
 
-    @Autowired
-    MstkeiroPersistenceService mstkeiroPersistenceService;
-
-    @Autowired
-    MstKeiroRepository mstKeiroRepository;
 
     @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    private CsvTableController csvTableController;
 
     /**
      * 一時保存ボタン押下時の処理
@@ -80,7 +75,7 @@ public class SaveController {
             .collect(Collectors.toList());  
 
         // 入力チェック処理
-        List<String> errorMessages = validateInputs(koutsuuhiList);
+        List<String> errorMessages = csvTableController.validateInputs(koutsuuhiList);
 
         if (!errorMessages.isEmpty()) {
             model.addAttribute("errormessage", String.join("<br>", errorMessages));
@@ -116,82 +111,4 @@ public class SaveController {
 
         return "csvTable";
     }
-
-    /**
-     * 入力チェック処理
-     * 
-     * @param koutsuuhiList
-     * @return
-     */
-    private List<String> validateInputs(List<WrkKeiroEntity> koutsuuhiList) {
-        List<String> errorMessages = new ArrayList<>();
-    
-        for (int i = 0; i < koutsuuhiList.size(); i++) {
-            WrkKeiroEntity dto = koutsuuhiList.get(i);
-    
-            int displayIndex = dto.getDisplayIndex() != null ? dto.getDisplayIndex() : (i + 1);    
-            String prefix = (Boolean.TRUE.equals(dto.getIsNewRow())) ? "追加行の" : "既存行の";
-            String rowLabel = prefix + displayIndex + "行目";
-    
-            if (dto.getExpenseCategory() == null || dto.getExpenseCategory().trim().isEmpty()) {
-                errorMessages.add(rowLabel + ": 経費科目が未入力です。");
-            }
-    
-            if (dto.getAmount() == null) {
-                errorMessages.add(rowLabel + ": 金額が未入力です。");
-            } else {
-                try {
-                    new BigDecimal(dto.getAmount().toString());
-                } catch (NumberFormatException e) {
-                    errorMessages.add(rowLabel + ": 金額は数字で入力してください。");
-                }
-            }
-    
-            if (dto.getMemo() == null || dto.getMemo().trim().isEmpty()) {
-                errorMessages.add(rowLabel + ": メモが未入力です。");
-            } else if (dto.getMemo().length() > 50) {
-                errorMessages.add(rowLabel + ": メモは50文字以内で入力してください。");
-            }
-        }
-        return errorMessages;
-    }
-
-    /**
-     *更新ボタン押下時の処理
-     * 
-     * @return
-     */
-    @PostMapping("/viewMasterTable")
-    public String saveMasterTable(@ModelAttribute MstKeiroFormDto formDto, Model model) {
-
-        // 登録経路一覧表のデータをリスト追加
-        List<MstKeiroEntity> newMstList = formDto.getMstKeiroList();
-
-        // 入力された値をマスタテーブルに保存する処理
-        mstkeiroPersistenceService.saveMstKeiroData(newMstList);
-
-        model.addAttribute("mstdataList", newMstList);
-        return "mstTableview";
-    }
-
-    /**
-     * 登録ボタン押下時の処理（経路登録画面）
-     * 
-     * @param dto 登録対象のデータ
-     * @param model
-     * @return
-     */
-    @PostMapping("/createMasterTable")
-    public String saveMstTable(@ModelAttribute MstCreateFormDto dto, Model model) {
-
-        // データ保存処理を呼び出し
-        mstkeiroPersistenceService.saveMstDataForDisplay(dto); 
-
-        // DBから全件取得して表示用に渡す
-        List<MstKeiroEntity> mstdataList = mstKeiroRepository.findAll();
-
-        model.addAttribute("mstdataList", mstdataList);
-        return "mstTableview"; 
-    }
 }
-

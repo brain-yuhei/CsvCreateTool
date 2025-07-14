@@ -1,0 +1,149 @@
+package com.example.csvcreate.controller.view;
+
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.csvcreate.constants.Constants;
+import com.example.csvcreate.controller.wrk.WrkCreateController;
+import com.example.csvcreate.controller.wrk.WrkDisplayController;
+import com.example.csvcreate.service.DateService;
+import com.example.csvcreate.service.MstKeiroService;
+import com.example.csvcreate.service.WrkKeiroPersistenceService;
+
+@Controller
+public class CsvMenuController {
+ 
+    @Autowired
+    private MstKeiroService mstKeiroService; 
+    
+    @Autowired
+    private DateService dateService; 
+
+    @Autowired
+    private WrkCreateController wrkCreateController;
+    
+    @Autowired
+    private WrkKeiroPersistenceService wrkKeiroPersistenceService;   
+    
+    @Autowired
+    private MessageSource messageSource;  
+    
+    @Autowired
+    private WrkDisplayController wrkDisplayController;
+
+    /**
+     * CSV編集画面の表示
+     * 年月選択にリダイレクト
+     * 
+     */
+    @GetMapping("/")
+    public String home() {
+        return "redirect:/currentMonth";
+    }
+
+    /**
+     * 年月選択時の処理
+     * 
+     * @param selectedMonth
+     * @param model
+     * @return
+     */
+    @GetMapping("/currentMonth")
+    public String showCurrentMonthPage(@RequestParam(value = "selectedMonth", required = false) String selectedMonth,
+                                       @RequestParam(value = "selectedPayee", required = false) String selectedPayee,
+                                       Model model) {
+    
+        String currentMonth;
+    
+        // 年月がnullか空欄の判定
+        if (selectedMonth != null && !selectedMonth.isEmpty()) {
+            currentMonth = selectedMonth;
+        } else {
+            currentMonth = YearMonth.now().toString();
+        }
+    
+        // 支払先一覧を取得しモデルに追加
+        List<String> payees = mstKeiroService.getSelectedPayees();
+        model.addAttribute("selectedPayees", payees);
+    
+        if (selectedPayee == null || selectedPayee.isEmpty()) {
+            selectedPayee = payees.stream().findFirst().orElse("");
+        }
+    
+        // 年月・Payeeも再表示用に追加
+        model.addAttribute("currentMonth", currentMonth);
+        model.addAttribute("selectedPayee", selectedPayee);
+    
+        //年月の範囲を設定し最小月と最大月をモデルに追加
+        Map<String, String> monthRange = dateService.getMonthRange();
+        model.addAttribute("minMonth", monthRange.get("minMonth"));
+        model.addAttribute("maxMonth", monthRange.get("maxMonth"));
+    
+        return "csvMenu"; // CSV管理表のJSP名
+    }  
+    
+    /**
+     * 新規or履歴ボタン押下時の処理
+     * 
+     * @param selectedPayee
+     * @param selectedMonth
+     * @param actionType
+     * @param model
+     * @return
+     */
+    @PostMapping("/selectPayee")
+    public String handlePayeeAction(
+        @RequestParam(value = "selectedPayee", required = false) String selectedPayee,
+        @RequestParam("selectedMonth") String selectedMonth,
+        @RequestParam("actionType") String actionType,
+        Model model) {
+    
+        // 新規作成時は経路必須
+        if (Constants.ACTION_TYPE_CREATE.equals(actionType) && (selectedPayee == null || selectedPayee.trim().isEmpty())) {
+            model.addAttribute("currentMonth", selectedMonth);
+            return "csvMenu";
+        }
+    
+        if (Constants.ACTION_TYPE_CREATE.equals(actionType)) {
+            // 選択年月の月初と月末を取得
+            YearMonth yearMonth = YearMonth.parse(selectedMonth);
+            LocalDate startDate = yearMonth.atDay(1);
+            LocalDate endDate = yearMonth.atEndOfMonth(); 
+            if (wrkKeiroPersistenceService.existsWrkDataByDateOnly(startDate, endDate)) {
+                model.addAttribute("selectedPayee", selectedPayee);
+                model.addAttribute("selectedMonth", selectedMonth);
+                return "csvDeleteHistory";
+            }
+            return wrkCreateController.createNewWrkData(selectedPayee, selectedMonth, model);
+        } else if (Constants.ACTION_TYPE_HISTORY.equals(actionType)) {
+            return wrkDisplayController.showHistoryData(selectedPayee, selectedMonth, model);
+        } else {
+            model.addAttribute("errormessage", messageSource.getMessage("selectPayeeError",new String[]{}, Locale.getDefault()));
+            return "csvTable";
+        }
+    }  
+    
+    @PostMapping("/returnFromConfirm")
+    public String returnFromConfirm(@RequestParam("selectedPayee") String selectedPayee,
+                                    @RequestParam("selectedMonth") String selectedMonth,
+                                    Model model) {
+        model.addAttribute("selectedPayee", selectedPayee);
+        model.addAttribute("currentMonth", selectedMonth);
+        model.addAttribute("selectedPayees", mstKeiroService.getSelectedPayees());
+        Map<String, String> monthRange = dateService.getMonthRange();
+        model.addAttribute("minMonth", monthRange.get("minMonth"));
+        model.addAttribute("maxMonth", monthRange.get("maxMonth"));
+    
+        return "csvMenu";
+    }    
+
+}

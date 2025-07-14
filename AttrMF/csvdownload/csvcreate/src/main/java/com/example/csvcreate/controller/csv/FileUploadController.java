@@ -1,11 +1,10 @@
-package com.example.csvcreate.controller.upload;
-
-import org.springframework.stereotype.Controller;
+package com.example.csvcreate.controller.csv;
 
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,8 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.csvcreate.service.CsvImportService;
 
 @Controller
-public class UploadController {
-
+public class FileUploadController {
+    
     @Autowired
     private CsvImportService csvImportService; 
 
@@ -50,6 +49,6 @@ public class UploadController {
         }
     
         return "redirect:/currentMonth"; 
-    }    
-    
+    } 
+
 }
