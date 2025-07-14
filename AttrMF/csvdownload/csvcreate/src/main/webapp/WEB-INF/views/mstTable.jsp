@@ -12,9 +12,19 @@
 
 <body>
 
+    <button type="button" onclick="location.href='/'">戻る</button>
+
     <p>登録経路一覧表</p>
 
     <form id="mstForm" action="/viewMasterTable" method="post" method="get" modelAttribute="formDto">
+
+        <c:if test="${not empty message}">
+            <div class="message">${message}</div>
+        </c:if>
+    
+        <c:if test="${not empty errormessage}">
+            <div class="error-message">${errormessage}</div>
+        </c:if>
 
         <button type="submit">更新</button>
 
@@ -43,12 +53,18 @@
                             <td><input type="text" name="mstKeiroList[${status.index}].expense_category" value="${row.expense_category}" required></td>
                             <td>${row.department_name}<input type="hidden" name="mstKeiroList[${status.index}].department_name" value="${row.department_name}" required></td>
                             <td>${row.department_code}<input type="hidden" name="mstKeiroList[${status.index}].department_code" value="${row.department_code}" required></td>
-                            <td><button type="button">削除</button></td>
+                            <td>
+                                <button type="button" onclick="submitDelete('${row.id}')">削除</button>
+                            </td>
                         </tr>
                     </c:forEach>
                 </tbody>
             </table>
         </div>
+    </form>
+
+    <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/mstdelete" style="display:none;">
+        <input type="hidden" name="id" id="deleteId" />
     </form>
 
     <p>経路新規追加</p>

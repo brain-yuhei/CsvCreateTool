@@ -37,4 +37,13 @@ public class MstKeiroService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * マスタテーブルのデータ削除処理（登録経路編集画面）
+     * 
+     * @param id
+     */
+    public void deleteById(Long id) {
+        mstKeiroRepository.deleteById(id);
+    }
+
 }

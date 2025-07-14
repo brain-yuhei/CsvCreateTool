@@ -23,6 +23,9 @@
             <a href="/csvUpload" class="nav-button">
                 <i class="fas fa-file-upload"></i> CSVファイルの登録画面へ
             </a>
+            <a href="/viewMasterTable" class="nav-button">
+                <i class="fas fa-file-upload"></i> 経路登録画面へ
+            </a>
 
             <label for="selectedPayee">選択中の経路：</label>
             <select name="selectedPayee" id="selectedPayee">
