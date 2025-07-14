@@ -4,6 +4,7 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.csvcreate.model.MstCreateFormDto;
 import com.example.csvcreate.model.MstKeiroEntity;
 import com.example.csvcreate.repository.MstKeiroRepository;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,26 @@ public class MstkeiroPersistenceService {
             mstKeiroRepository.save(entityToSave);
         }
     }
+
+    /**
+     * 経路登録表のDB保存処理
+     * 
+     * @param dto 登録対象の値
+     */
+    public void saveMstDataForDisplay(MstCreateFormDto dto) {
+        MstKeiroEntity entity = new MstKeiroEntity();
+
+        // データをセット
+        entity.setPayeeContent(dto.getPayeeContent());
+        entity.setAmountInclusiveTax(dto.getAmountInclusiveTax());
+        entity.setMemo(dto.getMemo());
+        entity.setExpense_category(dto.getExpense_category());
+        entity.setDepartment_name(dto.getDepartment_name());
+        entity.setDepartment_code(dto.getDepartment_code());
+
+        // マスタテーブルにデータを保存
+        mstKeiroRepository.save(entity);
+    }    
 
     
 }

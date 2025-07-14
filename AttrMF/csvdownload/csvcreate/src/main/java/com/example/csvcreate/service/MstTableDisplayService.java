@@ -24,11 +24,4 @@ public class MstTableDisplayService {
         // マスタテーブルの全データを取得し返す
         return mstKeiroRepository.findByAll();
     }
-
-    public List<MstKeiroEntity> saveMstDataForDisplay(){
-
-        // 保存されたデータも含めて取得し返す
-        return mstKeiroRepository.findByAll();
-
-    }
 }

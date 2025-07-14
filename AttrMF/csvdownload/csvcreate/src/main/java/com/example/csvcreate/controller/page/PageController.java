@@ -98,7 +98,7 @@ public class PageController {
      * 
      * @return
      */
-    @GetMapping(value = {"/csvDeleteHistory", "/selectPayee", "/saveWorkTable"})
+    @GetMapping(value = {"/csvDeleteHistory", "/selectPayee", "/saveWorkTable","/createMasterTable"})
     public String redirectToError() {
         return "redirect:/csvError";
     }
@@ -129,24 +129,6 @@ public class PageController {
 
         model.addAttribute("mstdataList", mstdataList);
         return "mstTableview";
-    }
-
-    /**
-     * 登録経路一覧画面を開いた際の処理
-     * 
-     * @param entity
-     * @return
-     */
-    @GetMapping("/createMasterTable")
-    public String saveMstTableDate(Model model) {
-
-        // マスタテーブルの保存処理
-        List<MstKeiroEntity> mstdataList = mstTableDisplayService.saveMstDataForDisplay();
-
-        model.addAttribute("mstdataList", mstdataList);
-        return "mstTableview";
-    }
-
-    
+    }  
 
 }

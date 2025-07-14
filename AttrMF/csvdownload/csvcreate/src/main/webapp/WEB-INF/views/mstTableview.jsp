@@ -73,12 +73,12 @@
                 <tbody id="mainTableBody">
                     <tr>
                         <td><input type="checkbox" name="selectedRow"></td>
-                        <td><input type="text" name="item1" required></td>
-                        <td><input type="text" name="item2" required></td>
-                        <td><input type="text" name="item3" required></td>
-                        <td><input type="text" name="item4" required></td>
-                        <td><input type="text" name="item5" required></td>
-                        <td><input type="text" name="item6" required></td>
+                        <td><input type="text" name="payeeContent" required></td>
+                        <td><input type="text" name="amountInclusiveTax" required></td>
+                        <td><input type="text" name="memo" required></td>
+                        <td><input type="text" name="expense_category" required></td>
+                        <td><input type="text" name="department_name" required></td>
+                        <td><input type="text" name="department_code" required></td>
                     </tr>
                 </tbody>
             </table>
