@@ -1,7 +1,11 @@
 package com.example.csvcreate.controller.upload;
 
 import org.springframework.stereotype.Controller;
+
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +18,9 @@ public class UploadController {
 
     @Autowired
     private CsvImportService csvImportService; 
+
+    @Autowired
+    private MessageSource messageSource;
 
     /**
      * CSVファイルのアップロード処理
@@ -29,16 +36,16 @@ public class UploadController {
             // ファイル名が空、または .csv でない場合はエラー
             String filename = uploadfile.getOriginalFilename();
             if (filename == null || !filename.toLowerCase().endsWith(".csv")) {
-                model.addAttribute("errormessage", "CSVファイルを選択してください（拡張子が .csv である必要があります）");
+                model.addAttribute("errormessage", messageSource.getMessage("csvFileError",new String[]{}, Locale.getDefault()));
                 return "csvUpload"; 
             }
     
             // CSVファイルを読み込み、DBに保存する
             csvImportService.saveDatabase(uploadfile);
-            model.addAttribute("message", "アップロードに成功しました！");
+            model.addAttribute("message", messageSource.getMessage("uploadFile",new String[]{}, Locale.getDefault()));
     
         } catch (Exception e) {
-            model.addAttribute("errormessage", "アップロードに失敗しました：CSVファイルの項目数が不足しています " + e.getMessage());
+            model.addAttribute("errormessage", messageSource.getMessage("uploadFileError",new String[]{}, Locale.getDefault()));
             return "csvUpload"; 
         }
     

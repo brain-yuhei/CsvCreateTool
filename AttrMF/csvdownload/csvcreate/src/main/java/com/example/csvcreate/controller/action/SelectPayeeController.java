@@ -79,7 +79,7 @@ public class SelectPayeeController {
         } else if (Constants.ACTION_TYPE_HISTORY.equals(actionType)) {
             return showHistoryData(selectedPayee, selectedMonth, model);
         } else {
-            model.addAttribute("errormessage", "無効な操作です。");
+            model.addAttribute("errormessage", messageSource.getMessage("selectPayeeError",new String[]{}, Locale.getDefault()));
             return "csvTable";
         }
     }
@@ -98,7 +98,7 @@ public class SelectPayeeController {
         wrkTableUpdateService.deleteWrkDataByYearMonth(selectedMonth);
         // ワークテーブル作成
         wrkTableUpdateService.createWrkDataFromMaster(selectedPayee, selectedMonth);
-        model.addAttribute("message", messageSource.getMessage("newtable",new String[]{}, Locale.getDefault()));
+        model.addAttribute("message", messageSource.getMessage("newTable",new String[]{}, Locale.getDefault()));
 
         // CSV管理表に表示
         return displayWrkData(selectedPayee, selectedMonth, model);
@@ -136,13 +136,13 @@ public class SelectPayeeController {
 
         // ワークテーブルを月初～月末でソート
         if (!wrkKeiroPersistenceService.existsWrkDataByDateOnly(startDate, endDate)) {
-            model.addAttribute("errormessage", "履歴データが存在しません。");
+            model.addAttribute("errormessage", messageSource.getMessage("historyDataError",new String[]{}, Locale.getDefault()));
             model.addAttribute("wrkList", new ArrayList<>());
             model.addAttribute("dateInfoList", new ArrayList<>());
             return "csvTable";
         }
     
-        model.addAttribute("message", "履歴データを表示しました。");
+        model.addAttribute("message", messageSource.getMessage("historyData",new String[]{}, Locale.getDefault()));
 
         // CSV管理表に表示
         return displayWrkData(selectedPayee, selectedMonth, model);

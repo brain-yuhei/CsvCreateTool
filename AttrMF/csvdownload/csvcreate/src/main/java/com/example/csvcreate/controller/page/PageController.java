@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +28,9 @@ public class PageController {
     
     @Autowired
     private MstTableDisplayService mstTableDisplayService;
+
+    @Autowired
+    private MessageSource messageSource;
 
     /**
      * CSV編集画面の表示
@@ -107,7 +111,7 @@ public class PageController {
      */
     @GetMapping("/csvError")
     public String showInvalidPage(Model model) {
-        model.addAttribute("errorMessage", "不正なアクセスです。");
+        model.addAttribute("errormessage", messageSource.getMessage("showInvalidPageError",new String[]{}, Locale.getDefault()));
         return "csvError"; 
     }
 

@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,6 +39,9 @@ public class SaveController {
     @Autowired
     MstkeiroPersistenceService mstkeiroPersistenceService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     /**
      * 一時保存ボタン押下時の処理
      *
@@ -53,7 +57,7 @@ public class SaveController {
 
         List<WrkKeiroEntity> originalList = csvFormWrapperDto.getKoutsuuhiList();
         if (originalList == null || originalList.isEmpty()) {
-            model.addAttribute("errormessage", "保存対象のデータがありません（入力データなし）");
+            model.addAttribute("errormessage", messageSource.getMessage("saveWorkTableError",new String[]{}, Locale.getDefault()));
             model.addAttribute("wrkList", new ArrayList<>());
             model.addAttribute("dateInfoList", new ArrayList<>());
             model.addAttribute("selectedPayees", mstKeiroService.getSelectedPayees());
@@ -92,7 +96,7 @@ public class SaveController {
             wrkKeiroPersistenceService.saveWrkKeiroData(koutsuuhiList); 
             model.addAttribute("saveSuccess", true);
         } catch (Exception e) {
-            model.addAttribute("errormessage", "同じ日付に対して同じ経路が登録されています");
+            //model.addAttribute("errormessage", "同じ日付に対して同じ経路が登録されています");
         }
 
         Map<String, Object> koutsuuhiData = wrkTableDisplayService.getWrkDataForDisplay(selectedPayee, selectedMonth);
