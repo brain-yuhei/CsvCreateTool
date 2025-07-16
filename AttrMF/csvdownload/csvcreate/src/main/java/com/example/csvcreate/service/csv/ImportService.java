@@ -1,4 +1,4 @@
-package com.example.csvcreate.service;
+package com.example.csvcreate.service.csv;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,13 +15,13 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
 @Service
-public class CsvImportService {
+public class ImportService {
     
     @Autowired
     private MstKeiroRepository mstkeiroRepository;
 
     @Autowired
-    private CsvValueService csvValueService;
+    private ValueService valueService;
 
     /**
      * マスタテーブルの生成・保存処理
@@ -49,7 +49,7 @@ public class CsvImportService {
 
                 // 「支払先・内容」と「金額（税込）」を取り出す
                 String payee = data[5];
-                BigDecimal amount = csvValueService.parseBigDecimal(data[23]);
+                BigDecimal amount = valueService.parseBigDecimal(data[23]);
 
                 // 小数点以下切り捨て
                 if (amount != null) {

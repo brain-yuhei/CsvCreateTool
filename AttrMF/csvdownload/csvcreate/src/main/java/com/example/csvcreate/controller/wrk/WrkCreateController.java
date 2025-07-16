@@ -9,13 +9,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.csvcreate.service.WrkTableUpdateService;
+import com.example.csvcreate.service.wrk.WrkDeleteService;
+import com.example.csvcreate.service.wrk.WrkCreateService;
 
 @Controller
 public class WrkCreateController {
  
     @Autowired
-    private WrkTableUpdateService wrkTableUpdateService;  
+    private WrkDeleteService wrkDeleteService;
+    
+    @Autowired
+    private WrkCreateService wrkCreateService;     
     
     @Autowired
     private MessageSource messageSource; 
@@ -53,9 +57,9 @@ public class WrkCreateController {
     public String createNewWrkData(String selectedPayee, String selectedMonth, Model model) {
  
         // ワークテーブル削除
-        wrkTableUpdateService.deleteWrkDataByYearMonth(selectedMonth);
+        wrkDeleteService.deleteWrkDataByYearMonth(selectedMonth);
         // ワークテーブル作成
-        wrkTableUpdateService.createWrkDataFromMaster(selectedPayee, selectedMonth);
+        wrkCreateService.createWrkDataFromMaster(selectedPayee, selectedMonth);
         model.addAttribute("message", messageSource.getMessage("newTable",new String[]{}, Locale.getDefault()));
 
         // CSV管理表に表示

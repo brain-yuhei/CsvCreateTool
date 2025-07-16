@@ -1,4 +1,4 @@
-package com.example.csvcreate.service;
+package com.example.csvcreate.service.mst;
 
 import java.util.stream.Collectors;
 import java.util.*;
@@ -10,10 +10,10 @@ import com.example.csvcreate.model.MstKeiroEntity;
 import com.example.csvcreate.repository.MstKeiroRepository;
 
 @Service
-public class MstKeiroService {
-
+public class GetService {
+ 
     @Autowired
-    private MstKeiroRepository mstKeiroRepository;
+    private MstKeiroRepository mstKeiroRepository;    
 
     /**
      * マスタテーブルのデータ一覧を取得
@@ -36,14 +36,16 @@ public class MstKeiroService {
                 .distinct()
                 .collect(Collectors.toList());
     }
+    
+    // /**
+    //  * マスタテーブルから全データ取得処理
+    //  * 
+    //  * @return
+    //  */
+    // public List<MstKeiroEntity> getMstDataForDisplay() {
 
-    /**
-     * マスタテーブルのデータ削除処理（登録経路編集画面）
-     * 
-     * @param id
-     */
-    public void deleteById(Long id) {
-        mstKeiroRepository.deleteById(id);
-    }
+    //     // マスタテーブルの全データを取得し返す
+    //     return mstKeiroRepository.findByAll();
+    // }
 
 }

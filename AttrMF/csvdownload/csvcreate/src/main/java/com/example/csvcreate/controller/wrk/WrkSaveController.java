@@ -16,25 +16,28 @@ import com.example.csvcreate.controller.view.CsvTableController;
 import com.example.csvcreate.model.CsvFormWrapperDto;
 import com.example.csvcreate.model.WrkKeiroEntity;
 import com.example.csvcreate.service.DateService;
-import com.example.csvcreate.service.MstKeiroService;
-import com.example.csvcreate.service.WrkKeiroPersistenceService;
-import com.example.csvcreate.service.WrkTableDisplayService;
+import com.example.csvcreate.service.mst.GetService;
+import com.example.csvcreate.service.wrk.WrkDisplayService;
+import com.example.csvcreate.service.wrk.WrkDeleteService;
+import com.example.csvcreate.service.wrk.WrkSaveService;
 
 @Controller
 public class WrkSaveController {
 
     @Autowired
-    private MstKeiroService mstKeiroService;
+    private GetService getService;
 
     @Autowired
     private DateService dateService;
 
     @Autowired
-    private WrkTableDisplayService wrkTableDisplayService;
+    private WrkDeleteService wrkDeleteService;
 
     @Autowired
-    private WrkKeiroPersistenceService wrkKeiroPersistenceService;
+    private WrkSaveService wrkSaveService;
 
+    @Autowired
+    private WrkDisplayService wrkDisplayService;
 
     @Autowired
     private MessageSource messageSource;
@@ -60,7 +63,7 @@ public class WrkSaveController {
             model.addAttribute("errormessage", messageSource.getMessage("saveWorkTableError",new String[]{}, Locale.getDefault()));
             model.addAttribute("wrkList", new ArrayList<>());
             model.addAttribute("dateInfoList", new ArrayList<>());
-            model.addAttribute("selectedPayees", mstKeiroService.getSelectedPayees());
+            model.addAttribute("selectedPayees", getService.getSelectedPayees());
             model.addAttribute("currentMonth", selectedMonth);
             model.addAttribute("selectedPayee", selectedPayee);
             Map<String, String> monthRange = dateService.getMonthRange();
@@ -80,9 +83,9 @@ public class WrkSaveController {
         if (!errorMessages.isEmpty()) {
             model.addAttribute("errormessage", String.join("<br>", errorMessages));
             model.addAttribute("wrkList", koutsuuhiList); 
-            model.addAttribute("dateInfoList", wrkTableDisplayService
+            model.addAttribute("dateInfoList", wrkDisplayService
                 .getWrkDataForDisplay(selectedPayee, selectedMonth).get("dateInfoList"));
-            model.addAttribute("selectedPayees", mstKeiroService.getSelectedPayees());
+            model.addAttribute("selectedPayees", getService.getSelectedPayees());
             model.addAttribute("currentMonth", selectedMonth);
             model.addAttribute("selectedPayee", selectedPayee);
             Map<String, String> monthRange = dateService.getMonthRange();
@@ -92,17 +95,17 @@ public class WrkSaveController {
         }
 
         try {
-            wrkKeiroPersistenceService.deleteWrkData(selectedMonth);
-            wrkKeiroPersistenceService.saveWrkKeiroData(koutsuuhiList); 
+            wrkDeleteService.deleteWrkData(selectedMonth);
+            wrkSaveService.saveWrkKeiroData(koutsuuhiList); 
             model.addAttribute("saveSuccess", true);
         } catch (Exception e) {
             //model.addAttribute("errormessage", "同じ日付に対して同じ経路が登録されています");
         }
 
-        Map<String, Object> koutsuuhiData = wrkTableDisplayService.getWrkDataForDisplay(selectedPayee, selectedMonth);
+        Map<String, Object> koutsuuhiData = wrkDisplayService.getWrkDataForDisplay(selectedPayee, selectedMonth);
         model.addAttribute("wrkList", koutsuuhiData.get("wrkList"));
         model.addAttribute("dateInfoList", koutsuuhiData.get("dateInfoList"));
-        model.addAttribute("selectedPayees", mstKeiroService.getSelectedPayees());
+        model.addAttribute("selectedPayees", getService.getSelectedPayees());
         model.addAttribute("currentMonth", selectedMonth);
         model.addAttribute("selectedPayee", selectedPayee);
         Map<String, String> monthRange = dateService.getMonthRange();

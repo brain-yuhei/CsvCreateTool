@@ -1,19 +1,17 @@
-package com.example.csvcreate.service;
+package com.example.csvcreate.service.wrk;
+
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.*;
-
 import com.example.csvcreate.model.WrkKeiroEntity;
 import com.example.csvcreate.repository.WrkKeiroRepository;
 
 @Service
-public class WrkKeiroPersistenceService {
-
+public class WrkSaveService {
+  
     @Autowired
     private WrkKeiroRepository wrkKeiroRepository;    
 
@@ -42,36 +40,6 @@ public class WrkKeiroPersistenceService {
     
             wrkKeiroRepository.save(entityToSave);
         }
-    }
-    
-    /**
-     * 対象月のワークテーブルデータを取得処理
-     * 
-     * @param startDate 月初
-     * @param endDate 月末
-     * @return
-     */
-    public boolean existsWrkDataByDateOnly(LocalDate startDate, LocalDate endDate) {
-
-        // 月初から月末のデータを取得し返す
-        return wrkKeiroRepository.existsByDateBetween(startDate, endDate);
-
-    }
-
-    /**
-     * 対象月のワークテーブルデータを削除処理
-     * 
-     * @param selectedMonth 選択月
-     */
-    public void deleteWrkData(String selectedMonth) {
-
-        // 対象月の月初から月末までを設定
-        YearMonth ym = YearMonth.parse(selectedMonth);
-        LocalDate startDate = ym.atDay(1);
-        LocalDate endDate = ym.atEndOfMonth();
-    
-        // 月初から月末のデータを削除
-        wrkKeiroRepository.deleteByMonthRange(startDate, endDate);
     }    
-    
+
 }

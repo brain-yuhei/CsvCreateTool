@@ -1,17 +1,18 @@
-package com.example.csvcreate.service;
+package com.example.csvcreate.service.mst;
+
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.csvcreate.model.MstCreateFormDto;
 import com.example.csvcreate.model.MstKeiroEntity;
 import com.example.csvcreate.repository.MstKeiroRepository;
-import org.springframework.stereotype.Service;
 
 @Service
-public class MstkeiroPersistenceService {
-
+public class SaveService {
+ 
     @Autowired
     private MstKeiroRepository mstKeiroRepository;
 
@@ -60,7 +61,6 @@ public class MstkeiroPersistenceService {
 
         // マスタテーブルにデータを保存
         mstKeiroRepository.save(entity);
-    }    
+    }       
 
-    
 }

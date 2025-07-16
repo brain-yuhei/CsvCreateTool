@@ -9,13 +9,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.csvcreate.service.MstKeiroService;
+import com.example.csvcreate.service.mst.DeleteService;
 
 @Controller
 public class MstDeleteController {
 
     @Autowired
-    private MstKeiroService mstKeiroService;
+    private DeleteService deleteService;
 
     // @Autowired
     // private MessageSource messageSource;
@@ -30,7 +30,8 @@ public class MstDeleteController {
     public String delete(@RequestParam("id") Long id, Model model) {
 
         // 削除処理を呼び出す
-        mstKeiroService.deleteById(id);
+        deleteService.deleteById(id);
+        // リダイレクトでもメッセージを返せるように考える
         // model.addAttribute("message", messageSource.getMessage("mstdelete",new String[]{}, Locale.getDefault()));
         return "redirect:/viewMasterTable"; 
     }

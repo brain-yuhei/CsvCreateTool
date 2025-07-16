@@ -16,14 +16,14 @@ import com.example.csvcreate.constants.Constants;
 import com.example.csvcreate.controller.wrk.WrkCreateController;
 import com.example.csvcreate.controller.wrk.WrkDisplayController;
 import com.example.csvcreate.service.DateService;
-import com.example.csvcreate.service.MstKeiroService;
-import com.example.csvcreate.service.WrkKeiroPersistenceService;
+import com.example.csvcreate.service.mst.GetService;
+import com.example.csvcreate.service.wrk.WrkGetService;
 
 @Controller
 public class CsvMenuController {
  
     @Autowired
-    private MstKeiroService mstKeiroService; 
+    private GetService getService; 
     
     @Autowired
     private DateService dateService; 
@@ -32,7 +32,7 @@ public class CsvMenuController {
     private WrkCreateController wrkCreateController;
     
     @Autowired
-    private WrkKeiroPersistenceService wrkKeiroPersistenceService;   
+    private WrkGetService wrkGetService;   
     
     @Autowired
     private MessageSource messageSource;  
@@ -72,7 +72,7 @@ public class CsvMenuController {
         }
     
         // 支払先一覧を取得しモデルに追加
-        List<String> payees = mstKeiroService.getSelectedPayees();
+        List<String> payees = getService.getSelectedPayees();
         model.addAttribute("selectedPayees", payees);
     
         if (selectedPayee == null || selectedPayee.isEmpty()) {
@@ -118,7 +118,7 @@ public class CsvMenuController {
             YearMonth yearMonth = YearMonth.parse(selectedMonth);
             LocalDate startDate = yearMonth.atDay(1);
             LocalDate endDate = yearMonth.atEndOfMonth(); 
-            if (wrkKeiroPersistenceService.existsWrkDataByDateOnly(startDate, endDate)) {
+            if (wrkGetService.existsWrkDataByDateOnly(startDate, endDate)) {
                 model.addAttribute("selectedPayee", selectedPayee);
                 model.addAttribute("selectedMonth", selectedMonth);
                 return "csvDeleteHistory";
@@ -138,7 +138,7 @@ public class CsvMenuController {
                                     Model model) {
         model.addAttribute("selectedPayee", selectedPayee);
         model.addAttribute("currentMonth", selectedMonth);
-        model.addAttribute("selectedPayees", mstKeiroService.getSelectedPayees());
+        model.addAttribute("selectedPayees", getService.getSelectedPayees());
         Map<String, String> monthRange = dateService.getMonthRange();
         model.addAttribute("minMonth", monthRange.get("minMonth"));
         model.addAttribute("maxMonth", monthRange.get("maxMonth"));

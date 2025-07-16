@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.example.csvcreate.model.MstCreateFormDto;
 import com.example.csvcreate.model.MstKeiroEntity;
 import com.example.csvcreate.repository.MstKeiroRepository;
-import com.example.csvcreate.service.MstkeiroPersistenceService;
+import com.example.csvcreate.service.mst.SaveService;
 
 @Controller
 public class MstCreateController {
@@ -20,7 +20,7 @@ public class MstCreateController {
     MstKeiroRepository mstKeiroRepository; 
 
     @Autowired
-    MstkeiroPersistenceService mstkeiroPersistenceService;
+    SaveService saveService;
 
     /**
      * 登録ボタン押下時の処理（経路登録画面）
@@ -33,7 +33,7 @@ public class MstCreateController {
     public String saveMstTable(@ModelAttribute MstCreateFormDto dto, Model model) {
 
         // データ保存処理を呼び出し
-        mstkeiroPersistenceService.saveMstDataForDisplay(dto); 
+        saveService.saveMstDataForDisplay(dto); 
 
         // DBから全件取得して表示用に渡す
         List<MstKeiroEntity> mstdataList = mstKeiroRepository.findAll();

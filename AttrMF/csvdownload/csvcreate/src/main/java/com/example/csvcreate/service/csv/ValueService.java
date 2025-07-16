@@ -1,12 +1,12 @@
-package com.example.csvcreate.service;
+package com.example.csvcreate.service.csv;
 
 import java.math.BigDecimal;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class CsvValueService {
-   
+public class ValueService {
+ 
     /**
      * 文字列を BigDecimal に変換するメソッド
      *
@@ -19,6 +19,6 @@ public class CsvValueService {
         } catch (NumberFormatException e) {
             return null;
         }
-    }
+    }    
 
 }

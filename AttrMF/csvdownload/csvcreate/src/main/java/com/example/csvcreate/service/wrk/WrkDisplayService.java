@@ -1,10 +1,11 @@
-package com.example.csvcreate.service;
+package com.example.csvcreate.service.wrk;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors;
 import java.util.*;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,8 @@ import com.example.csvcreate.repository.MstHolidayRepository;
 import com.example.csvcreate.repository.WrkKeiroRepository;
 
 @Service
-public class WrkTableDisplayService {
-    
+public class WrkDisplayService {
+  
     @Autowired
     private WrkKeiroRepository wrkKeiroRepository;
 
@@ -79,6 +80,6 @@ public class WrkTableDisplayService {
             case SUNDAY -> "sunday";
             default -> ""; // 平日は何もつけない
         };
-    }
+    }    
 
 }

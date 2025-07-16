@@ -10,24 +10,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import com.example.csvcreate.service.DateService;
-import com.example.csvcreate.service.MstKeiroService;
-import com.example.csvcreate.service.WrkKeiroPersistenceService;
-import com.example.csvcreate.service.WrkTableDisplayService;
+import com.example.csvcreate.service.mst.GetService;
+import com.example.csvcreate.service.wrk.WrkGetService;
+import com.example.csvcreate.service.wrk.WrkDisplayService;
 
 @Controller
 public class WrkDisplayController {
 
     @Autowired
-    private WrkTableDisplayService wrkTableDisplayService; 
+    private WrkDisplayService wrkDisplayService; 
 
     @Autowired
     private DateService dateService; 
     
     @Autowired
-    private MstKeiroService mstKeiroService;
+    private GetService getService;
     
     @Autowired
-    private WrkKeiroPersistenceService wrkKeiroPersistenceService;  
+    private WrkGetService wrkGetService;  
     
     @Autowired
     private MessageSource messageSource;    
@@ -41,11 +41,11 @@ public class WrkDisplayController {
      * @return
      */
     public String displayWrkData(String selectedPayee, String selectedMonth, Model model) {
-        Map<String, Object> koutsuuhiData = wrkTableDisplayService.getWrkDataForDisplay(selectedPayee, selectedMonth);
+        Map<String, Object> koutsuuhiData = wrkDisplayService.getWrkDataForDisplay(selectedPayee, selectedMonth);
     
         model.addAttribute("wrkList", koutsuuhiData.get("wrkList"));
         model.addAttribute("dateInfoList", koutsuuhiData.get("dateInfoList"));
-        model.addAttribute("selectedPayees", mstKeiroService.getSelectedPayees());
+        model.addAttribute("selectedPayees", getService.getSelectedPayees());
         model.addAttribute("minMonth", dateService.getMonthRange().get("minMonth"));
         model.addAttribute("maxMonth", dateService.getMonthRange().get("maxMonth"));
         model.addAttribute("currentMonth", selectedMonth);
@@ -70,7 +70,7 @@ public class WrkDisplayController {
         LocalDate endDate = yearMonth.atEndOfMonth();
 
         // ワークテーブルを月初～月末でソート
-        if (!wrkKeiroPersistenceService.existsWrkDataByDateOnly(startDate, endDate)) {
+        if (!wrkGetService.existsWrkDataByDateOnly(startDate, endDate)) {
             model.addAttribute("errormessage", messageSource.getMessage("historyDataError",new String[]{}, Locale.getDefault()));
             model.addAttribute("wrkList", new ArrayList<>());
             model.addAttribute("dateInfoList", new ArrayList<>());

@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.csvcreate.model.MstKeiroEntity;
 import com.example.csvcreate.model.MstKeiroFormDto;
-import com.example.csvcreate.service.MstkeiroPersistenceService;
+import com.example.csvcreate.service.mst.SaveService;
 
 @Controller
 public class MstEditController {
 
     @Autowired
-    private MstkeiroPersistenceService mstkeiroPersistenceService;
+    private SaveService saveService;
     
     /**
      *更新ボタン押下時の処理
@@ -30,7 +30,7 @@ public class MstEditController {
         List<MstKeiroEntity> newMstList = formDto.getMstKeiroList();
 
         // 入力された値をマスタテーブルに保存する処理
-        mstkeiroPersistenceService.saveMstKeiroData(newMstList);
+        saveService.saveMstKeiroData(newMstList);
 
         model.addAttribute("mstdataList", newMstList);
         return "mstTable";

@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.csvcreate.model.WrkKeiroEntity;
-import com.example.csvcreate.service.WrkKeiroCreateService;
+import com.example.csvcreate.service.wrk.WrkCreateService;
 
 @Controller
 public class CsvTableController {
 
     @Autowired
-    private WrkKeiroCreateService wrkKeiroCreateService; 
+    private WrkCreateService wrkCreateService; 
 
     /**
      * 支払先・内容を変更時の処理
@@ -36,7 +36,7 @@ public class CsvTableController {
         LocalDate date = LocalDate.parse(request.get("date"));
 
         // 支払先・内容と日付を使い1行分のワークテーブルデータを作成する
-        WrkKeiroEntity wrk = wrkKeiroCreateService.updateRowByPayee(payee, date);
+        WrkKeiroEntity wrk = wrkCreateService.updateRowByPayee(payee, date);
 
         // データがない場合は空データを返す
         if (wrk == null) {

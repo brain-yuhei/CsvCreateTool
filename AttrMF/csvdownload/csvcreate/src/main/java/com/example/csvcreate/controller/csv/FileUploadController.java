@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.csvcreate.service.CsvImportService;
+import com.example.csvcreate.service.csv.ImportService;
 
 @Controller
 public class FileUploadController {
     
     @Autowired
-    private CsvImportService csvImportService; 
+    private ImportService ImportService; 
 
     @Autowired
     private MessageSource messageSource;
@@ -40,7 +40,7 @@ public class FileUploadController {
             }
     
             // CSVファイルを読み込み、DBに保存する
-            csvImportService.saveDatabase(uploadfile);
+            ImportService.saveDatabase(uploadfile);
             model.addAttribute("message", messageSource.getMessage("uploadFile",new String[]{}, Locale.getDefault()));
     
         } catch (Exception e) {
