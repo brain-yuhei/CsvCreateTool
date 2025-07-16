@@ -14,7 +14,7 @@ import com.example.csvcreate.service.mst.GetService;
 public class MstTableController {
 
     @Autowired
-    private GetService getService;    
+    private GetService getService; 
 
     /**
      * 登録経路一覧画面を開いた際の処理
@@ -31,6 +31,5 @@ public class MstTableController {
 
         model.addAttribute("mstdataList", mstdataList);
         return "mstTable";
-    }     
-
+    }  
 }

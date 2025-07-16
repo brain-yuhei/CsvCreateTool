@@ -70,5 +70,6 @@ public class MstKeiroEntity {
     private LocalDateTime updated_at; //更新日時
     private String aggregate_title; //集計タイトル
     private LocalDate date;
+    private Boolean selected;
     
 }

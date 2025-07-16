@@ -27,6 +27,7 @@
         </c:if>
 
         <button type="submit">更新</button>
+        <button type="button" id="deleteBtn">一括削除</button>
 
         <div class="master-table-container">
             <table class="fixed-header-table" border="1">
@@ -44,7 +45,6 @@
                 </thead>
                 <tbody id="mainTableBody">
                     <c:forEach var="row" items="${mstdataList}" varStatus="status">
-                        <input type="hidden" name="mstKeiroList[${status.index}].id" value="${row.id}" />
                         <tr>
                             <td><input type="checkbox" name="mstKeiroList[${status.index}].selected"></td>
                             <td><input type="text" name="mstKeiroList[${status.index}].payeeContent" value="${row.payeeContent}" required></td>
@@ -54,6 +54,7 @@
                             <td>${row.department_name}<input type="hidden" name="mstKeiroList[${status.index}].department_name" value="${row.department_name}" required></td>
                             <td>${row.department_code}<input type="hidden" name="mstKeiroList[${status.index}].department_code" value="${row.department_code}" required></td>
                             <td>
+                                <input type="hidden" name="mstKeiroList[${status.index}].id" value="${row.id}" />
                                 <button type="button" onclick="submitDelete('${row.id}')">削除</button>
                             </td>
                         </tr>
@@ -63,9 +64,15 @@
         </div>
     </form>
 
+    <!--各行の削除機能-->
     <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/mstdelete" style="display:none;">
         <input type="hidden" name="id" id="deleteId" />
     </form>
+
+    <!--複数行の一括削除機能-->
+    <form id="checkDeleteForm" method="post" action="${pageContext.request.contextPath}/mstdelete/checked" style="display:none;">
+    </form>
+    
 
     <p>経路新規追加</p>
 

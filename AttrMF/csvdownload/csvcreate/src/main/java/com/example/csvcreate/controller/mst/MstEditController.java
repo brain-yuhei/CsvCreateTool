@@ -19,21 +19,31 @@ public class MstEditController {
     private SaveService saveService;
     
     /**
-     *更新ボタン押下時の処理
+     * 更新ボタン押下時の処理
      * 
+     * @param formDto
+     * @param model
      * @return
      */
     @PostMapping("/viewMasterTable")
     public String saveMasterTable(@ModelAttribute MstKeiroFormDto formDto, Model model) {
-
-        // 登録経路一覧表のデータをリスト追加
-        List<MstKeiroEntity> newMstList = formDto.getMstKeiroList();
-
-        // 入力された値をマスタテーブルに保存する処理
-        saveService.saveMstKeiroData(newMstList);
-
-        model.addAttribute("mstdataList", newMstList);
+    
+        // 全データを取得
+        List<MstKeiroEntity> allRows = formDto.getMstKeiroList();
+    
+        // チェックが入っている行だけを抽出
+        List<MstKeiroEntity> checked = new ArrayList<>();
+        for (MstKeiroEntity row : allRows) {
+            if (Boolean.TRUE.equals(row.getSelected())) { 
+                checked.add(row);
+            }
+        }
+    
+        // チェックされたデータのみを保存
+        saveService.saveMstKeiroData(checked);
+    
+        model.addAttribute("mstdataList", allRows); 
         return "mstTable";
-    }    
+    }   
 
 }
