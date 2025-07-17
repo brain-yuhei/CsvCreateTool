@@ -101,3 +101,22 @@ function errorTextSet(input, errorDiv) {
     }
 
 }
+
+function checkInputDepartmentCode(inputElement){
+    let rawValue = inputElement.value;
+    let numericValue = rawValue.replace(/[^0-9]/g, '');
+    const number = parseFloat(numericValue);
+    if (!isNaN(number)) {
+        inputElement.value = numericValue; // 数字のみを反映
+    } else {
+        inputElement.value = ''; // 無効な場合は空に
+    }
+}
+
+function checkInputDepartmentName(inputElement){
+    let rawValue = inputElement.value;
+    let nonNumericValue = rawValue.replace(/[0-9]/g, "");
+    inputElement.value = nonNumericValue;
+}
+
+

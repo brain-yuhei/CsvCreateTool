@@ -11,6 +11,7 @@
     <script src="${pageContext.request.contextPath}/js/formatting.js"defer></script>
     <script src="${pageContext.request.contextPath}/js/checkbox.js"defer></script>
     <script src="${pageContext.request.contextPath}/js/edit.js"defer></script>
+    <script src="${pageContext.request.contextPath}/js/validation.js"defer></script>
 </head>
 
 <body>
@@ -56,8 +57,10 @@
                             </td>
                             <td><input type="text" name="mstKeiroList[${status.index}].memo" value="${row.memo}" required></td>
                             <td><input type="text" name="mstKeiroList[${status.index}].expense_category" value="${row.expense_category}" required></td>
-                            <td><input type="text" name="mstKeiroList[${status.index}].department_name" value="${row.department_name}" required></td>
-                            <td><input type="text" name="mstKeiroList[${status.index}].department_code" value="${row.department_code}" required></td>
+                            <td><input type="text" name="mstKeiroList[${status.index}].department_name" value="${row.department_name}" onblur="checkInputDepartmentName(this, '${rowIndex}')" required></td>
+                            <td>
+                                <input type="text" name="mstKeiroList[${status.index}].department_code" value="${row.department_code}" onblur="checkInputDepartmentCode(this, '${rowIndex}')" required>
+                            </td>
                             <td>
                                 <input type="hidden" name="mstKeiroList[${status.index}].id" value="${row.id}" />
                                 <button type="button" onclick="submitDelete('${row.id}')">削除</button>
@@ -103,8 +106,8 @@
                         <td><input type="text" name="amountInclusiveTax" onblur="formatAmount(this); validateAmount(this, '${rowIndex}')" placeholder="例：380" required></td>
                         <td><input type="text" name="memo" placeholder="例：大阪->名古屋" required></td>
                         <td><input type="text" name="expense_category" placeholder="例：旅費交通費" required></td>
-                        <td><input type="text" name="department_name" placeholder="例：大阪支社" required></td>
-                        <td><input type="text" name="department_code" placeholder="例：19" required></td>
+                        <td><input type="text" name="department_name" placeholder="例：大阪支社" onblur="checkInputDepartmentName(this, '${rowIndex}')" required></td>
+                        <td><input type="text" name="department_code" placeholder="例：19" onblur="checkInputDepartmentCode(this, '${rowIndex}')" required></td>
                     </tr>
                 </tbody>
             </table>

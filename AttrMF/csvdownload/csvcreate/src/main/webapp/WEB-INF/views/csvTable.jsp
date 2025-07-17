@@ -19,6 +19,10 @@
 </head>
 <body>
 
+<div class="page_header">
+    <h2>CSV出力内容編集画面</h2>
+</div>
+
 <!-- 成功・エラーメッセージ -->
 <c:if test="${saveSuccess}">
     <div id="saveSuccessMessage" class="flash-message">データを一時保存しました。</div>
