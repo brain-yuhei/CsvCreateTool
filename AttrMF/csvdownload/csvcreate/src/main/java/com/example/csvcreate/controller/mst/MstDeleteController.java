@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.csvcreate.service.mst.DeleteService;
 
@@ -27,12 +28,11 @@ public class MstDeleteController {
      * @return
      */
     @PostMapping("/mstdelete")
-    public String delete(@RequestParam("id") Long id, Model model) {
+    public String delete(@RequestParam("id") Long id, RedirectAttributes redirectAttributes, Model model) {
 
         // 削除処理を呼び出す
         deleteService.deleteById(id);
-        // リダイレクトでもメッセージを返せるように考える
-        // model.addAttribute("message", messageSource.getMessage("mstdelete",new String[]{}, Locale.getDefault()));
+        redirectAttributes.addFlashAttribute("message", messageSource.getMessage("mstdelete",new String[]{}, Locale.getDefault()));
         return "redirect:/viewMasterTable"; 
     }
 
@@ -44,16 +44,17 @@ public class MstDeleteController {
      * @return
      */
     @PostMapping("/mstdelete/checked")
-    public String checkDelete(@RequestParam(name = "ids", required = false) List<Long> ids, Model model) {
+    public String checkDelete(@RequestParam(name = "ids", required = false) List<Long> ids, RedirectAttributes redirectAttributes, Model model) {
 
         // 未チェックの確認
         if (ids == null || ids.isEmpty()) {
-            model.addAttribute("errormessage", messageSource.getMessage("checkedError",new String[]{}, Locale.getDefault()));
-            return "mstTable"; 
+            redirectAttributes.addFlashAttribute("errormessage", messageSource.getMessage("checkedError",new String[]{}, Locale.getDefault()));
+            return "redirect:/viewMasterTable"; 
         }
 
         // 削除処理を呼び出す
         deleteService.deleteByAllIds(ids);
+        redirectAttributes.addFlashAttribute("message", messageSource.getMessage("mstdelete",new String[]{}, Locale.getDefault()));
         return "redirect:/viewMasterTable";
     }
 

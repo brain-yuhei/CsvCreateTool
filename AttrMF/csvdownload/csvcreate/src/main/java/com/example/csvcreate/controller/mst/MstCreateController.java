@@ -3,6 +3,7 @@ package com.example.csvcreate.controller.mst;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,10 +18,13 @@ import com.example.csvcreate.service.mst.SaveService;
 public class MstCreateController {
 
     @Autowired
-    MstKeiroRepository mstKeiroRepository; 
+    private MstKeiroRepository mstKeiroRepository; 
 
     @Autowired
-    SaveService saveService;
+    private SaveService saveService;
+
+    @Autowired
+    private MessageSource messageSource;
 
     /**
      * 登録ボタン押下時の処理（経路登録画面）
@@ -39,6 +43,7 @@ public class MstCreateController {
         List<MstKeiroEntity> mstdataList = mstKeiroRepository.findAll();
 
         model.addAttribute("mstdataList", mstdataList);
+        model.addAttribute("message", messageSource.getMessage("mstCleate",new String[]{}, Locale.getDefault()));
         return "mstTable"; 
     }
 

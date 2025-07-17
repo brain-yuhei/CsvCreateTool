@@ -25,3 +25,16 @@ function initializeRowBackgrounds() {
 }
 
 window.addEventListener('DOMContentLoaded', initializeRowBackgrounds);
+
+/**
+ * 全選択チェック処理（登録経路編集画面）
+ * 
+ * @param {*} source 
+ */
+function allCheckboxes(source) {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"][name$=".selected"]');
+
+    checkboxes.forEach(function(checkbox) {
+        checkbox.checked = source.checked;
+    });
+}

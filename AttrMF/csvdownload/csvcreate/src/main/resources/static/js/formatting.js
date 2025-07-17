@@ -29,3 +29,16 @@ function formatAmount(input) {
         input.value = ''; // 無効な場合は空にする
     }
 }
+
+window.addEventListener('DOMContentLoaded',function(){
+    const text = document.querySelectorAll('.fixed-header-table input[type="text"]'); 
+    
+    text.forEach(function(input) {
+        input.addEventListener('focus',function(e){ 
+            e.target.style.background = "#9DCCE0"; 
+        }); 
+        input.addEventListener('blur',function(e){
+            e.target.style.background = "";
+        });
+    });
+});

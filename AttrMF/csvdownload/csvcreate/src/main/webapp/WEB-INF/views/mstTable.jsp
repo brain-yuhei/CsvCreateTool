@@ -8,6 +8,9 @@
     <title>登録経路編集画面</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/mstTableView.css">
     <script src="${pageContext.request.contextPath}/js/delete.js"defer></script>
+    <script src="${pageContext.request.contextPath}/js/formatting.js"defer></script>
+    <script src="${pageContext.request.contextPath}/js/checkbox.js"defer></script>
+    <script src="${pageContext.request.contextPath}/js/edit.js"defer></script>
 </head>
 
 <body>
@@ -16,24 +19,24 @@
 
     <p>登録経路一覧表</p>
 
+    <c:if test="${not empty message}">
+        <div class="message">${message}</div>
+    </c:if>
+
+    <c:if test="${not empty errormessage}">
+        <div class="error-message">${errormessage}</div>
+    </c:if>
+
     <form id="mstForm" action="/viewMasterTable" method="post" method="get" modelAttribute="formDto">
 
-        <c:if test="${not empty message}">
-            <div class="message">${message}</div>
-        </c:if>
-    
-        <c:if test="${not empty errormessage}">
-            <div class="error-message">${errormessage}</div>
-        </c:if>
-
         <button type="submit">更新</button>
-        <button type="button" id="deleteBtn">一括削除</button>
+        <button type="button" id="deleteBtn" onclick="submitDelete('${row.id}')">一括削除</button>
 
         <div class="master-table-container">
             <table class="fixed-header-table" border="1">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" id="checkAll"></th>
+                        <th><input type="checkbox" id="checkAll" onclick="allCheckboxes(this)"></th>
                         <th>経路</th>
                         <th>金額</th>
                         <th>メモ</th>
@@ -46,13 +49,15 @@
                 <tbody id="mainTableBody">
                     <c:forEach var="row" items="${mstdataList}" varStatus="status">
                         <tr>
-                            <td><input type="checkbox" name="mstKeiroList[${status.index}].selected"></td>
+                            <td><input type="checkbox" class="checks" name="mstKeiroList[${status.index}].selected"></td>
                             <td><input type="text" name="mstKeiroList[${status.index}].payeeContent" value="${row.payeeContent}" required></td>
-                            <td><input type="text" name="mstKeiroList[${status.index}].amountInclusiveTax" value="${row.amountInclusiveTax}" required></td>
+                            <td>
+                                <input type="text" class="amount-input" name="mstKeiroList[${status.index}].amountInclusiveTax" value="${row.amountInclusiveTax}" onblur="formatAmount(this); validateAmount(this, '${rowIndex}')" placeholder="交通費を入力してください。" required>
+                            </td>
                             <td><input type="text" name="mstKeiroList[${status.index}].memo" value="${row.memo}" required></td>
                             <td><input type="text" name="mstKeiroList[${status.index}].expense_category" value="${row.expense_category}" required></td>
-                            <td>${row.department_name}<input type="hidden" name="mstKeiroList[${status.index}].department_name" value="${row.department_name}" required></td>
-                            <td>${row.department_code}<input type="hidden" name="mstKeiroList[${status.index}].department_code" value="${row.department_code}" required></td>
+                            <td><input type="text" name="mstKeiroList[${status.index}].department_name" value="${row.department_name}" required></td>
+                            <td><input type="text" name="mstKeiroList[${status.index}].department_code" value="${row.department_code}" required></td>
                             <td>
                                 <input type="hidden" name="mstKeiroList[${status.index}].id" value="${row.id}" />
                                 <button type="button" onclick="submitDelete('${row.id}')">削除</button>
@@ -84,7 +89,6 @@
             <table class="fixed-header-table" border="1">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" id="checkAll"></th>
                         <th>経路</th>
                         <th>金額</th>
                         <th>メモ</th>
@@ -95,13 +99,12 @@
                 </thead>
                 <tbody id="mainTableBody">
                     <tr>
-                        <td><input type="checkbox" name="selectedRow"></td>
-                        <td><input type="text" name="payeeContent" required></td>
-                        <td><input type="text" name="amountInclusiveTax" required></td>
-                        <td><input type="text" name="memo" required></td>
-                        <td><input type="text" name="expense_category" required></td>
-                        <td><input type="text" name="department_name" required></td>
-                        <td><input type="text" name="department_code" required></td>
+                        <td><input type="text" name="payeeContent" placeholder="例：客先業務片道" required></td>
+                        <td><input type="text" name="amountInclusiveTax" onblur="formatAmount(this); validateAmount(this, '${rowIndex}')" placeholder="例：380" required></td>
+                        <td><input type="text" name="memo" placeholder="例：大阪->名古屋" required></td>
+                        <td><input type="text" name="expense_category" placeholder="例：旅費交通費" required></td>
+                        <td><input type="text" name="department_name" placeholder="例：大阪支社" required></td>
+                        <td><input type="text" name="department_code" placeholder="例：19" required></td>
                     </tr>
                 </tbody>
             </table>

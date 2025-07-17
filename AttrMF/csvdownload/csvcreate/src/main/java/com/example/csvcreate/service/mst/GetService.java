@@ -36,16 +36,5 @@ public class GetService {
                 .distinct()
                 .collect(Collectors.toList());
     }
-    
-    // /**
-    //  * マスタテーブルから全データ取得処理
-    //  * 
-    //  * @return
-    //  */
-    // public List<MstKeiroEntity> getMstDataForDisplay() {
-
-    //     // マスタテーブルの全データを取得し返す
-    //     return mstKeiroRepository.findByAll();
-    // }
 
 }

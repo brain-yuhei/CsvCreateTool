@@ -83,7 +83,7 @@
                                     <input type="hidden" name="koutsuuhiList[${rowIndex}].displayIndex" value="${rowIndex + 1}" />
                                     <input type="hidden" name="koutsuuhiList[${rowIndex}].isNewRow" value="${item.isNewRow}" />
                                 </td>                                                               
-                                <td>${info.dayOfWeek}</td>
+                                <td class="${info.dayOfWeekClass}">${info.dayOfWeek}</td>
                                 <td>
                                     <select name="koutsuuhiList[${rowIndex}].payee" onchange="onPayeeChange(this, '${rowIndex}')">
                                         <c:forEach var="payee" items="${selectedPayees}">
