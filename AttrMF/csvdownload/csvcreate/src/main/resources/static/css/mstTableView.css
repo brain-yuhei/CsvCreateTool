@@ -6,12 +6,29 @@ body {
     padding: 40px;
 }
 
+.page_header {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #fff;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-weight: bold;
+}
+
+.page_header h2 {
+    margin: 0;
+    font-weight: bold;
+    font-size: 24px;
+    margin-left: 100px;
+}
+
 button {
     background-color: #687d91;
     color: #fff;
     font-weight: bold;
     cursor: pointer;
     border: none;
+    margin-top: 10px;
 }
 
 button:hover {
@@ -31,7 +48,7 @@ button, input[type="month"], input[type="file"] {
 p {
     text-align: center;
     font-weight: 600;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 25px;
 }
 
@@ -91,3 +108,8 @@ p {
     font-size: 20px;
 }
 
+.master-table-container {
+    max-height: 550px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+}
