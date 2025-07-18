@@ -74,6 +74,8 @@ public class WrkDisplayController {
             model.addAttribute("errormessage", messageSource.getMessage("historyDataError",new String[]{}, Locale.getDefault()));
             model.addAttribute("wrkList", new ArrayList<>());
             model.addAttribute("dateInfoList", new ArrayList<>());
+            model.addAttribute("selectedPayee", selectedPayee);
+            model.addAttribute("currentMonth", selectedMonth);
             return "csvTable";
         }
     

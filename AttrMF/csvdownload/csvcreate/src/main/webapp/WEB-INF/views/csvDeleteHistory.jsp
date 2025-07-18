@@ -18,10 +18,18 @@
     <button type="submit">削除して新規作成</button>
 </form>
 
+<form method="post" action="/csvHistoryDisplay">
+    <input type="hidden" name="selectedPayee" value="${selectedPayee}" />
+    <input type="hidden" name="selectedMonth" value="${selectedMonth}" />
+    <button type="submit">履歴を表示</button>
+</form>
+
 <form method="post" action="/returnFromConfirm">
     <input type="hidden" name="selectedPayee" value="${selectedPayee}" />
     <input type="hidden" name="selectedMonth" value="${selectedMonth}" />
     <button type="submit">キャンセル</button>
 </form>
+
 </div>
+
 </body>

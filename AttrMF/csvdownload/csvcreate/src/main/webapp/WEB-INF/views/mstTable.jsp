@@ -17,11 +17,8 @@
 
     <div class="page_header">
         <h2>登録経路管理画面</h2>
+        <a href="/">前の画面に戻る</a>
     </div>
-
-    <button type="button" onclick="location.href='/'">戻る</button>
-
-    <p>登録経路一覧表</p>
 
     <c:if test="${not empty message}">
         <div class="message">${message}</div>
@@ -30,6 +27,40 @@
     <c:if test="${not empty errormessage}">
         <div class="error-message">${errormessage}</div>
     </c:if>
+
+    <p>経路新規追加</p>
+
+    <form id="mstCreateForm" action="/createMasterTable" method="post">
+
+        <button type="submit">登録</button>
+
+        <div class="master-table-container">
+            <table class="fixed-header-table" border="1">
+                <thead>
+                    <tr>
+                        <th>経路</th>
+                        <th>金額</th>
+                        <th>メモ</th>
+                        <th>経費科目</th>
+                        <th>費用負担部門名</th>
+                        <th>費用負担部門コード</th>
+                    </tr>
+                </thead>
+                <tbody id="mainTableBody">
+                    <tr>
+                        <td><input type="text" name="payeeContent" placeholder="例：客先業務片道" required></td>
+                        <td><input type="text" name="amountInclusiveTax" onblur="formatAmount(this)" placeholder="例：380" required></td>
+                        <td><input type="text" name="memo" placeholder="例：大阪->名古屋" onblur="checkInputMemo(this, '${rowIndex}')" required></td>
+                        <td><input type="text" name="expense_category" placeholder="例：旅費交通費" required></td>
+                        <td><input type="text" name="department_name" placeholder="例：大阪支社" onblur="checkInputDepartmentName(this, '${rowIndex}')" required></td>
+                        <td><input type="text" name="department_code" placeholder="例：19" onblur="checkInputDepartmentCode(this, '${rowIndex}')" required></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+    <p>登録経路一覧表</p>
 
     <form id="mstForm" action="/viewMasterTable" method="post" method="get" modelAttribute="formDto">
 
@@ -58,7 +89,7 @@
                             <td>
                                 <input type="text" class="amount-input" name="mstKeiroList[${status.index}].amountInclusiveTax" value="${row.amountInclusiveTax}" onblur="formatAmount(this)" placeholder="交通費を入力してください。" required>
                             </td>
-                            <td><input type="text" name="mstKeiroList[${status.index}].memo" value="${row.memo}" required></td>
+                            <td><input type="text" name="mstKeiroList[${status.index}].memo" value="${row.memo}" onblur="checkInputMemo(this, '${rowIndex}')" required></td>
                             <td><input type="text" name="mstKeiroList[${status.index}].expense_category" value="${row.expense_category}" required></td>
                             <td><input type="text" name="mstKeiroList[${status.index}].department_name" value="${row.department_name}" onblur="checkInputDepartmentName(this, '${rowIndex}')" required></td>
                             <td>
@@ -83,40 +114,6 @@
     <!--複数行の一括削除機能-->
     <form id="checkDeleteForm" method="post" action="${pageContext.request.contextPath}/mstdelete/checked" style="display:none;">
     </form>
-    
-
-    <p>経路新規追加</p>
-
-    <form id="mstCreateForm" action="/createMasterTable" method="post">
-
-        <button type="submit">登録</button>
-
-        <div class="master-table-container">
-            <table class="fixed-header-table" border="1">
-                <thead>
-                    <tr>
-                        <th>経路</th>
-                        <th>金額</th>
-                        <th>メモ</th>
-                        <th>経費科目</th>
-                        <th>費用負担部門名</th>
-                        <th>費用負担部門コード</th>
-                    </tr>
-                </thead>
-                <tbody id="mainTableBody">
-                    <tr>
-                        <td><input type="text" name="payeeContent" placeholder="例：客先業務片道" required></td>
-                        <td><input type="text" name="amountInclusiveTax" onblur="formatAmount(this)" placeholder="例：380" required></td>
-                        <td><input type="text" name="memo" placeholder="例：大阪->名古屋" required></td>
-                        <td><input type="text" name="expense_category" placeholder="例：旅費交通費" required></td>
-                        <td><input type="text" name="department_name" placeholder="例：大阪支社" onblur="checkInputDepartmentName(this, '${rowIndex}')" required></td>
-                        <td><input type="text" name="department_code" placeholder="例：19" onblur="checkInputDepartmentCode(this, '${rowIndex}')" required></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </form>
-
 
 </body>
 </html>

@@ -11,7 +11,9 @@
 
 <body>
 
-    <h2>CSVファイルアップロード画面</h2>
+    <div class="page_header">
+        <h2>CSVファイルインポート画面</h2>
+    </div>
 
     <c:if test="${not empty message}">
         <div class="message">${message}</div>
@@ -24,7 +26,7 @@
     <form method="post" action="/csvUpload" enctype="multipart/form-data">
         <label for="uploadfile">CSVファイルを選択</label>
         <input type="file" id="uploadfile" name="uploadfile" accept=".csv">
-        <button type="submit">アップロード</button>
+        <button type="submit">インポート</button>
         <button type="button" onclick="location.href='/'">戻る</button>
     </form>
 

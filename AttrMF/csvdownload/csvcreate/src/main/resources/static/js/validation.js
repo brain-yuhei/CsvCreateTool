@@ -119,4 +119,10 @@ function checkInputDepartmentName(inputElement){
     inputElement.value = nonNumericValue;
 }
 
+function checkInputMemo(inputElement){
+    const value = inputElement.value.trim();
+    if (value.length > 50) {
+        inputElement.value = value.substring(0, 50);
+    } 
+}
 

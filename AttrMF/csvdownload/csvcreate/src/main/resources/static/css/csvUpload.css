@@ -4,15 +4,38 @@ body {
     background-color: #f4f5f7;
     color: #2c3e50;
     margin: 0;
-    padding: 40px;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* 見出し */
-h2 {
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 40px;
-    font-weight: 600;
+.page_header {
+    padding: 20px 0;
+    background-color: #fff;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-weight: bold;
+    display: flex;              
+    justify-content: space-between; 
+    align-items: center;
+}
+
+.page_header a {
+    margin: 0;
+    font-weight: bold;
+    text-align: right;
+    font-size: 20px;
+    margin-right: 100px;
+}
+
+.page_header h2 {
+    margin: 0;
+    font-weight: bold;
+    font-size: 24px;
+    margin-left: 100px;
+    text-align: left;
 }
 
 /* フォーム */
@@ -27,6 +50,7 @@ form {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     max-width: 400px;
     margin: 0 auto;
+    margin-top: 50px;
 }
 
 /* ラベル */

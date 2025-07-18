@@ -68,10 +68,14 @@ function addRowToDate(dateStr) {
         </td>
 
         <td>
-            <button type="button" onclick="removeRow(this)">－</button>
+            <button type="button" onclick="addRowToDate('${dateStr}')">＋</button>
         </td>
 
-        <input type="hidden" name="koutsuuhiList[${rowIndex}].deleted" value="false" />
+        <td>
+            <button type="button" onclick="markRowAsDeleted(this)">削除</button>
+            <input type="hidden" name="koutsuuhiList[${rowIndex}].deleted" value="false" />
+        </td>
+
     `;
 
     targetRow.parentNode.insertBefore(newRow, targetRow.nextSibling);

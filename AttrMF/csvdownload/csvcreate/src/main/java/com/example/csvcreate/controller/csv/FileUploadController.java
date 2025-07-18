@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.csvcreate.service.csv.ImportService;
 
@@ -29,7 +30,7 @@ public class FileUploadController {
      * @return CSVファイルのアップロード結果
      */
     @PostMapping("/csvUpload")
-    public String uploadFile(@RequestParam("uploadfile") MultipartFile uploadfile, Model model) {
+    public String uploadFile(@RequestParam("uploadfile") MultipartFile uploadfile, RedirectAttributes redirectAttributes, Model model) {
 
         try {
             // ファイル名が空、または .csv でない場合はエラー
@@ -41,13 +42,12 @@ public class FileUploadController {
     
             // CSVファイルを読み込み、DBに保存する
             ImportService.saveDatabase(uploadfile);
-            model.addAttribute("message", messageSource.getMessage("uploadFile",new String[]{}, Locale.getDefault()));
     
         } catch (Exception e) {
             model.addAttribute("errormessage", messageSource.getMessage("uploadFileError",new String[]{}, Locale.getDefault()));
             return "csvUpload"; 
         }
-    
+        redirectAttributes.addFlashAttribute("message", messageSource.getMessage("uploadFile",new String[]{}, Locale.getDefault()));
         return "redirect:/currentMonth"; 
     } 
 

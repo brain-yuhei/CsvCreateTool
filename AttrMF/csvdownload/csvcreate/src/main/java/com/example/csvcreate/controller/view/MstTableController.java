@@ -26,7 +26,6 @@ public class MstTableController {
     public String showMstTablePage(Model model) {
 
         // マスタテーブルのデータ取得処理
-        // List<MstKeiroEntity> mstdataList = mstTableDisplayService.getMstDataForDisplay();
         List<MstKeiroEntity> mstdataList = getService.getMstList();
 
         model.addAttribute("mstdataList", mstdataList);

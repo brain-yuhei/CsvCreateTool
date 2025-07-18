@@ -142,7 +142,7 @@ public class CsvMenuController {
         Map<String, String> monthRange = dateService.getMonthRange();
         model.addAttribute("minMonth", monthRange.get("minMonth"));
         model.addAttribute("maxMonth", monthRange.get("maxMonth"));
-    
+
         return "csvMenu";
     }    
 
