@@ -1,6 +1,5 @@
 package com.example.csvcreate.controller.view;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.*;
 
@@ -16,8 +15,8 @@ import com.example.csvcreate.constants.Constants;
 import com.example.csvcreate.controller.wrk.WrkCreateController;
 import com.example.csvcreate.controller.wrk.WrkDisplayController;
 import com.example.csvcreate.service.DateService;
+import com.example.csvcreate.service.api.GetDateService;
 import com.example.csvcreate.service.mst.GetService;
-import com.example.csvcreate.service.wrk.WrkGetService;
 
 @Controller
 public class CsvMenuController {
@@ -29,16 +28,16 @@ public class CsvMenuController {
     private DateService dateService; 
 
     @Autowired
-    private WrkCreateController wrkCreateController;
-    
-    @Autowired
-    private WrkGetService wrkGetService;   
+    private WrkCreateController wrkCreateController;  
     
     @Autowired
     private MessageSource messageSource;  
     
     @Autowired
     private WrkDisplayController wrkDisplayController;
+
+    @Autowired
+    private GetDateService getDateService;
 
     /**
      * CSV編集画面の表示
@@ -114,11 +113,9 @@ public class CsvMenuController {
         }
     
         if (Constants.ACTION_TYPE_CREATE.equals(actionType)) {
+
             // 選択年月の月初と月末を取得
-            YearMonth yearMonth = YearMonth.parse(selectedMonth);
-            LocalDate startDate = yearMonth.atDay(1);
-            LocalDate endDate = yearMonth.atEndOfMonth(); 
-            if (wrkGetService.existsWrkDataByDateOnly(startDate, endDate)) {
+            if (getDateService.createDate(selectedMonth)) {
                 model.addAttribute("selectedPayee", selectedPayee);
                 model.addAttribute("selectedMonth", selectedMonth);
                 return "csvDeleteHistory";

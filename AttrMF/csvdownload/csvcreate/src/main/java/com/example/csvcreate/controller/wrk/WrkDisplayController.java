@@ -1,7 +1,5 @@
 package com.example.csvcreate.controller.wrk;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import com.example.csvcreate.service.DateService;
+import com.example.csvcreate.service.api.GetDateService;
 import com.example.csvcreate.service.mst.GetService;
-import com.example.csvcreate.service.wrk.WrkGetService;
 import com.example.csvcreate.service.wrk.WrkDisplayService;
 
 @Controller
@@ -27,10 +25,10 @@ public class WrkDisplayController {
     private GetService getService;
     
     @Autowired
-    private WrkGetService wrkGetService;  
+    private MessageSource messageSource;  
     
     @Autowired
-    private MessageSource messageSource;    
+    private GetDateService getDateService;    
    
     /**
      * CSV管理表に表示処理
@@ -64,13 +62,8 @@ public class WrkDisplayController {
      */
     public String showHistoryData(String selectedPayee, String selectedMonth, Model model) {
 
-        // 選択年月の月初と月末を取得
-        YearMonth yearMonth = YearMonth.parse(selectedMonth);
-        LocalDate startDate = yearMonth.atDay(1);
-        LocalDate endDate = yearMonth.atEndOfMonth();
-
         // ワークテーブルを月初～月末でソート
-        if (!wrkGetService.existsWrkDataByDateOnly(startDate, endDate)) {
+        if (!getDateService.createDate(selectedMonth)) {
             model.addAttribute("errormessage", messageSource.getMessage("historyDataError",new String[]{}, Locale.getDefault()));
             model.addAttribute("wrkList", new ArrayList<>());
             model.addAttribute("dateInfoList", new ArrayList<>());
