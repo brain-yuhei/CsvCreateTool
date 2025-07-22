@@ -1,0 +1,30 @@
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #f4f5f7;
+    color: #2c3e50;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.page_header {
+    padding: 20px 0;
+    background-color: #fff;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-weight: bold;
+    display: flex;              
+    justify-content: space-between; 
+    align-items: center;
+}
+
+.page_header h2 {
+    margin: 0;
+    font-weight: bold;
+    font-size: 24px;
+    margin-left: 100px;
+    text-align: left;
+}

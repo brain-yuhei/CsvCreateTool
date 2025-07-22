@@ -1,10 +1,13 @@
 package com.example.csvcreate.service.wrk;
 
 import java.time.LocalDate;
+// import java.util.List;
+// import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+// import com.example.csvcreate.model.WrkKeiroEntity;
 import com.example.csvcreate.repository.WrkKeiroRepository;
 
 @Service
@@ -25,6 +28,20 @@ public class WrkGetService {
         // 月初から月末のデータを取得し返す
         return wrkKeiroRepository.existsByDateBetween(startDate, endDate);
 
-    }      
+    }   
+    
+    /**
+     * ワークテーブルから日付データを取得処理（仮）
+     * 
+     * @return
+     */
+    // public List<String> getHistoryYearMonth(){
+
+    //     return wrkKeiroRepository.findAll().stream()
+    //         .map(WrkKeiroEntity::getDate)
+    //         .distinct()
+    //         .collect(Collectors.toList());
+        
+    //     }
 
 }
