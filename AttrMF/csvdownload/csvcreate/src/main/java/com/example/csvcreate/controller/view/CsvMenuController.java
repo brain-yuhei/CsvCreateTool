@@ -100,11 +100,10 @@ public class CsvMenuController {
      * @return
      */
     @PostMapping("/selectPayee")
-    public String handlePayeeAction(
-        @RequestParam(value = "selectedPayee", required = false) String selectedPayee,
-        @RequestParam("selectedMonth") String selectedMonth,
-        @RequestParam("actionType") String actionType,
-        Model model) {
+    public String handlePayeeAction(@RequestParam(value = "selectedPayee", required = false) String selectedPayee,
+                                    @RequestParam("selectedMonth") String selectedMonth,
+                                    @RequestParam("actionType") String actionType,
+                                    Model model) {
     
         // 新規作成時は経路必須
         if (Constants.ACTION_TYPE_CREATE.equals(actionType) && (selectedPayee == null || selectedPayee.trim().isEmpty())) {

@@ -1,13 +1,15 @@
 package com.example.csvcreate.service.wrk;
 
 import java.time.LocalDate;
-// import java.util.List;
-// import java.util.stream.Collectors;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.Comparator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-// import com.example.csvcreate.model.WrkKeiroEntity;
+import com.example.csvcreate.model.WrkKeiroEntity;
 import com.example.csvcreate.repository.WrkKeiroRepository;
 
 @Service
@@ -35,13 +37,17 @@ public class WrkGetService {
      * 
      * @return
      */
-    // public List<String> getHistoryYearMonth(){
+    public List<String> getHistoryYearMonth(){
 
-    //     return wrkKeiroRepository.findAll().stream()
-    //         .map(WrkKeiroEntity::getDate)
-    //         .distinct()
-    //         .collect(Collectors.toList());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+
+        return wrkKeiroRepository.findAll().stream()
+        .map(WrkKeiroEntity::getDate)
+        .map(date -> date.format(formatter))
+        .distinct()
+        .sorted(Comparator.reverseOrder())
+        .collect(Collectors.toList());
         
-    //     }
+    }
 
 }

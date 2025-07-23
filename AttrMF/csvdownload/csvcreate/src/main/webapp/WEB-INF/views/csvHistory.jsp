@@ -20,9 +20,14 @@
     <!--ワークテーブルから年月を取得しプルダウン選択できる-->
     <form method="get" action="/csvHistory">
         <label for="selectedMonth">表示年月：</label>
-        
+        <select name="selectedMonth" id="selectedMonth">
+            <c:forEach var="month" items="${historyMonth}">
+                <option value="${month}">${month}</option>
+            </c:forEach>
+        </select>
         <button type="submit">表示</button>
     </form>
+    
 
     <!--編集不可のCSVデータ表を表示-->
     <table>
