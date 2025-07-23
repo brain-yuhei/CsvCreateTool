@@ -63,7 +63,7 @@ public class WrkCreateController {
         model.addAttribute("message", messageSource.getMessage("newTable",new String[]{}, Locale.getDefault()));
 
         // CSV管理表に表示
-        return wrkDisplayController.displayWrkData(selectedPayee, selectedMonth, model);
+        return wrkDisplayController.displayWrkData(selectedMonth, model);
     }
 
 }

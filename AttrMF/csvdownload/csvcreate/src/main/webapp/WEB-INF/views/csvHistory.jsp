@@ -8,6 +8,9 @@
     <meta charset="UTF-8">
     <title>CSVファイル簡易作成ツール</title> 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/csvHistory.css"> 
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/modal.css">
+    <script src="${pageContext.request.contextPath}/js/modal.js"defer></script>
+    <script src="${pageContext.request.contextPath}/js/modal-data.js"defer></script>
 </head>
 <body>
 
@@ -20,17 +23,19 @@
     <!--ワークテーブルから年月を取得しプルダウン選択できる-->
     <form method="get" action="/csvHistory">
         <label for="selectedMonth">表示年月：</label>
-        <select name="selectedMonth" id="selectedMonth">
+        <select name="selectedMonth" id="selectedMonth"required>
+            <option value="">-- 選択してください --</option>
             <c:forEach var="month" items="${historyMonth}">
-                <option value="${month}">${month}</option>
+                <option value="${month}" <c:if test="${month == selectedMonth}">selected</c:if>>${month}</option>      
             </c:forEach>
         </select>
         <button type="submit">表示</button>
     </form>
     
+    <button id="checkOutputBtn" type="button" onclick="openModal()">出力内容確認</button>
 
     <!--編集不可のCSVデータ表を表示-->
-    <table>
+    <table class="fixed-header-table" border="1">
         <thead>
             <tr>
                 <th>日付</th>                    
@@ -39,20 +44,57 @@
                 <th>経費科目</th>
                 <th>金額</th>
                 <th>メモ</th>
+                <th>部門名</th>
+                <th>部門コード</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="mainTableBody">
             <c:forEach var="info" items="${dateInfoList}">
                 <c:forEach var="item" items="${wrkList}">
                     <c:if test="${item.date == info.date}">
-                        
+                        <tr>
+                            <td>${info.displayDate}</td>
+                            <td>${info.dayOfWeek}</td>
+                            <td>${item.payee}</td>
+                            <td>${item.expenseCategory}</td>
+                            <td>${item.amount}</td>
+                            <td>${item.memo}</td>
+                            <td>${item.departmentName}</td>
+                            <td>${item.departmentCode}</td>
+                        </tr>
                     </c:if>
                 </c:forEach>
             </c:forEach>
+            
         </tbody>
     </table>
 
     <!--モーダル画面-->
+    <div id="modalOverlay">
+        <div id="outputModal">
+            <h3>出力内容確認画面</h3>
+            <button onclick="downloadCSV()">CSVファイルを出力</button>
+            <button onclick="closeModal()">閉じる</button>
+            <div class="modal-table">
+                <table class="modal-header-table" border="1">
+                    <thead>
+                        <tr>
+                            <th>日付</th>
+                            <th>支払先・内容</th>
+                            <th>経費科目</th>
+                            <th>金額</th>
+                            <th>メモ</th>
+                            <th>費用負担部門名</th>
+                            <th>費用負担部門コード</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modalTableBody"></tbody>
+                </table>
+            </div>
+            <div id="emptyFieldWarning"></div>
+            <br />
+        </div>
+    </div>
 
 
 </body>

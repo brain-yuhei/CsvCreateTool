@@ -18,6 +18,8 @@ import com.example.csvcreate.service.DateService;
 import com.example.csvcreate.service.api.GetDateService;
 import com.example.csvcreate.service.mst.GetService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class CsvMenuController {
  
@@ -103,7 +105,10 @@ public class CsvMenuController {
     public String handlePayeeAction(@RequestParam(value = "selectedPayee", required = false) String selectedPayee,
                                     @RequestParam("selectedMonth") String selectedMonth,
                                     @RequestParam("actionType") String actionType,
-                                    Model model) {
+                                    Model model, 
+                                    HttpSession session) {
+
+        session.setAttribute("selectedPayee", selectedPayee);                                
     
         // 新規作成時は経路必須
         if (Constants.ACTION_TYPE_CREATE.equals(actionType) && (selectedPayee == null || selectedPayee.trim().isEmpty())) {
@@ -121,7 +126,7 @@ public class CsvMenuController {
             }
             return wrkCreateController.createNewWrkData(selectedPayee, selectedMonth, model);
         } else if (Constants.ACTION_TYPE_HISTORY.equals(actionType)) {
-            return wrkDisplayController.showHistoryData(selectedPayee, selectedMonth, model);
+            return wrkDisplayController.showHistoryData(selectedMonth, model);
         } else {
             model.addAttribute("errormessage", messageSource.getMessage("selectPayeeError",new String[]{}, Locale.getDefault()));
             return "csvTable";
@@ -131,7 +136,10 @@ public class CsvMenuController {
     @PostMapping("/returnFromConfirm")
     public String returnFromConfirm(@RequestParam("selectedPayee") String selectedPayee,
                                     @RequestParam("selectedMonth") String selectedMonth,
-                                    Model model) {
+                                    Model model,
+                                    HttpSession session) {
+
+        session.setAttribute("selectedPayee", selectedPayee);
         model.addAttribute("selectedPayee", selectedPayee);
         model.addAttribute("currentMonth", selectedMonth);
         model.addAttribute("selectedPayees", getService.getSelectedPayees());

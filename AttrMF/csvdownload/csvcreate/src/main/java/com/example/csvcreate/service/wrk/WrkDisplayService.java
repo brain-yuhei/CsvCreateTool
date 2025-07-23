@@ -30,7 +30,7 @@ public class WrkDisplayService {
      * @param selectedMonth
      * @return
      */
-    public Map<String, Object> getWrkDataForDisplay(String selectedPayee, String selectedMonth) {
+    public Map<String, Object> getWrkDataForDisplay(String selectedMonth) {
 
         YearMonth yearMonth = YearMonth.parse(selectedMonth);
         LocalDate startDate = yearMonth.atDay(1);

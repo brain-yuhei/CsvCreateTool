@@ -84,7 +84,7 @@ public class WrkSaveController {
             model.addAttribute("errormessage", String.join("<br>", errorMessages));
             model.addAttribute("wrkList", koutsuuhiList); 
             model.addAttribute("dateInfoList", wrkDisplayService
-                .getWrkDataForDisplay(selectedPayee, selectedMonth).get("dateInfoList"));
+                .getWrkDataForDisplay(selectedMonth).get("dateInfoList"));
             model.addAttribute("selectedPayees", getService.getSelectedPayees());
             model.addAttribute("currentMonth", selectedMonth);
             model.addAttribute("selectedPayee", selectedPayee);
@@ -102,7 +102,7 @@ public class WrkSaveController {
             //model.addAttribute("errormessage", "同じ日付に対して同じ経路が登録されています");
         }
 
-        Map<String, Object> koutsuuhiData = wrkDisplayService.getWrkDataForDisplay(selectedPayee, selectedMonth);
+        Map<String, Object> koutsuuhiData = wrkDisplayService.getWrkDataForDisplay(selectedMonth);
         model.addAttribute("wrkList", koutsuuhiData.get("wrkList"));
         model.addAttribute("dateInfoList", koutsuuhiData.get("dateInfoList"));
         model.addAttribute("selectedPayees", getService.getSelectedPayees());

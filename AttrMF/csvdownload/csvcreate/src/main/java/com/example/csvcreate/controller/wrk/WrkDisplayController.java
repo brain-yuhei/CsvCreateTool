@@ -38,8 +38,8 @@ public class WrkDisplayController {
      * @param model
      * @return
      */
-    public String displayWrkData(String selectedPayee, String selectedMonth, Model model) {
-        Map<String, Object> koutsuuhiData = wrkDisplayService.getWrkDataForDisplay(selectedPayee, selectedMonth);
+    public String displayWrkData(String selectedMonth, Model model) {
+        Map<String, Object> koutsuuhiData = wrkDisplayService.getWrkDataForDisplay(selectedMonth);
     
         model.addAttribute("wrkList", koutsuuhiData.get("wrkList"));
         model.addAttribute("dateInfoList", koutsuuhiData.get("dateInfoList"));
@@ -47,7 +47,7 @@ public class WrkDisplayController {
         model.addAttribute("minMonth", dateService.getMonthRange().get("minMonth"));
         model.addAttribute("maxMonth", dateService.getMonthRange().get("maxMonth"));
         model.addAttribute("currentMonth", selectedMonth);
-        model.addAttribute("selectedPayee", selectedPayee);
+        //model.addAttribute("selectedPayee", selectedPayee);
     
         return "csvTable";
     }  
@@ -60,14 +60,14 @@ public class WrkDisplayController {
      * @param model
      * @return
      */
-    public String showHistoryData(String selectedPayee, String selectedMonth, Model model) {
+    public String showHistoryData(String selectedMonth, Model model) {
 
         // ワークテーブルを月初～月末でソート
         if (!getDateService.createDate(selectedMonth)) {
             model.addAttribute("errormessage", messageSource.getMessage("historyDataError",new String[]{}, Locale.getDefault()));
             model.addAttribute("wrkList", new ArrayList<>());
             model.addAttribute("dateInfoList", new ArrayList<>());
-            model.addAttribute("selectedPayee", selectedPayee);
+            //model.addAttribute("selectedPayee", selectedPayee);
             model.addAttribute("currentMonth", selectedMonth);
             return "csvTable";
         }
@@ -75,7 +75,7 @@ public class WrkDisplayController {
         model.addAttribute("message", messageSource.getMessage("historyData",new String[]{}, Locale.getDefault()));
 
         // CSV管理表に表示
-        return displayWrkData(selectedPayee, selectedMonth, model);
+        return displayWrkData(selectedMonth, model);
     }     
 
 }

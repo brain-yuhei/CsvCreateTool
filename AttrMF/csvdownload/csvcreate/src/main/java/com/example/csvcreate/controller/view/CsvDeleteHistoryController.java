@@ -23,10 +23,10 @@ public class CsvDeleteHistoryController {
      * @return
      */
     @PostMapping("/csvHistoryDisplay")
-    public String csvHistoryDisplay(@RequestParam("selectedPayee") String selectedPayee,
-                                     @RequestParam("selectedMonth") String selectedMonth,
+    public String csvHistoryDisplay(@RequestParam("selectedMonth") String selectedMonth,
                                      Model model) {
-        return wrkDisplayController.showHistoryData(selectedPayee, selectedMonth, model);
+                               
+        return wrkDisplayController.showHistoryData(selectedMonth, model);
     }
 
 
