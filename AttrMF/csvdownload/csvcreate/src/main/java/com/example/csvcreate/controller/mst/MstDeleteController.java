@@ -25,7 +25,9 @@ public class MstDeleteController {
      * 削除ボタン押下時の処理
      * 
      * @param id
-     * @return
+     * @param redirectAttributes 
+     * @param model
+     * @return 
      */
     @PostMapping("/mstdelete")
     public String delete(@RequestParam("id") Long id, RedirectAttributes redirectAttributes, Model model) {
@@ -40,6 +42,7 @@ public class MstDeleteController {
      * 一括削除処理
      * 
      * @param ids
+     * @param redirectAttributes
      * @param model
      * @return
      */

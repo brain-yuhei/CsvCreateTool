@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.csvcreate.model.MstKeiroEntity;
 import com.example.csvcreate.model.MstKeiroFormDto;
+import com.example.csvcreate.service.mst.GetService;
 import com.example.csvcreate.service.mst.SaveService;
 
 @Controller
@@ -22,6 +23,9 @@ public class MstEditController {
 
     @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    private GetService getService;
     
     /**
      * 更新ボタン押下時の処理
@@ -37,12 +41,7 @@ public class MstEditController {
         List<MstKeiroEntity> allRows = formDto.getMstKeiroList();       
     
         // チェックが入っている行だけを抽出
-        List<MstKeiroEntity> checked = new ArrayList<>();
-        for (MstKeiroEntity row : allRows) {
-            if (Boolean.TRUE.equals(row.getSelected())) { 
-                checked.add(row);
-            }
-        }
+        List<MstKeiroEntity> checked = getService.getChecked(allRows);
 
         // 未チェックの確認
         if (checked == null || checked.isEmpty()) {

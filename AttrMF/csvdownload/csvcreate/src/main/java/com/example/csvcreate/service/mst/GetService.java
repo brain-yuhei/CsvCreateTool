@@ -31,10 +31,23 @@ public class GetService {
      */    
     public List<String> getSelectedPayees() {
         return mstKeiroRepository.findAll().stream()
-                .map(MstKeiroEntity::getPayeeContent)
-                .filter(payee -> payee != null && !payee.isEmpty())
-                .distinct()
-                .collect(Collectors.toList());
+            .map(MstKeiroEntity::getPayeeContent)
+            .filter(payee -> payee != null && !payee.isEmpty())
+            .distinct()
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * チェック状態のデータを取得
+     * 
+     * @param allRows
+     * @return
+     */
+    public List<MstKeiroEntity> getChecked(List<MstKeiroEntity>allRows){
+
+        return allRows.stream()
+            .filter(row -> Boolean.TRUE.equals(row.getSelected()))
+            .collect(Collectors.toList());
     }
 
 }
