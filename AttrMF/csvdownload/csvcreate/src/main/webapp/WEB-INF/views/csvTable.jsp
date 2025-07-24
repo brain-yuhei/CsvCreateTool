@@ -21,9 +21,6 @@
 
 <div class="page_header">
     <h2>CSV出力内容編集画面</h2>
-    <a href="/csvHistory" class="history-button">
-        <i class=""></i> 過去内容出力画面へ
-    </a>
 </div>
 
 <!-- 成功・エラーメッセージ -->
