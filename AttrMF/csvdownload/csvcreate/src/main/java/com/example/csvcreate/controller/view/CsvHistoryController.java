@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.csvcreate.controller.wrk.WrkDisplayController;
 import com.example.csvcreate.service.wrk.WrkGetService;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.ui.Model;
 
 @Controller
@@ -29,7 +31,9 @@ public class CsvHistoryController {
      */
     @GetMapping("/csvHistory")
     public String showCsvHistory(@RequestParam(value = "selectedMonth", required = false) String selectedMonth,
-                                Model model) {
+                                 @RequestParam(value = "selectedPayee", required = false) String selectedPayee,
+                                  HttpSession session,
+                                  Model model) {
                             
 
         // ワークテーブルから日付データを取得
@@ -38,14 +42,11 @@ public class CsvHistoryController {
         // 日付選択箇所にセット
         model.addAttribute("historyMonth", historyMonth);
 
-        if (selectedMonth == null && !historyMonth.isEmpty()) {
-            selectedMonth = historyMonth.get(0); 
-        }
+        model.addAttribute("selectedPayee", selectedPayee);
 
-        if (selectedMonth != null) {
-
-            // 選択された日付でワークデータを取得
-            wrkDisplayController.showHistoryData(selectedMonth, model); 
+        if (selectedMonth != null && !selectedMonth.isEmpty()) {
+            wrkDisplayController.showHistoryData(selectedMonth, model);
+            model.addAttribute("selectedMonth", selectedMonth); 
         }
 
         return "csvHistory"; 

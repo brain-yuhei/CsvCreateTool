@@ -22,6 +22,7 @@
     <!--表示する履歴の年月選択-->
     <!--ワークテーブルから年月を取得しプルダウン選択できる-->
     <form method="get" action="/csvHistory">
+        <input type="hidden" name="selectedPayee" value="${selectedPayee}" />
         <div class="top_right">
             <label for="selectedMonth">表示年月：</label>
             <select name="selectedMonth" id="selectedMonth"required>
